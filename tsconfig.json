@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "module": "es2020",
+        "target": "es2020",
+        "noImplicitAny": true,
+        "sourceMap": true,
+        "alwaysStrict": true,
+        "declaration": true,
+        "forceConsistentCasingInFileNames": true,
+        "importHelpers": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "outDir": "dist",
+        "strictNullChecks": true,
+        "moduleResolution": "node",
+        "types": ["node", "jest"]
+    },
+    "include": [
+        "src/**/*.ts"
+    ]
+}
