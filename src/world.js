@@ -1,0 +1,62 @@
+let world={
+    Width:50,
+    Height :25 ,
+    Matrix:{}
+};
+
+
+function initializeWorld(){
+    world.Matrix = Array(world.Height);
+    for(let i=0;i<world.Height;i++){
+	world.Matrix[i]=Array(world.Width);
+    }
+    for(let i=0; i<world.Height; i++){
+        for(let j=0;j<world.Width ;j++){
+            world.Matrix[i][j]={
+                pos:     { x: i, y: j },
+                actions:{dx:0,dy:0}
+            };
+        }
+    }
+    return world;
+}
+
+//console.log(initializeWorld().Matrix[1][1].actions.move(1,1)[0]);
+
+function Road(world){
+    for(let i=0;i<=world.Height;i++){
+        for(let j=0;j<world.Width  ;j++){
+           if((j<=world.Width/4 || j>=3*world.Width/4) && (i<=world.Height/2+1 && i>=world.Height/2-1)){
+            world.Matrix[i][j].actions.dy=-1;
+            world.Matrix[i][j].actions.dx=-1;
+           }
+           else if(((i<=world.Height/3+1 && i>=world.Height/3-1 || i<=(2/3)*world.Height+1 && i>=(2/3)*world.Height-1) && !(j<=world.Width/4 || j>=3*world.Width/4))){
+            world.Matrix[i][j].actions.dy=-1;
+            world.Matrix[i][j].actions.dx=-1;
+           }
+           if(((j>=world.Width/4-1 && j<=world.Width/4+1) || (j>=3*world.Width/4-1 && j<=3*world.Width/4+1) ) && (i>=world.Height/3-1 && i<=(2/3)*world.Height+1)){
+            world.Matrix[i][j].actions.dy=-1;
+            world.Matrix[i][j].actions.dx=-1;
+           }
+        }
+    }
+    return world;
+
+}
+//console.log(initializeWorld().Matrix);
+    
+
+function display(world){
+    for(let i=0; i<world.Height ;i++){
+        let s=""
+        for(let j=0;j<world.Width;j++){
+           if(world.Matrix[i][j].actions.dx==-1) s+="\x1b[47m  \x1b[0m";
+            else s+="\x1b[42m  \x1b[0m";
+        }
+        console.log(s)
+        
+    }
+
+}
+//display(initializeWorld())
+display(Road(initializeWorld()));
