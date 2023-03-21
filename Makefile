@@ -1,8 +1,8 @@
 all: build
 
-build:
+build: ##eslint , tsc
 
-run:
+run: ## node dist/main.js
 
 test:
 
