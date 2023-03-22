@@ -1,13 +1,9 @@
-let world={
-    Width:50,
-    Height :25 ,
-    Matrix:{}
-};
+
 
 //This is a list of all types of actors
 const ActorsTypeList = {
     SimpleMonster : {dx : 3, dy : 3, type : "Monster"},
-    BigMonster : {dx : 1, dy : 1, type : "Monster"},
+    BigMonster : {dx : 0, dy : 1, type : "Monster"},
     SimpleTower : {dx : 0, dy : 0, type : "Tower"},
     MagicTower : {dx : 0, dy : 0, type : "Tower"},
     Floor : {dx : 0, dy : 0, type : "Floor"},
@@ -15,7 +11,7 @@ const ActorsTypeList = {
     Road : {dx : 0, dy : 0, type : "Road" },
 };
 
-function initializeWorld(){
+function initializeWorld(world){
     world.Matrix = Array(world.Height);
     for(let i=0;i<world.Height;i++){
 	world.Matrix[i]=Array(world.Width);
@@ -58,7 +54,9 @@ function display(world){
         let s=""
         for(let j=0;j<world.Width;j++){
            if(world.Matrix[i][j].typeActor.type=="Road") s+="\x1b[47m  \x1b[0m";
-            else s+="\x1b[42m  \x1b[0m";
+            else if(world.Matrix[i][j].typeActor.type=="Floor")
+            s+="\x1b[42m  \x1b[0m";
+            else s+="\x1b[37m  \x1b[0m"
         }
         console.log(s)
         
@@ -66,7 +64,7 @@ function display(world){
 
 }
 //display(initializeWorld())
-display(Road(initializeWorld()));
+//display(Road(initializeWorld()));
 
 // function ConsActor(_pos, _actions, _type) { return { pos: _pos, actions: _actions, type : _type}; }
 
@@ -88,8 +86,45 @@ const Actor = {
 //This function return a possible place to move for the actor 
 function SimpleMove(anActor, aWorld){
     let x = anActor.pos.x, y = anActor.pos.y;
-    if (isEmptyPosition(aWorld[x])){
+    //if (isEmptyPosition(aWorld[x])){
 
-    }
+   // }
+   return [x+anActor.typeActor.dx,y+anActor.typeActor.dy]
 } 
-//console.log(ActorsList.SimpleMonster);
+
+
+function loop(){
+  
+    let world={
+        actors:[],
+        Width:50,
+        Height :25 ,
+        Matrix:{}
+    };
+
+    world=Road(initializeWorld(world));
+    for(let i=0;i<13;i++){
+        if(i%4==0) world.actors.push({
+                pos:     { x: Math.floor(world.Height/2), y: 0 },
+                typeActor:ActorsTypeList.BigMonster
+            })
+   // console.log(world.actors.length)
+    
+    for(let j=0;j<world.actors.length;j++){
+        let [a,b]=SimpleMove(world.actors[j],world);
+        world.Matrix[world.actors[j].pos.x][world.actors[j].pos.y].typeActor=ActorsTypeList.Road
+        world.actors[j].pos={x:a,y:b};
+    }
+   
+
+    for(let i=0;i<world.actors.length;i++){
+        let z=world.actors[i].pos;
+       // console.log(z)
+        world.Matrix[Math.floor(z.x)][Math.floor(z.y)].typeActor=world.actors[i].typeActor.type;
+    }
+    display(world);
+    console.log();
+    }
+
+}
+loop()
