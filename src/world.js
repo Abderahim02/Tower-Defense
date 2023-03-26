@@ -128,7 +128,12 @@ function SimpleMove(anActor, aWorld){
     if(available_position(move, aWorld)){
         return move;
     }
+    let rand = Math.random();
     move = [x,y+anActor.typeActor.dy];
+    if(available_position(move, aWorld)){
+        return move;
+    }
+    move = [x,y-anActor.typeActor.dy];
     if(available_position(move, aWorld)){
         return move;
     }
@@ -160,7 +165,7 @@ function loop(){
     };
 
     world=Road(initializeWorld(world));
-    for(let i=0;i<15;i++){
+    for(let i=0;i<50;i++){
         if(i%4==0) world.actors.push({
                 pos:     { x: Math.floor(world.Height/2), y: 0 },
                 typeActor:ActorsTypeList.BigMonster
@@ -184,7 +189,7 @@ function loop(){
     }
 
 }
-loop()
+loop();
 
 
 
