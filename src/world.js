@@ -18,7 +18,7 @@ const ActorsTypeList = {
     River : {dx : 0, dy : 0, type : "River" , color : "\x1b[37m  \x1b[0m"},
     Road : {dx : 0, dy : 0, type : "Road" , color : "\x1b[48;2;76;70;50m  \x1b[0m"},
     Tree : {dx : 0, dy : 0, type : "Tree", color : "\x1b[48;2;34;139;34m 🎄\x1b[0m"},
-    Fire : {dx : 0, dy : 0, type : "Tree", color : "\x1b[48;2;34;139;34m 🔥\x1b[0m"},
+    Fire : {dx : 0, dy : 0, type : "Fire", color : "\x1b[48;2;34;139;34m 🔥\x1b[0m"},
 };
 
 
@@ -181,7 +181,22 @@ function create_simple_tower(i, j, world){
     return world;
 }
 
-
+function number_of_enemies(i,j,world){
+    // if(world.Matrix[i][j].typeActor.type != "Tower"){
+    //     console.log("Select a Tower");
+    // }
+    let range = world.Matrix[i][j].typeActor.attack_range;
+    let count = 0;
+    for(let k=i-range; k<i+range; k++){
+        for(let l=j-range; l<j+range; l++){
+            if(world.Matrix[k][l].typeActor.type === ActorsTypeList.BigMonster.type){
+                count++;
+            }
+        }
+    }
+    
+    return count;
+}
 
 
 
@@ -190,7 +205,7 @@ function create_simple_tower(i, j, world){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function loop(){
-  
+    
     let world={
         actors:[],
         Width:50,
@@ -199,29 +214,30 @@ function loop(){
     };
 
     world=Road(initializeWorld(world));
-    for(let i=0;i<5;i++){
+    for(let i=0;i<10;i++){
         if(i%4==0) world.actors.push({
-                pos:     { x: Math.floor(world.Height/2), y: 0 },
-                typeActor:ActorsTypeList.BigMonster
-            })
-   // console.log(world.actors.length)
+            pos:     { x: Math.floor(world.Height/2), y: 0 },
+            typeActor:ActorsTypeList.BigMonster
+        })
+	// console.log(world.actors.length)
+	
+	for(let j=0;j<world.actors.length;j++){
+            let [a,b]=SimpleMove(world.actors[j],world);
+            world.Matrix[world.actors[j].pos.x][world.actors[j].pos.y].typeActor=ActorsTypeList.Road
+            world.actors[j].pos={x:a,y:b};
+	}
+	
+	for(let i=0;i<world.actors.length;i++){
+            let z=world.actors[i].pos;
+	    // console.log(z)
+            world.Matrix[Math.floor(z.x)][Math.floor(z.y)].typeActor=world.actors[i].typeActor;
+	}
+	display(world);
+    console.log()
+    create_simple_tower(Math.floor(world.Height/2)+2,11,world);
+	console.log(number_of_enemies(Math.floor(world.Height/2)+2,11,world));
+    }
     
-    for(let j=0;j<world.actors.length;j++){
-        let [a,b]=SimpleMove(world.actors[j],world);
-        world.Matrix[world.actors[j].pos.x][world.actors[j].pos.y].typeActor=ActorsTypeList.Road
-        world.actors[j].pos={x:a,y:b};
-    }
-   
-
-    for(let i=0;i<world.actors.length;i++){
-        let z=world.actors[i].pos;
-       // console.log(z)
-        world.Matrix[Math.floor(z.x)][Math.floor(z.y)].typeActor=world.actors[i].typeActor.type;
-    }
-    display(world);
-    console.log();
-    }
-
 }
 loop();
 
