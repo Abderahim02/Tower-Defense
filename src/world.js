@@ -10,13 +10,15 @@
 
 //This is a list of all types of actors
 const ActorsTypeList = {
-    SimpleMonster : {dx : 3, dy : 3, type : "Monster", color : "\x1b[37m  \x1b[0m"},
-    BigMonster : {dx : 1, dy : 1, type : "Monster", color : "\x1b[37m♟♟\x1b[0m"},
-    SimpleTower : {dx : 0, dy : 0, type : "Tower", color : "\x1b[48;2;34;139;34m🏯\x1b[0m"},
-    MagicTower : {dx : 0, dy : 0, type : "Tower", color : "\x1b[37m  \x1b[0m"},
+    SimpleMonster : {dx : 3, dy : 3, type : "Monster", color : "\x1b[37m  \x1b[0m", hit_points : 3},
+    BigMonster : {dx : 1, dy : 1, type : "Monster", color : "\x1b[37m🦌\x1b[0m", hit_points : 5},
+    SimpleTower : {dx : 0, dy : 0, type : "Tower", color : "\x1b[48;2;34;139;34m🏯\x1b[0m", cost : 1000, damage: 1, attack_range : 5},
+    MagicTower : {dx : 0, dy : 0, type : "Tower", color : "\x1b[37m⛪\x1b[0m", cost : 1500, damage: 2, attack_range : 10},
     Floor : {dx : 0, dy : 0, type : "Floor", color : "\x1b[48;2;34;139;34m ▒\x1b[0m"},
     River : {dx : 0, dy : 0, type : "River" , color : "\x1b[37m  \x1b[0m"},
     Road : {dx : 0, dy : 0, type : "Road" , color : "\x1b[48;2;76;70;50m  \x1b[0m"},
+    Tree : {dx : 0, dy : 0, type : "Tree", color : "\x1b[48;2;34;139;34m 🎄\x1b[0m"},
+    Fire : {dx : 0, dy : 0, type : "Tree", color : "\x1b[48;2;34;139;34m 🔥\x1b[0m"},
 };
 
 
@@ -37,10 +39,6 @@ function initializeWorld(world){
             };
         }
     }
-    world.Matrix[world.Height-1][0]={
-        pos:     { x: world.Height-1, y: 0 },
-        typeActor:ActorsTypeList.SimpleTower
-    };
     return world;
 }
 
@@ -117,7 +115,7 @@ const Actor = {
 // }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////        MOVES            /////////////////////////////////////////////////////
+/////////////////////////////////////        MONSTERS         /////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //This function return a possible place to move for the actor 
@@ -151,6 +149,42 @@ function available_position(move, world){
 
 
 
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////        TOWER            /////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+function create_magic_tower(i, j, world){
+    let move = Array(2);
+    move = [i,j]
+    if(!available_position(move, world)){
+        world.Matrix[i][j]={
+            pos:     { x: i, y: j },
+            typeActor:ActorsTypeList.MagicTower
+        };
+        return world;
+    }
+    return world;
+}
+
+function create_simple_tower(i, j, world){
+    let move = Array(2);
+    move = [i,j]
+    if(!available_position(move, world)){
+        world.Matrix[i][j]={
+            pos:     { x: i, y: j },
+            typeActor:ActorsTypeList.SimpleTower
+        };
+        return world;
+    }
+    return world;
+}
+
+
+
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////        LOOP             /////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,7 +199,7 @@ function loop(){
     };
 
     world=Road(initializeWorld(world));
-    for(let i=0;i<50;i++){
+    for(let i=0;i<5;i++){
         if(i%4==0) world.actors.push({
                 pos:     { x: Math.floor(world.Height/2), y: 0 },
                 typeActor:ActorsTypeList.BigMonster
