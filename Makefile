@@ -9,7 +9,7 @@ TSC_OPTIONS = --project $(SRC_DIR) --outDir $(DIST_DIR)
 # Define targets
 .PHONY: all build run test eslint parcel clean
 
-all: build
+all: world
 
 build:
 	$(TSC) $(TSC_OPTIONS)
@@ -19,6 +19,9 @@ run:
 
 test:
 	npm test
+
+world: 
+	node src/world.js
 
 eslint:
 	npm run eslint
