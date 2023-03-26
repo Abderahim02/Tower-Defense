@@ -3,7 +3,7 @@
 //This is a list of all types of actors
 const ActorsTypeList = {
     SimpleMonster : {dx : 3, dy : 3, type : "Monster"},
-    BigMonster : {dx : 0, dy : 1, type : "Monster"},
+    BigMonster : {dx : 1, dy : 1, type : "Monster"},
     SimpleTower : {dx : 0, dy : 0, type : "Tower"},
     MagicTower : {dx : 0, dy : 0, type : "Tower"},
     Floor : {dx : 0, dy : 0, type : "Floor"},
@@ -83,15 +83,39 @@ const Actor = {
 //     Floor : ActorTypeGen({x : 11, y : 1}, 3, 3, "Monster"),
     
 // }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////        MOVES            /////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //This function return a possible place to move for the actor 
 function SimpleMove(anActor, aWorld){
     let x = anActor.pos.x, y = anActor.pos.y;
-    //if (isEmptyPosition(aWorld[x])){
+    let move = Array(2);
+    move = [x+anActor.typeActor.dx,y+anActor.typeActor.dy];
+    if(available_position(move, aWorld)){
+        return move;
+    }
+    move = [x,y+anActor.typeActor.dy];
+    if(available_position(move, aWorld)){
+        return move;
+    }
+    move = [x+anActor.typeActor.dx,y];
+    if(available_position(move, aWorld)){
+        return move;
+    }
+    return [x,y];
+}
 
-   // }
-   return [x+anActor.typeActor.dx,y+anActor.typeActor.dy]
-} 
+//Return True if the move is available, else False
+function available_position(move, world){
+    return world.Matrix[move[0]][move[1]].typeActor===ActorsTypeList.Road;
+}
 
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////        LOOP             /////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function loop(){
   
@@ -103,7 +127,7 @@ function loop(){
     };
 
     world=Road(initializeWorld(world));
-    for(let i=0;i<13;i++){
+    for(let i=0;i<70;i++){
         if(i%4==0) world.actors.push({
                 pos:     { x: Math.floor(world.Height/2), y: 0 },
                 typeActor:ActorsTypeList.BigMonster

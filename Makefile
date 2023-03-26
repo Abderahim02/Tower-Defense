@@ -21,7 +21,7 @@ test:
 	npm test
 
 world: 
-	node src/world.js
+	node ${SRC_DIR}/world.js
 
 eslint:
 	npm run eslint
