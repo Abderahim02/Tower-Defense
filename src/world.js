@@ -12,7 +12,7 @@
 const ActorsTypeList = {
     SimpleMonster : {dx : 3, dy : 3, type : "Monster", color : "\x1b[37m  \x1b[0m"},
     BigMonster : {dx : 1, dy : 1, type : "Monster", color : "\x1b[37m♟♟\x1b[0m"},
-    SimpleTower : {dx : 0, dy : 0, type : "Tower", color : "\x1b[37m  \x1b[0m"},
+    SimpleTower : {dx : 0, dy : 0, type : "Tower", color : "\x1b[48;2;34;139;34m🏯\x1b[0m"},
     MagicTower : {dx : 0, dy : 0, type : "Tower", color : "\x1b[37m  \x1b[0m"},
     Floor : {dx : 0, dy : 0, type : "Floor", color : "\x1b[48;2;34;139;34m ▒\x1b[0m"},
     River : {dx : 0, dy : 0, type : "River" , color : "\x1b[37m  \x1b[0m"},
@@ -30,13 +30,17 @@ function initializeWorld(world){
 	world.Matrix[i]=Array(world.Width);
     }
     for(let i=0; i<world.Height; i++){
-        for(let j=0;j<world.Width ;j++){
+        for(let j=0;j<world.Width; j++){
             world.Matrix[i][j]={
                 pos:     { x: i, y: j },
                 typeActor:ActorsTypeList.Floor
             };
         }
     }
+    world.Matrix[world.Height-1][0]={
+        pos:     { x: world.Height-1, y: 0 },
+        typeActor:ActorsTypeList.SimpleTower
+    };
     return world;
 }
 
@@ -82,8 +86,8 @@ function display(world){
         let s=""
         for(let j=0;j<world.Width;j++){
            if(world.Matrix[i][j].typeActor.type=="Road") s+=ActorsTypeList.Road.color;
-            else if(world.Matrix[i][j].typeActor.type=="Floor")
-            s+=ActorsTypeList.Floor.color;
+            else if(world.Matrix[i][j].typeActor.type=="Floor") s+=ActorsTypeList.Floor.color;
+            else if(world.Matrix[i][j].typeActor.type=="Tower") s+=ActorsTypeList.SimpleTower.color;
             else s+=ActorsTypeList.BigMonster.color;
         }
         console.log(s)
