@@ -59,6 +59,21 @@ function Road(world){
     return world;
 
 }
+
+function random_road(world){
+    let ht = world.Height;
+    let wt = world.Height;
+
+    for(let k=0; k<wt; k+=3){
+        for(let i=Math.floor(ht/2)-1; i<Math.floor(ht/2)+1; i++){
+            for(let j=0+k; j<3+k; j++){
+                world.Matrix[i][j].typeActor=ActorsTypeList.Road;
+            }
+        }
+    }
+    return world;
+}
+  
 //console.log(initializeWorld().Matrix);
     
 
@@ -141,7 +156,7 @@ function loop(){
     };
 
     world=Road(initializeWorld(world));
-    for(let i=0;i<2;i++){
+    for(let i=0;i<15;i++){
         if(i%4==0) world.actors.push({
                 pos:     { x: Math.floor(world.Height/2), y: 0 },
                 typeActor:ActorsTypeList.BigMonster
