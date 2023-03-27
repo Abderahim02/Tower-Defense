@@ -84,10 +84,11 @@ function display(world){
         for(let j=0;j<world.Width;j++){
             switch(world.Matrix[i][j].typeActor.type){
                 case 'SimpleMonster':
-                    s+=s+=ActorsTypeList.Road.color;
+                    s+=ActorsTypeList.SimpleMonster.color;
                     break;
                 case 'BigMonster':
                     s+=ActorsTypeList.BigMonster.color;
+                    break;
                 case 'SimpleTower':
                     s+=ActorsTypeList.SimpleTower.color;
                     break;
@@ -244,28 +245,33 @@ function loop(){
     };
 
     world=Road(initializeWorld(world));
+    for(let i=0;i<10;i++){
+        if(i%4==0){
+             world.actors.push({
+                pos:     { x: Math.floor(world.Height/2), y: 0 },
+                typeActor:ActorsTypeList.BigMonster
+
+            });
+            world.Matrix[Math.floor(world.Height/2)][0].ActorsTypeList=ActorsTypeList.BigMonster;
+        }
     display(world);
     console.log()
-    for(let i=0;i<10;i++){
-        if(i%4==0) world.actors.push({
-            pos:     { x: Math.floor(world.Height/2), y: 0 },
-            typeActor:ActorsTypeList.BigMonster
-        })
 	// console.log(world.actors.length)
 	
 	for(let j=0;j<world.actors.length;j++){
             let [a,b]=SimpleMove(world.actors[j],world);
-            world.Matrix[world.actors[j].pos.x][world.actors[j].pos.y].typeActor=ActorsTypeList.Road
+            world.Matrix[world.actors[j].pos.x][world.actors[j].pos.y].typeActor=ActorsTypeList.Road;
+            world.Matrix[Math.floor(a)][Math.floor(b)].typeActor=world.actors[j].typeActor;
             world.actors[j].pos={x:a,y:b};
 	}
 	
-	for(let i=0;i<world.actors.length;i++){
+	/*for(let i=0;i<world.actors.length;i++){
             let z=world.actors[i].pos;
 	    // console.log(z)
             world.Matrix[Math.floor(z.x)][Math.floor(z.y)].typeActor=world.actors[i].typeActor;
-	}
-	display(world);
-    console.log()
+	}*/
+	//display(world);
+    //console.log()
     create_simple_tower(Math.floor(world.Height/2)+2,11,world);
 	console.log(number_of_enemies_in_attack_range(Math.floor(world.Height/2)+2,11,world));
     }
