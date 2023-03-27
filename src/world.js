@@ -10,10 +10,10 @@
 
 //This is a list of all types of actors
 const ActorsTypeList = {
-    SimpleMonster : {dx : 3, dy : 3, type : "Monster", color : "\x1b[37m  \x1b[0m", hit_points : 3},
-    BigMonster : {dx : 1, dy : 1, type : "Monster", color : "\x1b[37m🦌\x1b[0m", hit_points : 5},
-    SimpleTower : {dx : 0, dy : 0, type : "Tower", color : "\x1b[48;2;34;139;34m🏯\x1b[0m", cost : 1000, damage: 1, attack_range : 5},
-    MagicTower : {dx : 0, dy : 0, type : "Tower", color : "\x1b[37m⛪\x1b[0m", cost : 1500, damage: 2, attack_range : 10},
+    SimpleMonster : {dx : 3, dy : 3, type : "SimpleMonster", color : "\x1b[37m  \x1b[0m", hit_points : 3},
+    BigMonster : {dx : 1, dy : 1, type : "BigMonster", color : "\x1b[37m🦌\x1b[0m", hit_points : 5},
+    SimpleTower : {dx : 0, dy : 0, type : "SimpleTower", color : "\x1b[48;2;34;139;34m🏯\x1b[0m", cost : 1000, damage: 1, attack_range : 5},
+    MagicTower : {dx : 0, dy : 0, type : "MagicTower", color : "\x1b[37m⛪\x1b[0m", cost : 1500, damage: 2, attack_range : 10},
     Floor : {dx : 0, dy : 0, type : "Floor", color : "\x1b[48;2;34;139;34m ▒\x1b[0m"},
     River : {dx : 0, dy : 0, type : "River" , color : "\x1b[37m  \x1b[0m"},
     Road : {dx : 0, dy : 0, type : "Road" , color : "\x1b[48;2;76;70;50m  \x1b[0m"},
@@ -78,15 +78,40 @@ function random_road(world){
   
 //console.log(initializeWorld().Matrix);
     
-
 function display(world){
     for(let i=0; i<world.Height ;i++){
         let s=""
         for(let j=0;j<world.Width;j++){
-           if(world.Matrix[i][j].typeActor.type=="Road") s+=ActorsTypeList.Road.color;
-            else if(world.Matrix[i][j].typeActor.type=="Floor") s+=ActorsTypeList.Floor.color;
-            else if(world.Matrix[i][j].typeActor.type=="Tower") s+=ActorsTypeList.SimpleTower.color;
-            else s+=ActorsTypeList.BigMonster.color;
+            switch(world.Matrix[i][j].typeActor.type){
+                case 'SimpleMonster':
+                    s+=s+=ActorsTypeList.Road.color;
+                    break;
+                case 'BigMonster':
+                    s+=ActorsTypeList.BigMonster.color;
+                case 'SimpleTower':
+                    s+=ActorsTypeList.SimpleTower.color;
+                    break;
+                case 'MagicTower':
+                    s+=ActorsTypeList.MagicTower.color;
+                    break;
+                case 'Floor':
+                    s+=ActorsTypeList.Floor.color;
+                    break;
+                case 'River':
+                    s+=ActorsTypeList.River.color;
+                    break;
+                case 'Tree':
+                    s+=ActorsTypeList.Tree.color;
+                    break;
+                case 'Fire':
+                    s+=ActorsTypeList.Fire.color;
+                    break;
+                case 'Road':
+                    s+=ActorsTypeList.Road.color;
+                    break;
+                //default:
+                  //  s+=ActorsTypeList.Road.color;
+            }
         }
         console.log(s)
         
@@ -219,6 +244,8 @@ function loop(){
     };
 
     world=Road(initializeWorld(world));
+    display(world);
+    console.log()
     for(let i=0;i<10;i++){
         if(i%4==0) world.actors.push({
             pos:     { x: Math.floor(world.Height/2), y: 0 },
