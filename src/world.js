@@ -10,8 +10,8 @@
 
 //This is a list of all types of actors
 const ActorsTypeList = {
-    SimpleMonster : {dx : 3, dy : 3, type : "SimpleMonster", color : "\x1b[37m  \x1b[0m", hit_points : 3},
-    BigMonster : {dx : 1, dy : 1, type : "BigMonster", color : "\x1b[37m🦌\x1b[0m", hit_points : 5},
+    SimpleMonster : {dx : 3, dy : 1, type : "SimpleMonster", color : "\x1b[37m  \x1b[0m", hit_points : 3},
+    BigMonster : {dx : 3, dy : 1, type : "BigMonster", color : "\x1b[37m🦌\x1b[0m", hit_points : 5},
     SimpleTower : {dx : 0, dy : 0, type : "SimpleTower", color : "\x1b[48;2;34;139;34m🏯\x1b[0m", cost : 1000, damage: 1, attack_range : 5},
     MagicTower : {dx : 0, dy : 0, type : "MagicTower", color : "\x1b[37m⛪\x1b[0m", cost : 1500, damage: 2, attack_range : 10},
     Floor : {dx : 0, dy : 0, type : "Floor", color : "\x1b[48;2;34;139;34m ▒\x1b[0m"},
@@ -20,7 +20,6 @@ const ActorsTypeList = {
     Tree : {dx : 0, dy : 0, type : "Tree", color : "\x1b[48;2;34;139;34m 🎄\x1b[0m"},
     Fire : {dx : 0, dy : 0, type : "Fire", color : "\x1b[48;2;34;139;34m 🔥\x1b[0m"},
 };
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////        WORLD            /////////////////////////////////////////////////////
@@ -110,8 +109,8 @@ function display(world){
                 case 'Road':
                     s+=ActorsTypeList.Road.color;
                     break;
-                //default:
-                  //  s+=ActorsTypeList.Road.color;
+               // default:
+                 //   s+=ActorsTypeList.Road.color;
             }
         }
         console.log(s)
@@ -157,20 +156,28 @@ function SimpleMove(anActor, aWorld){
     if(available_position(move, aWorld)){
         return move;
     }
-    move = [x,y-anActor.typeActor.dy];
-    if(available_position(move, aWorld)){
-        return move;
-    }
     move = [x+anActor.typeActor.dx,y];
     if(available_position(move, aWorld)){
         return move;
     }
+    move = [x-anActor.typeActor.dx,y];
+    if(available_position(move, aWorld)){
+        return move;
+    }
+    move = [x,y-anActor.typeActor.dy];
+    if(available_position(move, aWorld)){
+        return move;
+    }
+   
+   
     return [x,y];
 }
 
 //Return True if the move is available, else False
 function available_position(move, world){
-    return world.Matrix[move[0]][move[1]].typeActor===ActorsTypeList.Road;
+    if(move[0]<0 || move[0]>=world.Height || move[1]>=world.Width || move[1]<0 )
+        return 0;
+    return world.Matrix[move[0]][move[1]].typeActor.type=="Road";
 }
 
 
@@ -239,14 +246,15 @@ function loop(){
     
     let world={
         actors:[],
-        Width:50,
+        Width:51,
         Height :25 ,
         Matrix:{}
     };
 
     world=Road(initializeWorld(world));
-    for(let i=0;i<10;i++){
+    for(let i=0;i<70;i++){
         if(i%4==0){
+            
              world.actors.push({
                 pos:     { x: Math.floor(world.Height/2), y: 0 },
                 typeActor:ActorsTypeList.BigMonster
@@ -254,6 +262,19 @@ function loop(){
             });
             world.Matrix[Math.floor(world.Height/2)][0].ActorsTypeList=ActorsTypeList.BigMonster;
         }
+        if(i%4==2){
+            {
+            
+                world.actors.push({
+                   pos:     { x: Math.floor(world.Height/2)+1, y: 0 },
+                   typeActor:ActorsTypeList.SimpleMonster
+   
+               });
+               world.Matrix[Math.floor(world.Height/2)+1][0].ActorsTypeList=ActorsTypeList.SimpleMonster;
+           }
+        }
+      //  console.log(world.actors.length);
+        
     display(world);
     console.log()
 	// console.log(world.actors.length)
@@ -261,7 +282,7 @@ function loop(){
 	for(let j=0;j<world.actors.length;j++){
             let [a,b]=SimpleMove(world.actors[j],world);
             world.Matrix[world.actors[j].pos.x][world.actors[j].pos.y].typeActor=ActorsTypeList.Road;
-            world.Matrix[Math.floor(a)][Math.floor(b)].typeActor=world.actors[j].typeActor;
+            world.Matrix[a][b].typeActor=world.actors[j].typeActor;
             world.actors[j].pos={x:a,y:b};
 	}
 	
