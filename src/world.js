@@ -181,7 +181,7 @@ function create_simple_tower(i, j, world){
     return world;
 }
 
-function number_of_enemies(i,j,world){
+function number_of_enemies_in_attack_range(i,j,world){
     // if(world.Matrix[i][j].typeActor.type != "Tower"){
     //     console.log("Select a Tower");
     // }
@@ -198,6 +198,11 @@ function number_of_enemies(i,j,world){
     return count;
 }
 
+function Tower_attacks(i,j,world){
+    let enemies = number_of_enemies_in_attack_range(i,j,world);
+    let rand  = Math.floor(Math.random()*enemies);
+    
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -235,7 +240,7 @@ function loop(){
 	display(world);
     console.log()
     create_simple_tower(Math.floor(world.Height/2)+2,11,world);
-	console.log(number_of_enemies(Math.floor(world.Height/2)+2,11,world));
+	console.log(number_of_enemies_in_attack_range(Math.floor(world.Height/2)+2,11,world));
     }
     
 }
