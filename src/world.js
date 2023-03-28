@@ -10,8 +10,8 @@
 
 //This is a list of all types of actors
 const ActorsTypeList = {
-    SimpleMonster : {dx : 3, dy : 1, type : "SimpleMonster", color : "\x1b[37m  \x1b[0m", hit_points : 3},
-    BigMonster : {dx : 3, dy : 1, type : "BigMonster", color : "\x1b[37m🦌\x1b[0m", hit_points : 5},
+    SimpleMonster : {Movement:SimpleMove, type : "SimpleMonster", color : "\x1b[37m  \x1b[0m", hit_points : 3},
+    BigMonster : {Movement:SimpleMove, type : "BigMonster", color : "\x1b[37m🦌\x1b[0m", hit_points : 5},
     SimpleTower : {dx : 0, dy : 0, type : "SimpleTower", color : "\x1b[48;2;34;139;34m🏯\x1b[0m", cost : 1000, damage: 1, attack_range : 5},
     MagicTower : {dx : 0, dy : 0, type : "MagicTower", color : "\x1b[37m⛪\x1b[0m", cost : 1500, damage: 2, attack_range : 10},
     Floor : {dx : 0, dy : 0, type : "Floor", color : "\x1b[48;2;34;139;34m ▒\x1b[0m"},
@@ -21,10 +21,43 @@ const ActorsTypeList = {
     Fire : {dx : 0, dy : 0, type : "Fire", color : "\x1b[48;2;34;139;34m 🔥\x1b[0m"},
 };
 
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////        WORLD            /////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+function SimpleMove(anActor, aWorld,type){
+   let dx=2;
+   let dy=2;
+    if(type=="BigMonster"){
+         dx=1;
+         dy=1;
+    }
+   
+    let move = [anActor.pos.x+dx,anActor.pos.y+dy];
+    if(available_position(move, aWorld)){
+        return move;
+    }
+    let rand = Math.random();
+    move = [anActor.pos.x,anActor.pos.y+dy];
+    if(available_position(move, aWorld)){
+        return move;
+    }
+    move = [anActor.pos.x+dx,anActor.pos.y];
+    if(available_position(move, aWorld)){
+        return move;
+    }
+    move = [anActor.pos.x-dx,anActor.pos.y];
+    if(available_position(move, aWorld)){
+        return move;
+    }
+    move = [anActor.pos.x,anActor.pos.y-dy];
+    if(available_position(move, aWorld)){
+        return move;
+    }
+   
+   
+    return [anActor.pos.x,anActor.pos.y];
+}
 function initializeWorld(world){
     world.Matrix = Array(world.Height);
     for(let i=0;i<world.Height;i++){
@@ -144,34 +177,6 @@ const Actor = {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //This function return a possible place to move for the actor 
-function SimpleMove(anActor, aWorld){
-    let x = anActor.pos.x, y = anActor.pos.y;
-    let move = Array(2);
-    move = [x+anActor.typeActor.dx,y+anActor.typeActor.dy];
-    if(available_position(move, aWorld)){
-        return move;
-    }
-    let rand = Math.random();
-    move = [x,y+anActor.typeActor.dy];
-    if(available_position(move, aWorld)){
-        return move;
-    }
-    move = [x+anActor.typeActor.dx,y];
-    if(available_position(move, aWorld)){
-        return move;
-    }
-    move = [x-anActor.typeActor.dx,y];
-    if(available_position(move, aWorld)){
-        return move;
-    }
-    move = [x,y-anActor.typeActor.dy];
-    if(available_position(move, aWorld)){
-        return move;
-    }
-   
-   
-    return [x,y];
-}
 
 //Return True if the move is available, else False
 function available_position(move, world){
@@ -280,7 +285,12 @@ function loop(){
 	// console.log(world.actors.length)
 	
 	for(let j=0;j<world.actors.length;j++){
-            let [a,b]=SimpleMove(world.actors[j],world);
+       // c console.log(world.actors[j].color)
+     //  console.log(world.actors[j].color)
+       var actor=world.actors[j]
+       // console.log(actor)
+            let t=actor.typeActor.Movement(actor,world,actor.type);
+            let [a,b]=t
             world.Matrix[world.actors[j].pos.x][world.actors[j].pos.y].typeActor=ActorsTypeList.Road;
             world.Matrix[a][b].typeActor=world.actors[j].typeActor;
             world.actors[j].pos={x:a,y:b};
@@ -291,8 +301,8 @@ function loop(){
 	    // console.log(z)
             world.Matrix[Math.floor(z.x)][Math.floor(z.y)].typeActor=world.actors[i].typeActor;
 	}*/
-	//display(world);
-    //console.log()
+	display(world);
+    console.log()
     create_simple_tower(Math.floor(world.Height/2)+2,11,world);
 	console.log(number_of_enemies_in_attack_range(Math.floor(world.Height/2)+2,11,world));
     }
