@@ -161,16 +161,11 @@ function display(world){
 //     return ConsActor( pos, (anActor, aWorld) => [_dx, _dy], _type);
 // }
 
-
-
 const Actor = {
     pos : {},
     typeActor : {},
 };
-// const MapTexture = {
-//     Floor : ActorTypeGen({x : 11, y : 1}, 3, 3, "Monster"),
-    
-// }
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////        MONSTERS         /////////////////////////////////////////////////////
@@ -185,6 +180,14 @@ function available_position(move, world){
     return world.Matrix[move[0]][move[1]].typeActor.type=="Road";
 }
 
+
+function gamePhase(aWorld){
+    let Phase=[];
+    for (let i=0; i<aWorld.actors.length; ++i ){
+        Phase.push(SimpleMove(aWorld.actors[i], aWorld));
+    }
+    return Phase;
+}
 
 
 
