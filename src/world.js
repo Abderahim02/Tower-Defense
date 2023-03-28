@@ -111,8 +111,22 @@ function random_road(world){
 //console.log(initializeWorld().Matrix);
     
 function display(world){
+    let s2="";
+    let count=0;
+    for(let i =0; i<world.Height+19; i++){
+        if(i<world.Height/2 +15 && i >world.Height/2+5 && count===0){
+            s2+=" Score : ";
+            s2+=world.score;
+            s2+=" 💀 ";
+            count ++;
+        }
+        else{
+            s2+= "🕸️ ";
+        }
+    }
+    console.log(s2);
     for(let i=0; i<world.Height ;i++){
-        let s=""
+        let s="";
         for(let j=0;j<world.Width;j++){
             switch(world.Matrix[i][j].typeActor.type){
                 case 'SimpleMonster':
@@ -250,6 +264,7 @@ function Tower_attacks(i,j,world){
         //console.log(enemies[0].x)
         if(world.Matrix[enemies[0].x][enemies[0].y].typeActor.hit_points === 1){
             world.Matrix[enemies[0].x][enemies[0].y].typeActor=ActorsTypeList.Road;
+            world.score ++;
         }
         else{
             world.Matrix[enemies[0].x][enemies[0].y].typeActor.hit_points--;
@@ -270,6 +285,7 @@ function loop(){
         actors:[],
         Width:51,
         Height :25 ,
+        score:0,
         Matrix:{}
     };
 
