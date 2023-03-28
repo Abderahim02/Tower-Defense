@@ -11,7 +11,7 @@
 //This is a list of all types of actors
 const ActorsTypeList = {
     SimpleMonster : {dx : 3, dy : 3, type : "Monster", color : "\x1b[37m  \x1b[0m", hit_points : 3},
-    BigMonster : {dx : 1, dy : 1, type : "Monster", color : "\x1b[37m🦌\x1b[0m", hit_points : 5},
+    BigMonster : {dx : 1, dy : 1, type : "Monster", color : "\x1b[37m🔥\x1b[0m", hit_points : 5},
     SimpleTower : {dx : 0, dy : 0, type : "Tower", color : "\x1b[48;2;34;139;34m🏯\x1b[0m", cost : 1000, damage: 1, attack_range : 5},
     MagicTower : {dx : 0, dy : 0, type : "Tower", color : "\x1b[37m⛪\x1b[0m", cost : 1500, damage: 2, attack_range : 10},
     Floor : {dx : 0, dy : 0, type : "Floor", color : "\x1b[48;2;34;139;34m ▒\x1b[0m"},
@@ -201,7 +201,8 @@ function number_of_enemies_in_attack_range(i,j,world){
 function Tower_attacks(i,j,world){
     let enemies = number_of_enemies_in_attack_range(i,j,world);
     let rand  = Math.floor(Math.random()*enemies);
-    
+    let type = world.Matrix[i][j].typeActor;
+    console.log(type);
 }
 
 
@@ -219,7 +220,7 @@ function loop(){
     };
 
     world=Road(initializeWorld(world));
-    for(let i=0;i<10;i++){
+    for(let i=0;i<70;i++){
         if(i%4==0) world.actors.push({
             pos:     { x: Math.floor(world.Height/2), y: 0 },
             typeActor:ActorsTypeList.BigMonster
@@ -242,7 +243,7 @@ function loop(){
     create_simple_tower(Math.floor(world.Height/2)+2,11,world);
 	console.log(number_of_enemies_in_attack_range(Math.floor(world.Height/2)+2,11,world));
     }
-    
+    Tower_attacks(Math.floor(world.Height/2)+2,11, world);
 }
 loop();
 
