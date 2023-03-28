@@ -214,27 +214,41 @@ function create_simple_tower(i, j, world){
     return world;
 }
 
-function number_of_enemies_in_attack_range(i,j,world){
+function enemies_in_attack_range(i,j,world){
     // if(world.Matrix[i][j].typeActor.type != "Tower"){
     //     console.log("Select a Tower");
     // }
+    let enemies=[];
+
     let range = world.Matrix[i][j].typeActor.attack_range;
-    let count = 0;
     for(let k=i-range; k<i+range; k++){
         for(let l=j-range; l<j+range; l++){
             if(world.Matrix[k][l].typeActor.type === ActorsTypeList.BigMonster.type){
-                count++;
+                enemies.push({x:world.Matrix[k][l].pos.x, y:world.Matrix[k][l].pos.y})
+                
+                
             }
         }
     }
     
-    return count;
+    return enemies;
 }
 
+
 function Tower_attacks(i,j,world){
-    let enemies = number_of_enemies_in_attack_range(i,j,world);
-    let rand  = Math.floor(Math.random()*enemies);
-    
+    let enemies = enemies_in_attack_range(i,j,world);
+    if(enemies.length!=0){
+        let rand  = Math.floor(Math.random()*enemies.length);
+        //console.log(enemies[0].x)
+        if(world.Matrix[enemies[0].x][enemies[0].y].typeActor.hit_points === 1){
+            world.Matrix[enemies[0].x][enemies[0].y].typeActor=ActorsTypeList.Road;
+        }
+        else{
+            world.Matrix[enemies[0].x][enemies[0].y].typeActor.hit_points--;
+            console.log(world.Matrix[enemies[0].x][enemies[0].y].typeActor.hit_points);
+        }
+    }
+    return world;
 }
 
 
@@ -252,8 +266,9 @@ function loop(){
     };
 
     world=Road(initializeWorld(world));
-    for(let i=0;i<70;i++){
-        if(i%4==0){
+    world=create_simple_tower(Math.floor(world.Height/2)+2,11,world);
+    for(let i=0;i<30;i++){
+        if(i%6==0){
             
              world.actors.push({
                 pos:     { x: Math.floor(world.Height/2), y: 0 },
@@ -262,7 +277,7 @@ function loop(){
             });
             world.Matrix[Math.floor(world.Height/2)][0].ActorsTypeList=ActorsTypeList.BigMonster;
         }
-        if(i%4==2){
+        if(i%6==3){
             {
             
                 world.actors.push({
@@ -273,6 +288,7 @@ function loop(){
                world.Matrix[Math.floor(world.Height/2)+1][0].ActorsTypeList=ActorsTypeList.SimpleMonster;
            }
         }
+        //world=Tower_attacks(Math.floor(world.Height/2)+2,11,world);
       //  console.log(world.actors.length);
         
     display(world);
@@ -293,10 +309,9 @@ function loop(){
 	}*/
 	//display(world);
     //console.log()
-    create_simple_tower(Math.floor(world.Height/2)+2,11,world);
-	console.log(number_of_enemies_in_attack_range(Math.floor(world.Height/2)+2,11,world));
+    world=Tower_attacks(Math.floor(world.Height/2)+2,11,world);
     }
-    
+    world=Tower_attacks(Math.floor(world.Height/2)+2,11,world);
 }
 loop();
 
