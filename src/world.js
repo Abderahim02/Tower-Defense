@@ -10,8 +10,8 @@
 
 //This is a list of all types of actors
 const ActorsTypeList = {
-    SimpleMonster : {dx : 3, dy : 1, type : "SimpleMonster", color : "\x1b[37m  \x1b[0m", hit_points : 3},
-    BigMonster : {dx : 3, dy : 1, type : "BigMonster", color : "\x1b[37m🦌\x1b[0m", hit_points : 5},
+    SimpleMonster : {Movement:SimpleMove, type : "SimpleMonster", color : "\x1b[37m  \x1b[0m", hit_points : 3},
+    BigMonster : {Movement:SimpleMove, type : "BigMonster", color : "\x1b[37m🦌\x1b[0m", hit_points : 5},
     SimpleTower : {dx : 0, dy : 0, type : "SimpleTower", color : "\x1b[48;2;34;139;34m🏯\x1b[0m", cost : 1000, damage: 1, attack_range : 5},
     MagicTower : {dx : 0, dy : 0, type : "MagicTower", color : "\x1b[37m⛪\x1b[0m", cost : 1500, damage: 2, attack_range : 10},
     Floor : {dx : 0, dy : 0, type : "Floor", color : "\x1b[48;2;34;139;34m ▒\x1b[0m"},
@@ -21,10 +21,43 @@ const ActorsTypeList = {
     Fire : {dx : 0, dy : 0, type : "Fire", color : "\x1b[48;2;34;139;34m 🔥\x1b[0m"},
 };
 
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////        WORLD            /////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+function SimpleMove(anActor, aWorld,type){
+   let dx=2;
+   let dy=2;
+    if(type=="BigMonster"){
+         dx=1;
+         dy=1;
+    }
+   
+    let move = [anActor.pos.x+dx,anActor.pos.y+dy];
+    if(available_position(move, aWorld)){
+        return move;
+    }
+    let rand = Math.random();
+    move = [anActor.pos.x,anActor.pos.y+dy];
+    if(available_position(move, aWorld)){
+        return move;
+    }
+    move = [anActor.pos.x+dx,anActor.pos.y];
+    if(available_position(move, aWorld)){
+        return move;
+    }
+    move = [anActor.pos.x-dx,anActor.pos.y];
+    if(available_position(move, aWorld)){
+        return move;
+    }
+    move = [anActor.pos.x,anActor.pos.y-dy];
+    if(available_position(move, aWorld)){
+        return move;
+    }
+   
+   
+    return [anActor.pos.x,anActor.pos.y];
+}
 function initializeWorld(world){
     world.Matrix = Array(world.Height);
     for(let i=0;i<world.Height;i++){
@@ -139,34 +172,6 @@ const Actor = {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //This function return a possible place to move for the actor 
-function SimpleMove(anActor, aWorld){
-    let x = anActor.pos.x, y = anActor.pos.y;
-    let move = Array(2);
-    move = [x+anActor.typeActor.dx,y+anActor.typeActor.dy];
-    if(available_position(move, aWorld)){
-        return move;
-    }
-    let rand = Math.random();
-    move = [x,y+anActor.typeActor.dy];
-    if(available_position(move, aWorld)){
-        return move;
-    }
-    move = [x+anActor.typeActor.dx,y];
-    if(available_position(move, aWorld)){
-        return move;
-    }
-    move = [x-anActor.typeActor.dx,y];
-    if(available_position(move, aWorld)){
-        return move;
-    }
-    move = [x,y-anActor.typeActor.dy];
-    if(available_position(move, aWorld)){
-        return move;
-    }
-   
-   
-    return [x,y];
-}
 
 //Return True if the move is available, else False
 function available_position(move, world){
@@ -272,27 +277,41 @@ function create_simple_tower(i, j, world){
     return world;
 }
 
-function number_of_enemies_in_attack_range(i,j,world){
+function enemies_in_attack_range(i,j,world){
     // if(world.Matrix[i][j].typeActor.type != "Tower"){
     //     console.log("Select a Tower");
     // }
+    let enemies=[];
+
     let range = world.Matrix[i][j].typeActor.attack_range;
-    let count = 0;
     for(let k=i-range; k<i+range; k++){
         for(let l=j-range; l<j+range; l++){
             if(world.Matrix[k][l].typeActor.type === ActorsTypeList.BigMonster.type){
-                count++;
+                enemies.push({x:world.Matrix[k][l].pos.x, y:world.Matrix[k][l].pos.y})
+                
+                
             }
         }
     }
     
-    return count;
+    return enemies;
 }
 
+
 function Tower_attacks(i,j,world){
-    let enemies = number_of_enemies_in_attack_range(i,j,world);
-    let rand  = Math.floor(Math.random()*enemies);
-    
+    let enemies = enemies_in_attack_range(i,j,world);
+    if(enemies.length!=0){
+        let rand  = Math.floor(Math.random()*enemies.length);
+        //console.log(enemies[0].x)
+        if(world.Matrix[enemies[0].x][enemies[0].y].typeActor.hit_points === 1){
+            world.Matrix[enemies[0].x][enemies[0].y].typeActor=ActorsTypeList.Road;
+        }
+        else{
+            world.Matrix[enemies[0].x][enemies[0].y].typeActor.hit_points--;
+            console.log(world.Matrix[enemies[0].x][enemies[0].y].typeActor.hit_points);
+        }
+    }
+    return world;
 }
 
 
@@ -310,8 +329,9 @@ function loop(){
     };
 
     world=Road(initializeWorld(world));
-    for(let i=0;i<70;i++){
-        if(i%4==0){
+    world=create_simple_tower(Math.floor(world.Height/2)+2,11,world);
+    for(let i=0;i<30;i++){
+        if(i%6==0){
             
              world.actors.push({
                 pos:     { x: Math.floor(world.Height/2), y: 0 },
@@ -320,7 +340,7 @@ function loop(){
             });
             world.Matrix[Math.floor(world.Height/2)][0].ActorsTypeList=ActorsTypeList.BigMonster;
         }
-        if(i%4==2){
+        if(i%6==3){
             {
             
                 world.actors.push({
@@ -331,6 +351,7 @@ function loop(){
                world.Matrix[Math.floor(world.Height/2)+1][0].ActorsTypeList=ActorsTypeList.SimpleMonster;
            }
         }
+        //world=Tower_attacks(Math.floor(world.Height/2)+2,11,world);
       //  console.log(world.actors.length);
         
     display(world);
@@ -338,7 +359,12 @@ function loop(){
 	// console.log(world.actors.length)
 	
 	for(let j=0;j<world.actors.length;j++){
-            let [a,b]=SimpleMove(world.actors[j],world);
+       // c console.log(world.actors[j].color)
+     //  console.log(world.actors[j].color)
+       var actor=world.actors[j]
+       // console.log(actor)
+            let t=actor.typeActor.Movement(actor,world,actor.type);
+            let [a,b]=t
             world.Matrix[world.actors[j].pos.x][world.actors[j].pos.y].typeActor=ActorsTypeList.Road;
             world.Matrix[a][b].typeActor=world.actors[j].typeActor;
             world.actors[j].pos={x:a,y:b};
@@ -351,10 +377,9 @@ function loop(){
 	}*/
 	//display(world);
     //console.log()
-    create_simple_tower(Math.floor(world.Height/2)+2,11,world);
-	console.log(number_of_enemies_in_attack_range(Math.floor(world.Height/2)+2,11,world));
+    world=Tower_attacks(Math.floor(world.Height/2)+2,11,world);
     }
-    
+    world=Tower_attacks(Math.floor(world.Height/2)+2,11,world);
 }
 // loop();
 
