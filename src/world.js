@@ -179,11 +179,66 @@ function available_position(move, world){
 function gamePhase(aWorld){
     let Phase=[];
     for (let i=0; i<aWorld.actors.length; ++i ){
-        Phase.push(SimpleMove(aWorld.actors[i], aWorld));
+        let tmp = SimpleMove(aWorld.actors[i], aWorld);
+        Phase.push({index :i ,type : aWorld.actors[i].typeActor ,exPos : aWorld.actors[i].pos, newPos : {x : tmp[0], y :tmp[1]}}) ;
     }
     return Phase;
 }
 
+function test_gamePhase(){
+    let world={
+        actors:[{
+            pos:     { x: 0 , y: 0 },
+            typeActor:ActorsTypeList.BigMonster
+        } ],
+        Width:51,
+        Height :25 ,
+        Matrix:{}
+    };
+    world=Road(initializeWorld(world));
+    world.actors[0].pos = {x : Math.floor(world.Height/2), y : 0};
+    world.Matrix[Math.floor(world.Height/2)][ 0 ].typeActor = ActorsTypeList.BigMonster;
+    display(world);
+    console.log(world.actors);
+    console.log(gamePhase(world));
+    console.log("\napre\n");
+    console.log(world.actors);
+    console.log(gamePhase(world));
+}
+test_gamePhase();
+
+
+function GameMotor(aPhase, aWorld){
+    for(let i=0; i<aPhase.length; ++i){
+        let [index,type,ex_pos,new_pos]=aPhase[i];
+        aWorld.Matrix[new_pos.x][new_pos.y].typeActor = type ;
+        aWorld.Matrix[ex_pos.x][ex_pos.y].typeActor = ActorsTypeList.Road;
+        aWorld.actors[index].x = new_pos.x;
+        aWorld.actors[index].y = new_pos.y;
+    }
+}
+
+function test_GameMotor(){
+    let world={
+        actors:[{
+            pos:     { x: 0 , y: 0 },
+            typeActor:ActorsTypeList.BigMonster
+        } ],
+        Width:51,
+        Height :25 ,
+        Matrix:{}
+    };
+    world=Road(initializeWorld(world));
+    world.actors[0].pos = {x : Math.floor(world.Height/2), y : 0};
+    world.Matrix[Math.floor(world.Height/2)][ 0 ].typeActor = ActorsTypeList.BigMonster;
+    display(world);
+    // console.log(world.actors);
+    // console.log(gamePhase(world));
+    // console.log("\napre\n");
+    // console.log(world.actors);
+    // console.log(gamePhase(world));
+}
+test_GameMotor();
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -301,7 +356,7 @@ function loop(){
     }
     
 }
-loop();
+// loop();
 
 
 
