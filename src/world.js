@@ -76,7 +76,7 @@ function initializeWorld(world){
 
 //console.log(initializeWorld().Matrix[1][1].actions.move(1,1)[0]);
 
-function Road(world){
+export function Road(world){
     for(let i=0;i<=world.Height;i++){
         for(let j=0;j<world.Width  ;j++){
            if((j<=world.Width/4 || j>=3*world.Width/4) && (i<=world.Height/2+1 && i>=world.Height/2-1)){
@@ -340,11 +340,6 @@ function loop(){
     world=Tower_attacks(Math.floor(world.Height/2)+2,11,world);
 }
 loop();
-
-
-
-
-
 
 
 
