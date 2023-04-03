@@ -11,9 +11,9 @@
 //This is a list of all types of actors
 const ActorsTypeList = {
     SimpleMonster : {Movement:SimpleMove, type : "SimpleMonster", color : "\x1b[37m  \x1b[0m", hit_points : 3},
-    BigMonster : {Movement:SimpleMove, type : "BigMonster", color : "\x1b[37m🦌\x1b[0m", hit_points : 5},
-    SimpleTower : {dx : 0, dy : 0, type : "SimpleTower", color : "\x1b[48;2;34;139;34m🏯\x1b[0m", cost : 1000, damage: 1, attack_range : 5},
-    MagicTower : {dx : 0, dy : 0, type : "MagicTower", color : "\x1b[37m⛪\x1b[0m", cost : 1500, damage: 2, attack_range : 10},
+    BigMonster : {Movement:SimpleMove, type : "BigMonster", color : "\x1b[37m🦌\x1b[0m", hit_points : 3},
+    SimpleTower : {dx : 0, dy : 0, type : "SimpleTower", color : "\x1b[48;2;34;139;34m🏯\x1b[0m", cost : 1000, damage: 5, attack_range : 5},
+    MagicTower : {dx : 0, dy : 0, type : "MagicTower", color : "\x1b[37m⛪\x1b[0m", cost : 1500, damage: 5, attack_range : 10},
     Floor : {dx : 0, dy : 0, type : "Floor", color : "\x1b[48;2;34;139;34m ▒\x1b[0m"},
     River : {dx : 0, dy : 0, type : "River" , color : "\x1b[37m  \x1b[0m"},
     Road : {dx : 0, dy : 0, type : "Road" , color : "\x1b[48;2;76;70;50m  \x1b[0m"},
@@ -76,7 +76,7 @@ function initializeWorld(world){
 
 //console.log(initializeWorld().Matrix[1][1].actions.move(1,1)[0]);
 
-function Road(world){
+export function Road(world){
     for(let i=0;i<=world.Height;i++){
         for(let j=0;j<world.Width  ;j++){
            if((j<=world.Width/4 || j>=3*world.Width/4) && (i<=world.Height/2+1 && i>=world.Height/2-1)){
@@ -111,8 +111,22 @@ function random_road(world){
 //console.log(initializeWorld().Matrix);
     
 function display(world){
+    let s2="";
+    let count=0;
+    for(let i =0; i<world.Height+19; i++){
+        if(i<world.Height/2 +15 && i >world.Height/2+5 && count===0){
+            s2+=" Score : ";
+            s2+=world.score;
+            s2+=" 💀 ";
+            count ++;
+        }
+        else{
+            s2+= "🕸️ ";
+        }
+    }
+    console.log(s2);
     for(let i=0; i<world.Height ;i++){
-        let s=""
+        let s="";
         for(let j=0;j<world.Width;j++){
             switch(world.Matrix[i][j].typeActor.type){
                 case 'SimpleMonster':
@@ -303,12 +317,10 @@ function Tower_attacks(i,j,world){
     if(enemies.length!=0){
         let rand  = Math.floor(Math.random()*enemies.length);
         //console.log(enemies[0].x)
-        if(world.Matrix[enemies[0].x][enemies[0].y].typeActor.hit_points === 1){
-            world.Matrix[enemies[0].x][enemies[0].y].typeActor=ActorsTypeList.Road;
-        }
-        else{
-            world.Matrix[enemies[0].x][enemies[0].y].typeActor.hit_points--;
-            console.log(world.Matrix[enemies[0].x][enemies[0].y].typeActor.hit_points);
+        world.Matrix[enemies[rand].x][enemies[rand].y].typeActor.hit_points-=world.Matrix[i][j].typeActor.damage;
+        if(world.Matrix[enemies[rand].x][enemies[rand].y].typeActor.hit_points <= 0){
+            world.Matrix[enemies[rand].x][enemies[rand].y].typeActor=ActorsTypeList.Road;
+            world.score ++;
         }
     }
     return world;
@@ -325,6 +337,7 @@ function loop(){
         actors:[],
         Width:51,
         Height :25 ,
+        score:0,
         Matrix:{}
     };
 
@@ -382,11 +395,6 @@ function loop(){
     world=Tower_attacks(Math.floor(world.Height/2)+2,11,world);
 }
 // loop();
-
-
-
-
-
 
 
 
