@@ -75,7 +75,26 @@ function initializeWorld(world){
 }
 
 //console.log(initializeWorld().Matrix[1][1].actions.move(1,1)[0]);
+function setActor(world, i, j, anActorType){
+    world.Matrix[i][j].typeActor=anActorType;
+}
+export function RoadFunctionnal(world){
+    for(let i=0;i<=world.Height;i++){
+        for(let j=0;j<world.Width  ;j++){
+           if((j<=world.Width/4 || j>=3*world.Width/4) && (i<=world.Height/2+1 && i>=world.Height/2-1)){
+            setActor(world, i, j, ActorsTypeList.Road);
+           }
+           else if(((i<=world.Height/3+1 && i>=world.Height/3-1 || i<=(2/3)*world.Height+1 && i>=(2/3)*world.Height-1) && !(j<=world.Width/4 || j>=3*world.Width/4))){
+            setActor(world, i, j, ActorsTypeList.Road);
+           }
+           if(((j>=world.Width/4-1 && j<=world.Width/4+1) || (j>=3*world.Width/4-1 && j<=3*world.Width/4+1) ) && (i>=world.Height/3-1 && i<=(2/3)*world.Height+1)){
+            setActor(world, i, j, ActorsTypeList.Road);
+           }
+        }
+    }
+    return world;
 
+}
 export function Road(world){
     for(let i=0;i<=world.Height;i++){
         for(let j=0;j<world.Width  ;j++){
@@ -167,13 +186,6 @@ function display(world){
 }
 //display(initializeWorld())
 //display(Road(initializeWorld()));
-
-// function ConsActor(_pos, _actions, _type) { return { pos: _pos, actions: _actions, type : _type}; }
-
-
-// function ActorTypeGen(pos, _dx, _dy, _type){
-//     return ConsActor( pos, (anActor, aWorld) => [_dx, _dy], _type);
-// }
 
 const Actor = {
     pos : {},
