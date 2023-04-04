@@ -1,5 +1,6 @@
 
 import {Road} from './rand.js'
+import {create_simple_tower, create_magic_tower, enemies_in_attack_range, Tower_attacks} from './actors.js'
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////        BEGIN            /////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -22,7 +23,7 @@ const ActorsTypeList = {
     Fire : {dx : 0, dy : 0, type : "Fire", color : "\x1b[48;2;34;139;34m 🔥\x1b[0m"},
 };
 
-export {ActorsTypeList}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////        WORLD            /////////////////////////////////////////////////////
@@ -138,22 +139,18 @@ function display(world){
                 case 'Road':
                     s+=ActorsTypeList.Road.color;
                     break;
-               // default:
-                 //   s+=ActorsTypeList.Road.color;
             }
         }
         console.log(s)
         
     }
 
-}
-//display(initializeWorld())
-//display(Road(initializeWorld()));
 
 const Actor = {
     pos : {},
     typeActor : {},
 };
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -240,66 +237,6 @@ test_GameMotor();
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-function create_magic_tower(i, j, world){
-    let move = Array(2);
-    move = [i,j]
-    if(!available_position(move, world)){
-        world.Matrix[i][j]={
-            pos:     { x: i, y: j },
-            typeActor:ActorsTypeList.MagicTower
-        };
-        return world;
-    }
-    return world;
-}
-
-function create_simple_tower(i, j, world){
-    let move = Array(2);
-    move = [i,j]
-    if(!available_position(move, world)){
-        world.Matrix[i][j]={
-            pos:     { x: i, y: j },
-            typeActor:ActorsTypeList.SimpleTower
-        };
-        return world;
-    }
-    return world;
-}
-
-function enemies_in_attack_range(i,j,world){
-    // if(world.Matrix[i][j].typeActor.type != "Tower"){
-    //     console.log("Select a Tower");
-    // }
-    let enemies=[];
-
-    let range = world.Matrix[i][j].typeActor.attack_range;
-    for(let k=i-range; k<i+range; k++){
-        for(let l=j-range; l<j+range; l++){
-            if(world.Matrix[k][l].typeActor.type === ActorsTypeList.BigMonster.type){
-                enemies.push({x:world.Matrix[k][l].pos.x, y:world.Matrix[k][l].pos.y})
-                
-                
-            }
-        }
-    }
-    
-    return enemies;
-}
-
-
-function Tower_attacks(i,j,world){
-    let enemies = enemies_in_attack_range(i,j,world);
-    if(enemies.length!=0){
-        let rand  = Math.floor(Math.random()*enemies.length);
-        //console.log(enemies[0].x)
-        world.Matrix[enemies[rand].x][enemies[rand].y].typeActor.hit_points-=world.Matrix[i][j].typeActor.damage;
-        if(world.Matrix[enemies[rand].x][enemies[rand].y].typeActor.hit_points <= 0){
-            world.Matrix[enemies[rand].x][enemies[rand].y].typeActor=ActorsTypeList.Road;
-            world.score ++;
-        }
-    }
-    return world;
-}
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -358,7 +295,7 @@ let end = start-1;
 }
  loop();
 
-
+ export {ActorsTypeList, available_position}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////           END           /////////////////////////////////////////////////////
