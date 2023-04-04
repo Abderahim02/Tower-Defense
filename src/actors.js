@@ -1,5 +1,10 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////        BEGIN            /////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 import { ActorsTypeList } from "./world.js";
-import { available_position } from "./movements.js";
+import { AvailablePosition } from "./movements.js";
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -8,7 +13,7 @@ import { available_position } from "./movements.js";
 
 
 
-function create_magic_tower(i, j, world){
+function CreateMagicTower(i, j, world){
     let move = Array(2);
     move = [i,j]
     if(!available_position(move, world)){
@@ -21,10 +26,10 @@ function create_magic_tower(i, j, world){
     return world;
 }
 
-function create_simple_tower(i, j, world){
+function CreateSimpleTower(i, j, world){
     let move = Array(2);
     move = [i,j]
-    if(!available_position(move, world)){
+    if(!AvailablePosition(move, world)){
         world.Matrix[i][j]={
             pos:     { x: i, y: j },
             typeActor:ActorsTypeList.SimpleTower
@@ -34,7 +39,7 @@ function create_simple_tower(i, j, world){
     return world;
 }
 
-function enemies_in_attack_range(i,j,world){
+function EnemiesInAttackRange(i,j,world){
     // if(world.Matrix[i][j].typeActor.type != "Tower"){
     //     console.log("Select a Tower");
     // }
@@ -55,8 +60,8 @@ function enemies_in_attack_range(i,j,world){
 }
 
 
-function Tower_attacks(i,j,world){
-    let enemies = enemies_in_attack_range(i,j,world);
+function TowerAttacks(i,j,world){
+    let enemies = EnemiesInAttackRange(i,j,world);
     if(enemies.length!=0){
         let rand  = Math.floor(Math.random()*enemies.length);
         //console.log(enemies[0].x)
@@ -69,4 +74,11 @@ function Tower_attacks(i,j,world){
     return world;
 }
 
-export{Tower_attacks, create_magic_tower, create_simple_tower, enemies_in_attack_range}
+export{TowerAttacks, CreateMagicTower, CreateSimpleTower, EnemiesInAttackRange}
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////           END           /////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
