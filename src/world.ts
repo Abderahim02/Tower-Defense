@@ -61,8 +61,6 @@ function noMove(anActor: actor, aWorld: world, type: string) : any {
     return ;
 }
 
-
-
 function CreateEmptyMatrix(width : number, height : number): position[][] {
     let tmp: position[][] = [];
     let b : actor = ActorsTypeList.Floor;
@@ -78,10 +76,12 @@ function CreateEmptyMatrix(width : number, height : number): position[][] {
     return tmp;
 }
 
-
+function CreateWorld(width : number, height : number): world {
+    let emptyWorld : world = {Matrix : CreateEmptyMatrix(width, height), Width : width, Height : height, Score : 0, Actors : []};
+    return emptyWorld;
+}
 
 function initializeWorld(world : world) : world {
-    world.Score =0;
     world.Matrix = CreateEmptyMatrix(world.Width , world.Height);
     return world;
 }
@@ -177,7 +177,7 @@ function display(world : world): void {
 //         aWorld.actors[index].y = new_pos.y;
 //     }
 // }
-export {ActorsTypeList, display, initializeWorld}
+export {ActorsTypeList, display, initializeWorld, CreateWorld}
 
 
 /////////////////////////////////////           END           /////////////////////////////////////////////////////
