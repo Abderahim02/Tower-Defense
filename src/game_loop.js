@@ -22,7 +22,7 @@ let end = start-1;
     world=Road(initializeWorld(world),start,end);
 
     world=create_simple_tower(Math.floor(world.Height/2)+2,11,world);
-    for(let i=0;i<2;i++){
+    for(let i=0;i<60;i++){
         if(i%6==0){
             
              world.actors.push({
