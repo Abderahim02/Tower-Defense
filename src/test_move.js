@@ -1,6 +1,6 @@
 import { ActorsTypeList, display, initializeWorld } from "./world.js";
 
-import { Road } from "./rand_road.js";
+import { R } from "./rand_road.js";
 
 import { CreateSimpleTower, CreateMagicTower, TowerAttacks } from "./actors.js"; 
 
