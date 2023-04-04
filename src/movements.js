@@ -1,4 +1,4 @@
-
+import { ActorsTypeList } from "./world.js";
 
 //This function return a possible place to move for the actor 
 
