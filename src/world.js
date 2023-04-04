@@ -1,5 +1,7 @@
 
-import {Road} from './rand.js'
+import {Road} from './rand_road.js'
+import {create_simple_tower, create_magic_tower, enemies_in_attack_range, Tower_attacks} from './actors.js'
+import { available_position } from './movements.js';
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////        BEGIN            /////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -22,7 +24,7 @@ const ActorsTypeList = {
     Fire : {dx : 0, dy : 0, type : "Fire", color : "\x1b[48;2;34;139;34m 🔥\x1b[0m"},
 };
 
-export {ActorsTypeList}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////        WORLD            /////////////////////////////////////////////////////
@@ -138,36 +140,24 @@ function display(world){
                 case 'Road':
                     s+=ActorsTypeList.Road.color;
                     break;
-               // default:
-                 //   s+=ActorsTypeList.Road.color;
             }
         }
         console.log(s)
         
     }
 
-}
-//display(initializeWorld())
-//display(Road(initializeWorld()));
 
 const Actor = {
     pos : {},
     typeActor : {},
 };
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////        MONSTERS         /////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//This function return a possible place to move for the actor 
-
-//Return True if the move is available, else False
-function available_position(move, world){
-    if(move[0]<0 || move[0]>=world.Height || move[1]>=world.Width || move[1]<0 )
-        return 0;
-    return world.Matrix[move[0]][move[1]].typeActor.type=="Road";
-}
 
 
 function gamePhase(aWorld){
@@ -235,129 +225,12 @@ function test_GameMotor(){
 test_GameMotor();
 
 */
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////        TOWER            /////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-function create_magic_tower(i, j, world){
-    let move = Array(2);
-    move = [i,j]
-    if(!available_position(move, world)){
-        world.Matrix[i][j]={
-            pos:     { x: i, y: j },
-            typeActor:ActorsTypeList.MagicTower
-        };
-        return world;
-    }
-    return world;
-}
-
-function create_simple_tower(i, j, world){
-    let move = Array(2);
-    move = [i,j]
-    if(!available_position(move, world)){
-        world.Matrix[i][j]={
-            pos:     { x: i, y: j },
-            typeActor:ActorsTypeList.SimpleTower
-        };
-        return world;
-    }
-    return world;
-}
-
-function enemies_in_attack_range(i,j,world){
-    // if(world.Matrix[i][j].typeActor.type != "Tower"){
-    //     console.log("Select a Tower");
-    // }
-    let enemies=[];
-
-    let range = world.Matrix[i][j].typeActor.attack_range;
-    for(let k=i-range; k<i+range; k++){
-        for(let l=j-range; l<j+range; l++){
-            if(world.Matrix[k][l].typeActor.type === ActorsTypeList.BigMonster.type){
-                enemies.push({x:world.Matrix[k][l].pos.x, y:world.Matrix[k][l].pos.y})
-                
-                
-            }
-        }
-    }
-    
-    return enemies;
-}
 
 
-function Tower_attacks(i,j,world){
-    let enemies = enemies_in_attack_range(i,j,world);
-    if(enemies.length!=0){
-        let rand  = Math.floor(Math.random()*enemies.length);
-        world.Matrix[enemies[rand].x][enemies[rand].y].typeActor.hit_points-=world.Matrix[i][j].typeActor.damage;
-        if(world.Matrix[enemies[rand].x][enemies[rand].y].typeActor.hit_points <= 0){
-            world.Matrix[enemies[rand].x][enemies[rand].y].typeActor=ActorsTypeList.Road;
-            world.score ++;
-        }
-    }
-    return world;
-}
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////        LOOP             /////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-function loop(){
-    
-    let world={
-        actors:[],
-        Width:15,
-        Height :10 ,
-        score:0,
-        Matrix:{}
-    };
-let start = Math.floor(world.Height/2)*world.Width;
-let end = start-1;
-    world=Road(initializeWorld(world),start,end);
-
-    world=create_simple_tower(Math.floor(world.Height/2)+2,11,world);
-    for(let i=0;i<2;i++){
-        if(i%6==0){
-            
-             world.actors.push({
-                pos:     { x: Math.floor(world.Height/2), y: 0 },
-                typeActor:ActorsTypeList.BigMonster
-
-            });
-            world.Matrix[Math.floor(world.Height/2)][0].ActorsTypeList=ActorsTypeList.BigMonster;
-        }
-        if(i%6==3){
-            {
-            
-                world.actors.push({
-                   pos:     { x: Math.floor(world.Height/2)+1, y: 0 },
-                   typeActor:ActorsTypeList.SimpleMonster
-   
-               });
-               world.Matrix[Math.floor(world.Height/2)+1][0].ActorsTypeList=ActorsTypeList.SimpleMonster;
-           }
-        }
-        
-    display(world);
-    console.log()
-	
-	for(let j=0;j<world.actors.length;j++){
-            var actor=world.actors[j]
-            let t=actor.typeActor.Movement(actor,world,actor.type);
-            let [a,b]=t
-            world.Matrix[world.actors[j].pos.x][world.actors[j].pos.y].typeActor=ActorsTypeList.Road;
-            world.Matrix[a][b].typeActor=world.actors[j].typeActor;
-            world.actors[j].pos={x:a,y:b};
-	}
-	
-    }
-}
- loop();
-
-
+ export {ActorsTypeList, display, initializeWorld}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////           END           /////////////////////////////////////////////////////
