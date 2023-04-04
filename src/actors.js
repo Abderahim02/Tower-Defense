@@ -1,4 +1,5 @@
-import { ActorsTypeList , available_position} from "./world.js";
+import { ActorsTypeList } from "./world.js";
+import { available_position } from "./movements.js";
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
