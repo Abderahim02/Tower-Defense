@@ -1,7 +1,6 @@
 
-import {Road} from './rand_road.js'
-import {create_simple_tower, create_magic_tower, enemies_in_attack_range, Tower_attacks} from './actors.js'
-import { available_position } from './movements.js';
+import {Road} from './rand_road.js';
+import { AvailablePosition } from './movements.js';
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////        BEGIN            /////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,24 +37,24 @@ function SimpleMove(anActor, aWorld,type){
     }
    
     let move = [anActor.pos.x+dx,anActor.pos.y+dy];
-    if(available_position(move, aWorld)){
+    if(AvailablePosition(move, aWorld)){
         return move;
     }
     let rand = Math.random();
     move = [anActor.pos.x,anActor.pos.y+dy];
-    if(available_position(move, aWorld)){
+    if(AvailablePosition(move, aWorld)){
         return move;
     }
     move = [anActor.pos.x+dx,anActor.pos.y];
-    if(available_position(move, aWorld)){
+    if(AvailablePosition(move, aWorld)){
         return move;
     }
     move = [anActor.pos.x-dx,anActor.pos.y];
-    if(available_position(move, aWorld)){
+    if(AvailablePosition(move, aWorld)){
         return move;
     }
     move = [anActor.pos.x,anActor.pos.y-dy];
-    if(available_position(move, aWorld)){
+    if(AvailablePosition(move, aWorld)){
         return move;
     }
    
