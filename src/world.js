@@ -341,18 +341,12 @@ let end = start-1;
                world.Matrix[Math.floor(world.Height/2)+1][0].ActorsTypeList=ActorsTypeList.SimpleMonster;
            }
         }
-        //world=Tower_attacks(Math.floor(world.Height/2)+2,11,world);
-      //  console.log(world.actors.length);
         
     display(world);
     console.log()
-	// console.log(world.actors.length)
 	
 	for(let j=0;j<world.actors.length;j++){
-       // c console.log(world.actors[j].color)
-     //  console.log(world.actors[j].color)
-       var actor=world.actors[j]
-       // console.log(actor)
+            var actor=world.actors[j]
             let t=actor.typeActor.Movement(actor,world,actor.type);
             let [a,b]=t
             world.Matrix[world.actors[j].pos.x][world.actors[j].pos.y].typeActor=ActorsTypeList.Road;
@@ -360,16 +354,7 @@ let end = start-1;
             world.actors[j].pos={x:a,y:b};
 	}
 	
-	/*for(let i=0;i<world.actors.length;i++){
-            let z=world.actors[i].pos;
-	    // console.log(z)
-            world.Matrix[Math.floor(z.x)][Math.floor(z.y)].typeActor=world.actors[i].typeActor;
-	}*/
-	//display(world);
-    //console.log()
-  //  world=Tower_attacks(Math.floor(world.Height/2)+2,11,world);
     }
-    //world=Tower_attacks(Math.floor(world.Height/2)+2,11,world);
 }
  loop();
 
