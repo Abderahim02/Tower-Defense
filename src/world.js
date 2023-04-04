@@ -291,7 +291,6 @@ function Tower_attacks(i,j,world){
     let enemies = enemies_in_attack_range(i,j,world);
     if(enemies.length!=0){
         let rand  = Math.floor(Math.random()*enemies.length);
-        //console.log(enemies[0].x)
         world.Matrix[enemies[rand].x][enemies[rand].y].typeActor.hit_points-=world.Matrix[i][j].typeActor.damage;
         if(world.Matrix[enemies[rand].x][enemies[rand].y].typeActor.hit_points <= 0){
             world.Matrix[enemies[rand].x][enemies[rand].y].typeActor=ActorsTypeList.Road;
