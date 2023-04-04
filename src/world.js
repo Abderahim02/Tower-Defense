@@ -1,6 +1,6 @@
 
 import {Road} from './rand_road.js';
-import { AvailablePosition } from './movements.js';
+import { AvailablePosition, SimpleMove } from './movements.js';
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////        BEGIN            /////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -28,39 +28,7 @@ const ActorsTypeList = {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////        WORLD            /////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function SimpleMove(anActor, aWorld,type){
-   let dx=2;
-   let dy=2;
-    if(type=="BigMonster"){
-         dx=1;
-         dy=1;
-    }
-   
-    let move = [anActor.pos.x+dx,anActor.pos.y+dy];
-    if(AvailablePosition(move, aWorld)){
-        return move;
-    }
-    let rand = Math.random();
-    move = [anActor.pos.x,anActor.pos.y+dy];
-    if(AvailablePosition(move, aWorld)){
-        return move;
-    }
-    move = [anActor.pos.x+dx,anActor.pos.y];
-    if(AvailablePosition(move, aWorld)){
-        return move;
-    }
-    move = [anActor.pos.x-dx,anActor.pos.y];
-    if(AvailablePosition(move, aWorld)){
-        return move;
-    }
-    move = [anActor.pos.x,anActor.pos.y-dy];
-    if(AvailablePosition(move, aWorld)){
-        return move;
-    }
-   
-   
-    return [anActor.pos.x,anActor.pos.y];
-}
+
 function initializeWorld(world){
     world.Matrix = Array(world.Height);
     for(let i=0;i<world.Height;i++){

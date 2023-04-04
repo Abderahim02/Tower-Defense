@@ -9,4 +9,39 @@ function AvailablePosition(move, world){
     return world.Matrix[move[0]][move[1]].typeActor.type=="Road";
 }
 
-export {AvailablePosition}
+function SimpleMove(anActor, aWorld,type){
+    let dx=2;
+    let dy=2;
+     if(type=="BigMonster"){
+          dx=1;
+          dy=1;
+     }
+    
+     let move = [anActor.pos.x+dx,anActor.pos.y+dy];
+     if(AvailablePosition(move, aWorld)){
+         return move;
+     }
+     let rand = Math.random();
+     move = [anActor.pos.x,anActor.pos.y+dy];
+     if(AvailablePosition(move, aWorld)){
+         return move;
+     }
+     move = [anActor.pos.x+dx,anActor.pos.y];
+     if(AvailablePosition(move, aWorld)){
+         return move;
+     }
+     move = [anActor.pos.x-dx,anActor.pos.y];
+     if(AvailablePosition(move, aWorld)){
+         return move;
+     }
+     move = [anActor.pos.x,anActor.pos.y-dy];
+     if(AvailablePosition(move, aWorld)){
+         return move;
+     }
+    
+    
+     return [anActor.pos.x,anActor.pos.y];
+ }
+
+
+export {AvailablePosition, SimpleMove}
