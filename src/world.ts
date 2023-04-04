@@ -1,6 +1,6 @@
 
 import {Road} from './rand_road.js';
-import { AvailablePosition, SimpleMove } from './movements.js';
+import { AvailablePosition, SimpleMove } from './movements.ts';
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //the type that defines the world 
