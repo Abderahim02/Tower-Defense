@@ -4,7 +4,7 @@ import { AvailablePosition, SimpleMove } from './Moves.js';
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //the type that defines the world 
-type actor = {
+export type actor = {
     Move : Function;
     Type : string;
     Color : string;
@@ -14,16 +14,16 @@ type actor = {
     AttackRange : number;
 }
 
-type point = {
+export type point = {
     x : number;
     y : number;
 }
-type position = {
+export type position = {
     Pos: point;
     AnActor : actor;
 }
 
-type world = {
+export type world = {
     Matrix : position[][] ;
     Width : number;
     Height : number;
