@@ -1,5 +1,6 @@
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+import {Road} from './rand.js'
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////        BEGIN            /////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -21,6 +22,7 @@ const ActorsTypeList = {
     Fire : {dx : 0, dy : 0, type : "Fire", color : "\x1b[48;2;34;139;34m 🔥\x1b[0m"},
 };
 
+export {ActorsTypeList}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////        WORLD            /////////////////////////////////////////////////////
@@ -74,25 +76,7 @@ function initializeWorld(world){
     return world;
 }
 
-//console.log(initializeWorld().Matrix[1][1].actions.move(1,1)[0]);
 
-export function Road(world){
-    for(let i=0;i<=world.Height;i++){
-        for(let j=0;j<world.Width  ;j++){
-           if((j<=world.Width/4 || j>=3*world.Width/4) && (i<=world.Height/2+1 && i>=world.Height/2-1)){
-            world.Matrix[i][j].typeActor=ActorsTypeList.Road;
-           }
-           else if(((i<=world.Height/3+1 && i>=world.Height/3-1 || i<=(2/3)*world.Height+1 && i>=(2/3)*world.Height-1) && !(j<=world.Width/4 || j>=3*world.Width/4))){
-            world.Matrix[i][j].typeActor=ActorsTypeList.Road;
-           }
-           if(((j>=world.Width/4-1 && j<=world.Width/4+1) || (j>=3*world.Width/4-1 && j<=3*world.Width/4+1) ) && (i>=world.Height/3-1 && i<=(2/3)*world.Height+1)){
-            world.Matrix[i][j].typeActor=ActorsTypeList.Road;
-           }
-        }
-    }
-    return world;
-
-}
 
 function random_road(world){
     let ht = world.Height;
@@ -108,7 +92,6 @@ function random_road(world){
     return world;
 }
   
-//console.log(initializeWorld().Matrix);
     
 function display(world){
     let s2="";
@@ -280,15 +263,17 @@ function loop(){
     
     let world={
         actors:[],
-        Width:51,
-        Height :25 ,
+        Width:15,
+        Height :10 ,
         score:0,
         Matrix:{}
     };
+let start = Math.floor(world.Width/2)*world.Width;
+let end = start-1;
+    world=Road(initializeWorld(world),start,end);
 
-    world=Road(initializeWorld(world));
     world=create_simple_tower(Math.floor(world.Height/2)+2,11,world);
-    for(let i=0;i<30;i++){
+    for(let i=0;i<2;i++){
         if(i%6==0){
             
              world.actors.push({
@@ -335,9 +320,9 @@ function loop(){
 	}*/
 	//display(world);
     //console.log()
-    world=Tower_attacks(Math.floor(world.Height/2)+2,11,world);
+  //  world=Tower_attacks(Math.floor(world.Height/2)+2,11,world);
     }
-    world=Tower_attacks(Math.floor(world.Height/2)+2,11,world);
+    //world=Tower_attacks(Math.floor(world.Height/2)+2,11,world);
 }
 loop();
 
