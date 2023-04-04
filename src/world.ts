@@ -28,7 +28,7 @@ export type world = {
     Width : number;
     Height : number;
     Score : number;
-    Actors : actor[];
+    Actors : position[];
 }
 
 // let actor : number = 5;
@@ -46,8 +46,8 @@ export type world = {
 // };
 
 const ActorsTypeList = {
-    SimpleMonster : {Move: SimpleMove, Type : "SimpleMonster", Color : "\x1b[37m  \x1b[0m", HitPoints : 3},
-    BigMonster : {Move : SimpleMove, Type : "BigMonster", Color : "\x1b[37m🦌\x1b[0m", HitPoints : 3},
+    SimpleMonster : {Move: SimpleMove, Type : "SimpleMonster", Color : "\x1b[37m  \x1b[0m", HitPoints : 3, Cost : 0, Damage: 0, AttackRange : 0},
+    BigMonster : {Move : SimpleMove, Type : "BigMonster", Color : "\x1b[37m🦌\x1b[0m", HitPoints : 3, Cost : 0, Damage: 0, AttackRange : 0},
     SimpleTower : {Move: noMove, Type : "SimpleTower", Color : "\x1b[48;2;34;139;34m🏯\x1b[0m", HitPoints : 0, Cost : 1000, Damage: 5, AttackRange : 5},
     MagicTower : {Move: noMove, Type : "MagicTower", Color : "\x1b[37m⛪\x1b[0m", Cost : 1500, HitPoints : 0, Damage: 5, AttackRange : 10},
     Floor : {Move: noMove, Type : "Floor", Color : "\x1b[48;2;34;139;34m ▒\x1b[0m", Cost : 0, HitPoints : 0, Damage: 0, AttackRange : 0},
@@ -61,6 +61,11 @@ function noMove(anActor: actor, aWorld: world, type: string) : any {
     return ;
 }
 
+// function ActorGen( type : string){
+//     switch (type){
+
+//     }
+// }
 function CreateEmptyMatrix(width : number, height : number): position[][] {
     let tmp: position[][] = [];
     let b : actor = ActorsTypeList.Floor;

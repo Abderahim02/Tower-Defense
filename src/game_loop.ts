@@ -1,4 +1,4 @@
-import { ActorsTypeList, display, initializeWorld, world, CreateWorld} from "./world.js";
+import { ActorsTypeList, display, initializeWorld, world, CreateWorld, point, position} from "./world.js";
 import { Road } from "./rand_road.js";
 import { CreateSimpleTower, CreateMagicTower } from "./actors.js"; 
 
@@ -14,34 +14,31 @@ function loop() : void {
     for(let i : number = 0 ; i < 60 ; i++ ){
         if(i%6==0){   
              world.Actors.push({
-                pos:     { x: Math.floor(world.Height/2), y: 0 },
-                typeActor:ActorsTypeList.BigMonster
-
+                Pos:  { x: Math.floor(world.Height/2), y: 0 },
+                AnActor : ActorsTypeList.BigMonster
             });
-            world.Matrix[Math.floor(world.Height/2)][0].ActorsTypeList=ActorsTypeList.BigMonster;
+            world.Matrix[Math.floor(world.Height/2)][0].AnActor =ActorsTypeList.BigMonster;
         }
         if(i%6==3){
             {
-            
-                world.actors.push({
-                   pos:     { x: Math.floor(world.Height/2)+1, y: 0 },
-                   typeActor:ActorsTypeList.SimpleMonster
-   
+                world.Actors.push({
+                   Pos:     { x: Math.floor(world.Height/2)+1, y: 0 },
+                   AnActor : ActorsTypeList.SimpleMonster
                });
-               world.Matrix[Math.floor(world.Height/2)+1][0].ActorsTypeList=ActorsTypeList.SimpleMonster;
+               world.Matrix[Math.floor(world.Height/2)+1][0].AnActor =ActorsTypeList.SimpleMonster;
            }
         }
         
     display(world);
     console.log()
 	
-	for(let j=0;j<world.actors.length;j++){
-            var actor=world.actors[j]
-            let t=actor.typeActor.Movement(actor,world,actor.type);
-            let [a,b]=t
-            world.Matrix[world.actors[j].pos.x][world.actors[j].pos.y].typeActor=ActorsTypeList.Road;
-            world.Matrix[a][b].typeActor=world.actors[j].typeActor;
-            world.actors[j].pos={x:a,y:b};
+	for(let j=0;j<world.Actors.length;j++){
+            var actor=world.Actors[j];
+            let t = actor.AnActor.Move(actor,world, actor.AnActor.Type);
+            let [a,b]=t;
+            world.Matrix[world.Actors[j].Pos.x][world.Actors[j].Pos.y].AnActor = ActorsTypeList.Road;
+            world.Matrix[a][b].AnActor = world.Actors[j].AnActor;
+            world.Actors[j].Pos={x:a,y:b};
 	}
 	
     }

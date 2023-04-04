@@ -1,204 +1,130 @@
-
-import {Road} from './rand_road.js';
-import { AvailablePosition, SimpleMove } from './movements.js';
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////        BEGIN            /////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////        ACTORS           /////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+"use strict";
+exports.__esModule = true;
+exports.CreateWorld = exports.initializeWorld = exports.display = exports.ActorsTypeList = void 0;
+var movements_ts_1 = require("./movements.ts");
+// let actor : number = 5;
 //This is a list of all types of actors
-const ActorsTypeList = {
-    SimpleMonster : {Movement:SimpleMove, type : "SimpleMonster", color : "\x1b[37m  \x1b[0m", hit_points : 3},
-    BigMonster : {Movement:SimpleMove, type : "BigMonster", color : "\x1b[37m🦌\x1b[0m", hit_points : 3},
-    SimpleTower : {dx : 0, dy : 0, type : "SimpleTower", color : "\x1b[48;2;34;139;34m🏯\x1b[0m", cost : 1000, damage: 5, attack_range : 5},
-    MagicTower : {dx : 0, dy : 0, type : "MagicTower", color : "\x1b[37m⛪\x1b[0m", cost : 1500, damage: 5, attack_range : 10},
-    Floor : {dx : 0, dy : 0, type : "Floor", color : "\x1b[48;2;34;139;34m ▒\x1b[0m"},
-    River : {dx : 0, dy : 0, type : "River" , color : "\x1b[37m  \x1b[0m"},
-    Road : {dx : 0, dy : 0, type : "Road" , color : "\x1b[48;2;76;70;50m  \x1b[0m"},
-    Tree : {dx : 0, dy : 0, type : "Tree", color : "\x1b[48;2;34;139;34m 🎄\x1b[0m"},
-    Fire : {dx : 0, dy : 0, type : "Fire", color : "\x1b[48;2;34;139;34m 🔥\x1b[0m"},
+// const ActorsTypeList = {
+//     SimpleMonster : {Movement:SimpleMove, type : "SimpleMonster", Color : "\x1b[37m  \x1b[0m", HitPoints : 3},
+//     BigMonster : {Movement:SimpleMove, type : "BigMonster", Color : "\x1b[37m🦌\x1b[0m",  : 3},
+//     SimpleTower : {dx : 0, dy : 0, type : "SimpleTower", Color : "\x1b[48;2;34;139;34m🏯\x1b[0m", cost : 1000, Damage: 5, AttackRange : 5},
+//     MagicTower : {dx : 0, dy : 0, type : "MagicTower", Color : "\x1b[37m⛪\x1b[0m", cost : 1500, Damage: 5, AttackRange : 10},
+//     Floor : {dx : 0, dy : 0, type : "Floor", Color : "\x1b[48;2;34;139;34m ▒\x1b[0m"},
+//     River : {dx : 0, dy : 0, type : "River" , Color : "\x1b[37m  \x1b[0m"},
+//     Road : {dx : 0, dy : 0, type : "Road" , Color : "\x1b[48;2;76;70;50m  \x1b[0m"},
+//     Tree : {dx : 0, dy : 0, type : "Tree", Color : "\x1b[48;2;34;139;34m 🎄\x1b[0m"},
+//     Fire : {dx : 0, dy : 0, type : "Fire", Color : "\x1b[48;2;34;139;34m 🔥\x1b[0m"},
+// };
+var ActorsTypeList = {
+    SimpleMonster: { Move: movements_ts_1.SimpleMove, Type: "SimpleMonster", Color: "\x1b[37m  \x1b[0m", HitPoints: 3, Cost: 0, Damage: 0, AttackRange: 0 },
+    BigMonster: { Move: movements_ts_1.SimpleMove, Type: "BigMonster", Color: "\x1b[37m🦌\x1b[0m", HitPoints: 3, Cost: 0, Damage: 0, AttackRange: 0 },
+    SimpleTower: { Move: noMove, Type: "SimpleTower", Color: "\x1b[48;2;34;139;34m🏯\x1b[0m", HitPoints: 0, Cost: 1000, Damage: 5, AttackRange: 5 },
+    MagicTower: { Move: noMove, Type: "MagicTower", Color: "\x1b[37m⛪\x1b[0m", Cost: 1500, HitPoints: 0, Damage: 5, AttackRange: 10 },
+    Floor: { Move: noMove, Type: "Floor", Color: "\x1b[48;2;34;139;34m ▒\x1b[0m", Cost: 0, HitPoints: 0, Damage: 0, AttackRange: 0 },
+    River: { Move: noMove, Type: "River", Color: "\x1b[37m  \x1b[0m", HitPoints: 0, Cost: 0, Damage: 0, AttackRange: 0 },
+    Road: { Move: noMove, Type: "Road", Color: "\x1b[48;2;76;70;50m  \x1b[0m", HitPoints: 0, Cost: 0, Damage: 0, AttackRange: 0 },
+    Tree: { Move: noMove, Type: "Tree", Color: "\x1b[48;2;34;139;34m 🎄\x1b[0m", HitPoints: 0, Cost: 0, Damage: 0, AttackRange: 0 },
+    Fire: { Move: noMove, Type: "Fire", Color: "\x1b[48;2;34;139;34m 🔥\x1b[0m", HitPoints: 0, Cost: 0, Damage: 0, AttackRange: 0 }
 };
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////        WORLD            /////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-function initializeWorld(world){
-    world.Matrix = Array(world.Height);
-    for(let i=0;i<world.Height;i++){
-	world.Matrix[i]=Array(world.Width);
-    }
-    for(let i=0; i<world.Height; i++){
-        for(let j=0;j<world.Width; j++){
-            world.Matrix[i][j]={
-                pos:     { x: i, y: j },
-                typeActor:ActorsTypeList.Floor
-            };
+exports.ActorsTypeList = ActorsTypeList;
+function noMove(anActor, aWorld, type) {
+    return;
+}
+// function ActorGen( type : string){
+//     switch (type){
+//     }
+// }
+function CreateEmptyMatrix(width, height) {
+    var tmp = [];
+    var b = ActorsTypeList.Floor;
+    var p = { x: 0, y: 0 };
+    for (var i = 0; i < width; i++) {
+        for (var j = 0; j < height; ++j) {
+            tmp[i][j].AnActor = b;
+            // p.x = i;
+            // p.y=j;
+            tmp[i][j].Pos = { x: i, y: j };
         }
     }
+    return tmp;
+}
+function CreateWorld(width, height) {
+    var emptyWorld = { Matrix: CreateEmptyMatrix(width, height), Width: width, Height: height, Score: 0, Actors: [] };
+    return emptyWorld;
+}
+exports.CreateWorld = CreateWorld;
+function initializeWorld(world) {
+    world.Matrix = CreateEmptyMatrix(world.Width, world.Height);
     return world;
 }
+exports.initializeWorld = initializeWorld;
+// function initializeWorld(world : world) : world {
+//     world.Matrix = CreateEmptyMatrix(world.Width , world.Height);
+//     for(let i=0;i<world.Height;i++){
+// 	world.Matrix[i]=Array(world.Width);
+//     }
+//     for(let i=0; i<world.Height; i++){
+//         for(let j=0;j<world.Width; j++){
+//             world.Matrix[i][j]={
+//                 pos:     { x: i, y: j },
+//                 typeActor:ActorsTypeList.Floor
+//             };
+//         }
+//     }
+//     return world;
+// }
 /*
 */
-function random_road(world){
-    let ht = world.Height;
-    let wt = world.Height;
-
-    for(let k=0; k<wt; k+=3){
-        for(let i=Math.floor(ht/2)-1; i<Math.floor(ht/2)+1; i++){
-            for(let j=0+k; j<3+k; j++){
-                world.Matrix[i][j].typeActor=ActorsTypeList.Road;
-            }
+function display(world) {
+    var s2 = "";
+    var count = 0;
+    for (var i = 0; i < world.Height + 19; i++) {
+        if (i < world.Height / 2 + 15 && i > world.Height / 2 + 5 && count === 0) {
+            s2 += " Score : ";
+            s2 += world.Score;
+            s2 += " 💀 ";
+            count++;
         }
-    }
-    return world;
-}
-  
-    
-function display(world){
-    let s2="";
-    let count=0;
-    for(let i =0; i<world.Height+19; i++){
-        if(i<world.Height/2 +15 && i >world.Height/2+5 && count===0){
-            s2+=" Score : ";
-            s2+=world.score;
-            s2+=" 💀 ";
-            count ++;
-        }
-        else{
-            s2+= "🕸️ ";
+        else {
+            s2 += "🕸️ ";
         }
     }
     console.log(s2);
-    for(let i=0; i<world.Height ;i++){
-        let s="";
-        for(let j=0;j<world.Width;j++){
-            switch(world.Matrix[i][j].typeActor.type){
+    for (var i = 0; i < world.Height; i++) {
+        var s = "";
+        for (var j = 0; j < world.Width; j++) {
+            switch (world.Matrix[i][j].AnActor.Type) {
                 case 'SimpleMonster':
-                    s+=ActorsTypeList.SimpleMonster.color;
+                    s += ActorsTypeList.SimpleMonster.Color;
                     break;
                 case 'BigMonster':
-                    s+=ActorsTypeList.BigMonster.color;
+                    s += ActorsTypeList.BigMonster.Color;
                     break;
                 case 'SimpleTower':
-                    s+=ActorsTypeList.SimpleTower.color;
+                    s += ActorsTypeList.SimpleTower.Color;
                     break;
                 case 'MagicTower':
-                    s+=ActorsTypeList.MagicTower.color;
+                    s += ActorsTypeList.MagicTower.Color;
                     break;
                 case 'Floor':
-                    s+=ActorsTypeList.Floor.color;
+                    s += ActorsTypeList.Floor.Color;
                     break;
                 case 'River':
-                    s+=ActorsTypeList.River.color;
+                    s += ActorsTypeList.River.Color;
                     break;
                 case 'Tree':
-                    s+=ActorsTypeList.Tree.color;
+                    s += ActorsTypeList.Tree.Color;
                     break;
                 case 'Fire':
-                    s+=ActorsTypeList.Fire.color;
+                    s += ActorsTypeList.Fire.Color;
                     break;
                 case 'Road':
-                    s+=ActorsTypeList.Road.color;
+                    s += ActorsTypeList.Road.Color;
                     break;
             }
         }
-        console.log(s)
-        
-    }
-
-
-const Actor = {
-    pos : {},
-    typeActor : {},
-};
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////        MONSTERS         /////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-function gamePhase(aWorld){
-    let Phase=[];
-    for (let i=0; i<aWorld.actors.length; ++i ){
-        let tmp = SimpleMove(aWorld.actors[i], aWorld);
-        Phase.push({index :i ,type : aWorld.actors[i].typeActor ,exPos : aWorld.actors[i].pos, newPos : {x : tmp[0], y :tmp[1]}}) ;
-    }
-    return Phase;
-}
-/*
-function test_gamePhase(){
-    let world={
-        actors:[{
-            pos:     { x: 0 , y: 0 },
-            typeActor:ActorsTypeList.BigMonster
-        } ],
-        Width:51,
-        Height :25 ,
-        Matrix:{}
-    };
-    world=Road(initializeWorld(world));
-    world.actors[0].pos = {x : Math.floor(world.Height/2), y : 0};
-    world.Matrix[Math.floor(world.Height/2)][ 0 ].typeActor = ActorsTypeList.BigMonster;
-    display(world);
-    console.log(world.actors);
-    console.log(gamePhase(world));
-    console.log("\napre\n");
-    console.log(world.actors);
-    console.log(gamePhase(world));
-}
-test_gamePhase();
-
-
-function GameMotor(aPhase, aWorld){
-    for(let i=0; i<aPhase.length; ++i){
-        let [index,type,ex_pos,new_pos]=aPhase[i];
-        aWorld.Matrix[new_pos.x][new_pos.y].typeActor = type ;
-        aWorld.Matrix[ex_pos.x][ex_pos.y].typeActor = ActorsTypeList.Road;
-        aWorld.actors[index].x = new_pos.x;
-        aWorld.actors[index].y = new_pos.y;
+        console.log(s);
     }
 }
-
-function test_GameMotor(){
-    let world={
-        actors:[{
-            pos:     { x: 0 , y: 0 },
-            typeActor:ActorsTypeList.BigMonster
-        } ],
-        Width:51,
-        Height :25 ,
-        Matrix:{}
-    };
-    world=Road(initializeWorld(world));
-    world.actors[0].pos = {x : Math.floor(world.Height/2), y : 0};
-    world.Matrix[Math.floor(world.Height/2)][ 0 ].typeActor = ActorsTypeList.BigMonster;
-    display(world);
-    // console.log(world.actors);
-    // console.log(gamePhase(world));
-    // console.log("\napre\n");
-    // console.log(world.actors);
-    // console.log(gamePhase(world));
-}
-test_GameMotor();
-
-*/
-
-
-
-
-
-export {ActorsTypeList, display, initializeWorld}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+exports.display = display;
 /////////////////////////////////////           END           /////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
