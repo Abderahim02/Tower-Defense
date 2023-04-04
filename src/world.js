@@ -75,9 +75,8 @@ function initializeWorld(world){
     }
     return world;
 }
-
-
-
+/*
+*/
 function random_road(world){
     let ht = world.Height;
     let wt = world.Height;
@@ -151,13 +150,6 @@ function display(world){
 //display(initializeWorld())
 //display(Road(initializeWorld()));
 
-// function ConsActor(_pos, _actions, _type) { return { pos: _pos, actions: _actions, type : _type}; }
-
-
-// function ActorTypeGen(pos, _dx, _dy, _type){
-//     return ConsActor( pos, (anActor, aWorld) => [_dx, _dy], _type);
-// }
-
 const Actor = {
     pos : {},
     typeActor : {},
@@ -181,13 +173,68 @@ function available_position(move, world){
 function gamePhase(aWorld){
     let Phase=[];
     for (let i=0; i<aWorld.actors.length; ++i ){
-        Phase.push(SimpleMove(aWorld.actors[i], aWorld));
+        let tmp = SimpleMove(aWorld.actors[i], aWorld);
+        Phase.push({index :i ,type : aWorld.actors[i].typeActor ,exPos : aWorld.actors[i].pos, newPos : {x : tmp[0], y :tmp[1]}}) ;
     }
     return Phase;
 }
+/*
+function test_gamePhase(){
+    let world={
+        actors:[{
+            pos:     { x: 0 , y: 0 },
+            typeActor:ActorsTypeList.BigMonster
+        } ],
+        Width:51,
+        Height :25 ,
+        Matrix:{}
+    };
+    world=Road(initializeWorld(world));
+    world.actors[0].pos = {x : Math.floor(world.Height/2), y : 0};
+    world.Matrix[Math.floor(world.Height/2)][ 0 ].typeActor = ActorsTypeList.BigMonster;
+    display(world);
+    console.log(world.actors);
+    console.log(gamePhase(world));
+    console.log("\napre\n");
+    console.log(world.actors);
+    console.log(gamePhase(world));
+}
+test_gamePhase();
 
 
+function GameMotor(aPhase, aWorld){
+    for(let i=0; i<aPhase.length; ++i){
+        let [index,type,ex_pos,new_pos]=aPhase[i];
+        aWorld.Matrix[new_pos.x][new_pos.y].typeActor = type ;
+        aWorld.Matrix[ex_pos.x][ex_pos.y].typeActor = ActorsTypeList.Road;
+        aWorld.actors[index].x = new_pos.x;
+        aWorld.actors[index].y = new_pos.y;
+    }
+}
 
+function test_GameMotor(){
+    let world={
+        actors:[{
+            pos:     { x: 0 , y: 0 },
+            typeActor:ActorsTypeList.BigMonster
+        } ],
+        Width:51,
+        Height :25 ,
+        Matrix:{}
+    };
+    world=Road(initializeWorld(world));
+    world.actors[0].pos = {x : Math.floor(world.Height/2), y : 0};
+    world.Matrix[Math.floor(world.Height/2)][ 0 ].typeActor = ActorsTypeList.BigMonster;
+    display(world);
+    // console.log(world.actors);
+    // console.log(gamePhase(world));
+    // console.log("\napre\n");
+    // console.log(world.actors);
+    // console.log(gamePhase(world));
+}
+test_GameMotor();
+
+*/
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////        TOWER            /////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -268,7 +315,7 @@ function loop(){
         score:0,
         Matrix:{}
     };
-let start = Math.floor(world.Width/2)*world.Width;
+let start = Math.floor(world.Height/2)*world.Width;
 let end = start-1;
     world=Road(initializeWorld(world),start,end);
 
@@ -324,7 +371,7 @@ let end = start-1;
     }
     //world=Tower_attacks(Math.floor(world.Height/2)+2,11,world);
 }
-loop();
+ loop();
 
 
 
