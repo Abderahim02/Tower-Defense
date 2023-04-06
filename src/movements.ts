@@ -3,7 +3,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-import { ActorsTypeList, world } from "./world.js";
+import { ActorsTypeList, world, actor, position} from "./world.js";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////        MOVES            /////////////////////////////////////////////////////
@@ -17,38 +17,38 @@ function AvailablePosition(move:any, world:world){
     return world.Matrix[move[0]][move[1]].AnActor.Type=="Road";
 }
 
-function SimpleMove(anActor:actor, aWorld:world,type:string){
-    let dx=2;
-    let dy=2;
-     if(type=="BigMonster"){
+function SimpleMove(anActor:position, aWorld:world,type:string){
+    let dx: number=2;
+    let dy: number=2;
+     if(type==="BigMonster"){
           dx=1;
           dy=1;
      }
     
-     let move = [anActor.pos.x+dx,anActor.pos.y+dy];
+     let move:number[] = [anActor.Pos.x+dx,anActor.Pos.y+dy];
      if(AvailablePosition(move, aWorld)){
          return move;
      }
      let rand = Math.random();
-     move = [anActor.pos.x,anActor.pos.y+dy];
+     move = [anActor.Pos.x,anActor.Pos.y+dy];
      if(AvailablePosition(move, aWorld)){
          return move;
      }
-     move = [anActor.pos.x+dx,anActor.pos.y];
+     move = [anActor.Pos.x+dx,anActor.Pos.y];
      if(AvailablePosition(move, aWorld)){
          return move;
      }
-     move = [anActor.pos.x-dx,anActor.pos.y];
+     move = [anActor.Pos.x-dx,anActor.Pos.y];
      if(AvailablePosition(move, aWorld)){
          return move;
      }
-     move = [anActor.pos.x,anActor.pos.y-dy];
+     move = [anActor.Pos.x,anActor.Pos.y-dy];
      if(AvailablePosition(move, aWorld)){
          return move;
      }
     
     
-     return [anActor.pos.x,anActor.pos.y];
+     return [anActor.Pos.x,anActor.Pos.y];
  }
 
 
