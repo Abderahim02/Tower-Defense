@@ -1,7 +1,7 @@
 import { ActorsTypeList, actor, point, position, world } from "./world.js";
 
 // creat a matrix with i*WIDTH+j in the position(i,j) 
-function createMatrix(Width,Height) :number[][] {
+function createMatrix(Width:number,Height:number) :number[][] {
   const matrix:number [][]= [];
 
   for (let i:number = 0; i < Height; i++) {
@@ -29,7 +29,7 @@ function randomPath(world:world, matrix:number[][],start:number, end:number) {
 return path;
 }
 
-function dfs(world:world, currentPosition:number, visited: number[], matrix:number[][],end):number[] | null {
+function dfs(world:world, currentPosition:number, visited: number[], matrix:number[][],end:number):number[] | null {
   // Si on atteint la position finale, retourner le chemin
   if (currentPosition === end) {
 
