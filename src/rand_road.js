@@ -114,7 +114,6 @@ export {
 
 
 function Road(world,start,end){
-  
   let t=randomPath(world, createMatrix(world.Width, world.Height),start, end);
   //console.log(t)
   if(t.length!=0){
@@ -126,6 +125,3 @@ function Road(world,start,end){
   }
   return world;
 }
-
-
-b
