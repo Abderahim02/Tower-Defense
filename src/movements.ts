@@ -3,7 +3,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-import { ActorsTypeList, world } from "./world.js";
+import { ActorsTypeList, world, actor, position} from "./world";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////        MOVES            /////////////////////////////////////////////////////
@@ -11,45 +11,45 @@ import { ActorsTypeList, world } from "./world.js";
 //This function return a possible place to move for the actor 
 
 //Return True if the move is available, else False
-function AvailablePosition(move:any, world:world){
+function AvailablePosition(move:any, world:world):boolean{
     if(move[0]<0 || move[0]>=world.Height || move[1]>=world.Width || move[1]<0 )
-        return 0;
-    return world.Matrix[move[0]][move[1]].AnActor.Type=="Road";
+        return false;
+    return world.Matrix[move[0]][move[1]].AnActor.Type==="Road";
 }
 
-function SimpleMove(anActor:actor, aWorld:world,type:string){
-    let dx=2;
-    let dy=2;
-     if(type=="BigMonster"){
+function SimpleMove(anActor:position, aWorld:world,type:string){
+    let dx: number=2;
+    let dy: number=2;
+     if(type==="BigMonster"){
           dx=1;
           dy=1;
      }
     
-     let move = [anActor.pos.x+dx,anActor.pos.y+dy];
+     let move:number[] = [anActor.Pos.x+dx,anActor.Pos.y+dy];
      if(AvailablePosition(move, aWorld)){
          return move;
      }
-     let rand = Math.random();
-     move = [anActor.pos.x,anActor.pos.y+dy];
+     const rand = Math.random();
+     move = [anActor.Pos.x,anActor.Pos.y+dy];
      if(AvailablePosition(move, aWorld)){
          return move;
      }
-     move = [anActor.pos.x+dx,anActor.pos.y];
+     move = [anActor.Pos.x+dx,anActor.Pos.y];
      if(AvailablePosition(move, aWorld)){
          return move;
      }
-     move = [anActor.pos.x-dx,anActor.pos.y];
+     move = [anActor.Pos.x-dx,anActor.Pos.y];
      if(AvailablePosition(move, aWorld)){
          return move;
      }
-     move = [anActor.pos.x,anActor.pos.y-dy];
+     move = [anActor.Pos.x,anActor.Pos.y-dy];
      if(AvailablePosition(move, aWorld)){
          return move;
      }
     
     
-     return [anActor.pos.x,anActor.pos.y];
+     return [anActor.Pos.x,anActor.Pos.y];
  }
 
 
-export {AvailablePosition, SimpleMove}
+export {AvailablePosition, SimpleMove};

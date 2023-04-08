@@ -3,37 +3,31 @@ SRC_DIR = src
 DIST_DIR = dist
 
 # TypeScript compiler options
-TSC = tsc
-TSC_OPTIONS = --project $(SRC_DIR) --outDir $(DIST_DIR)
+TSC = tsc 
+TSC_OPTIONS = --project .
 
 # Define targets
 .PHONY: all build run test eslint parcel clean
 
-all: move
+all: build
 
 build:
-	$(TSC) $(TSC_OPTIONS)
+	$(TSC) $(TSC_OPTIONS) --outDir $(DIST_DIR)
 
 run:
-	node $(DIST_DIR)/index.ts
+	node $(DIST_DIR)/game_loop.js
 
 test:
 	npm test
 
 world: 
-	node ${SRC_DIR}/world.ts
+	$(TSC) ${SRC_DIR}/world.ts $(TSC_OPTIONS)
 
 actors: 
-	node ${SRC_DIR}/actors.ts
+	$(TSC) ${SRC_DIR}/actors.ts $(TSC_OPTIONS)
 
 movements:
-	node ${SRC_DIR}/movements.ts
-
-game_loop:
-	node ${SRC_DIR}/game_loop.ts
-
-move:
-	node ${SRC_DIR}/test_move.ts
+	$(TSC) ${SRC_DIR}/movements.ts $(TSC_OPTIONS)
 
 html: index.html
 	tidy -q -o index.html index.html
@@ -50,3 +44,5 @@ parcel:
 clean:
 	rm -rf $(DIST_DIR)/*
 	rm -f *~
+	if [ -f src/*.js ]; then rm src/*.js; fi
+	if [ -f tst/*.js ]; then rm tst/*.js; fi
