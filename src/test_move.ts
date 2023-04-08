@@ -42,9 +42,9 @@ function loop(){
     console.log();
 	
 	for(let j=0;j<world.Actors.length;j++){
-            let actor=world.Actors[j]
+            const actor=world.Actors[j];
             const t=actor.AnActor.Move(actor,world,actor.AnActor.Type);
-            const [a,b]=t
+            const [a,b]=t;
             world.Matrix[actor.Pos.x][actor.Pos.y].AnActor.Type=W.ActorsTypeList.Road.Type;
             world.Matrix[a][b].AnActor.Type=world.Actors[j].AnActor.Type;
             world.Actors[j].Pos={x:a,y:b};
