@@ -3,7 +3,7 @@ SRC_DIR = src
 DIST_DIR = dist
 
 # TypeScript compiler options
-TSC = tsc
+TSC = tsc 
 TSC_OPTIONS = --project .
 
 # Define targets
@@ -44,5 +44,5 @@ parcel:
 clean:
 	rm -rf $(DIST_DIR)/*
 	rm -f *~
-	rm  src/*.js
-	rm 	tst/*.js
+	if [ -f src/*.js ]; then rm src/*.js; fi
+	if [ -f tst/*.js ]; then rm tst/*.js; fi
