@@ -11,10 +11,10 @@ import { ActorsTypeList, world, actor, position} from "./world.js";
 //This function return a possible place to move for the actor 
 
 //Return True if the move is available, else False
-function AvailablePosition(move:any, world:world):Boolean{
+function AvailablePosition(move:any, world:world):boolean{
     if(move[0]<0 || move[0]>=world.Height || move[1]>=world.Width || move[1]<0 )
         return false;
-    return world.Matrix[move[0]][move[1]].AnActor.Type=="Road";
+    return world.Matrix[move[0]][move[1]].AnActor.Type==="Road";
 }
 
 function SimpleMove(anActor:position, aWorld:world,type:string){
@@ -29,7 +29,7 @@ function SimpleMove(anActor:position, aWorld:world,type:string){
      if(AvailablePosition(move, aWorld)){
          return move;
      }
-     let rand = Math.random();
+     const rand = Math.random();
      move = [anActor.Pos.x,anActor.Pos.y+dy];
      if(AvailablePosition(move, aWorld)){
          return move;
@@ -52,4 +52,4 @@ function SimpleMove(anActor:position, aWorld:world,type:string){
  }
 
 
-export {AvailablePosition, SimpleMove}
+export {AvailablePosition, SimpleMove};

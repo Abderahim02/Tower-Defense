@@ -5,14 +5,13 @@ function createMatrix(Width:number,Height:number) :number[][] {
   const matrix:number [][]= [];
 
   for (let i:number = 0; i < Height; i++) {
-    let row :number[] = new Array(Width);
+    const row :number[] = new Array(Width);
     for (let j = 0; j < Width; j++) {
       const value:number = i * Width + j;
       row[j]=value;
     }
     matrix[i]=row;
   }
-
   return matrix;
 }
 
@@ -21,10 +20,10 @@ function randomPath(world:world, matrix:number[][],start:number, end:number) {
   // Créer une copie de la matrice pour garder l'originale intacte
   const copyMatrix:number[][] = matrix.slice();
   // visited for cells visited with dfs
-  let visited:number[] = new Array();
+  const visited:number[] = new Array();
   //adding the first element 
   visited.push(start);
-  let path:number[]| null = dfs(world, start, visited, copyMatrix, end);
+  const path:number[]| null = dfs(world, start, visited, copyMatrix, end);
   
 return path;
 }
@@ -37,7 +36,7 @@ function dfs(world:world, currentPosition:number, visited: number[], matrix:numb
   }
 
   // Obtenir les positions voisines
-  let neighbors: number[] = getNeighbors(currentPosition, world.Width, world.Height);
+  const neighbors: number[] = getNeighbors(currentPosition, world.Width, world.Height);
 
   // Mélanger les positions voisines pour obtenir un ordre aléatoire
   shuffleArray(neighbors);
@@ -50,7 +49,7 @@ function dfs(world:world, currentPosition:number, visited: number[], matrix:numb
       // Appeler récursivement l'algorithme DFS pour la position voisine
       
        
-      let path: number[] | null = dfs(world, neighbor, visited, matrix,end);
+      const path: number[] | null = dfs(world, neighbor, visited, matrix,end);
       if (path !== null) {
         // Ajouter la position courante au début du chemin trouvé
        //console.log(path);
@@ -68,7 +67,7 @@ function dfs(world:world, currentPosition:number, visited: number[], matrix:numb
 function getNeighbors(position:number, Width:number, Height:number) {
   const i:number = Math.floor(position / Width);
   const j:number = position % Width;
-  let neighbors:number[] = [];
+  const neighbors:number[] = [];
 
   // Ajouter les positions voisines valides
   if (i > 0) {
@@ -109,16 +108,16 @@ function shuffleArray(array: number[]) {
 export {
    shuffleArray, getNeighbors, dfs, randomPath, createMatrix, Road
 
-}
+};
 
 
 function Road(world: world,start:number,end: number){
   
-  let t:number[] | null=randomPath(world, createMatrix(world.Width, world.Height),start, end);
+  const t:number[] | null=randomPath(world, createMatrix(world.Width, world.Height),start, end);
   //console.log(t)
-  if(t!=null){
+  if(t!==null){
   for(let i=0;i<t.length;i++){
-    let[x,y]: [number,number]=[Math.floor(t[i]/world.Width),t[i]%world.Width];
+    const [x,y]: [number,number]=[Math.floor(t[i]/world.Width),t[i]%world.Width];
   //console.log(x,y)
     world.Matrix[x][y].AnActor=ActorsTypeList.Road;
   }
