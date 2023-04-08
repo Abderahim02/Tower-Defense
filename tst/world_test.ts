@@ -54,7 +54,6 @@ describe('Tower atacks test ', () => {
     test('retruns error if actor not in range', () => {
         let w=W.CreateWorld(15, 10);
         w = W.initializeWorld(w);
-        let actor = 
         expect(A.CreateMagicTower(1,2,w).Matrix[1][2].Pos).toBe({ x: 1, y: 2 });
         expect(A.CreateMagicTower(1,2,w).Matrix[1][2].AnActor).toBe(W.ActorsTypeList.MagicTower);
     });
