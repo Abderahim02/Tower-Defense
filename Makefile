@@ -15,25 +15,20 @@ build:
 	$(TSC) $(TSC_OPTIONS)
 
 run:
-	node $(DIST_DIR)/index.ts
+	tsc $(SRC_DIR)/game_loop.ts
 
 test:
 	npm test
 
 world: 
-	node ${SRC_DIR}/world.ts
+	tsc ${SRC_DIR}/world.ts
 
 actors: 
-	node ${SRC_DIR}/actors.ts
+	tsc ${SRC_DIR}/actors.ts
 
 movements:
-	node ${SRC_DIR}/movements.ts
+	tsc ${SRC_DIR}/movements.ts
 
-game_loop:
-	node ${SRC_DIR}/game_loop.ts
-
-move:
-	node ${SRC_DIR}/test_move.ts
 
 html: index.html
 	tidy -q -o index.html index.html
@@ -50,3 +45,4 @@ parcel:
 clean:
 	rm -rf $(DIST_DIR)/*
 	rm -f *~
+	rm $(SRC_DIR)/*.js

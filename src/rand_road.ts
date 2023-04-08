@@ -20,7 +20,7 @@ function randomPath(world:world, matrix:number[][],start:number, end:number) {
   // Créer une copie de la matrice pour garder l'originale intacte
   const copyMatrix:number[][] = matrix.slice();
   // visited for cells visited with dfs
-  const visited:number[] = [];
+  const visited:number[] = new Array();
   //adding the first element 
   visited.push(start);
   const path:number[]| null = dfs(world, start, visited, copyMatrix, end);
