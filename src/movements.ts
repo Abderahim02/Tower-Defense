@@ -11,9 +11,9 @@ import { ActorsTypeList, world, actor, position} from "./world.js";
 //This function return a possible place to move for the actor 
 
 //Return True if the move is available, else False
-function AvailablePosition(move:any, world:world){
+function AvailablePosition(move:any, world:world):Boolean{
     if(move[0]<0 || move[0]>=world.Height || move[1]>=world.Width || move[1]<0 )
-        return 0;
+        return false;
     return world.Matrix[move[0]][move[1]].AnActor.Type=="Road";
 }
 
