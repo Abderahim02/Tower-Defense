@@ -6,7 +6,7 @@ import { AvailablePosition, SimpleMove } from './movements.js';
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //the type that defines the world 
 export type actor = {
-    Move : Function;
+    Move : Function; //(x: number, y: number) => boolean;
     Type : string;
     Color : string;
     HitPoints : number;
@@ -68,9 +68,9 @@ function noMove(anActor: actor, aWorld: world, type: string) : any {
 //     }
 // }
 function CreateEmptyMatrix(width : number, height : number): position[][] {
-    let tmp: position[][] = [];
-    let b : actor = ActorsTypeList.Floor;
-    let p : point = {x : 0, y : 0};
+    const tmp: position[][] = [];
+    const b : actor = ActorsTypeList.Floor;
+    const p : point = {x : 0, y : 0};
     for (let i : number = 0; i < width; i++) {
         for(let j : number= 0; j< height; ++j){
             tmp[i][j].AnActor = b;
@@ -83,7 +83,7 @@ function CreateEmptyMatrix(width : number, height : number): position[][] {
 }
 
 function CreateWorld(width : number, height : number): world {
-    let emptyWorld : world = {Matrix : CreateEmptyMatrix(width, height), Width : width, Height : height, Score : 0, Actors : []};
+    const emptyWorld : world = {Matrix : CreateEmptyMatrix(width, height), Width : width, Height : height, Score : 0, Actors : []};
     return emptyWorld;
 }
 
@@ -183,7 +183,7 @@ function display(world : world): void {
 //         aWorld.actors[index].y = new_pos.y;
 //     }
 // }
-export {ActorsTypeList, display, initializeWorld, CreateWorld}
+export {ActorsTypeList, display, initializeWorld, CreateWorld};
 
 
 /////////////////////////////////////           END           /////////////////////////////////////////////////////
