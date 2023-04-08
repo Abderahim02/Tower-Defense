@@ -1,6 +1,5 @@
 
-import {Road} from './rand_road.js';
-import { AvailablePosition, SimpleMove } from './movements.js';
+import { AvailablePosition, SimpleMove } from './movements';
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
