@@ -33,7 +33,7 @@ function loop() : void {
     console.log();
 	
 	for(let j=0;j<world.Actors.length;j++){
-            let actor=world.Actors[j];
+            const actor=world.Actors[j];
             const t = actor.AnActor.Move(actor,world, actor.AnActor.Type);
             const [a,b]=t;
             world.Matrix[world.Actors[j].Pos.x][world.Actors[j].Pos.y].AnActor = ActorsTypeList.Road;
