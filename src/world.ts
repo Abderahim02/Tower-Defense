@@ -45,7 +45,7 @@ export type world = {
 //     Fire : {dx : 0, dy : 0, type : "Fire", Color : "\x1b[48;2;34;139;34m 🔥\x1b[0m"},
 // };
 
-const ActorsTypeList = {
+export const ActorsTypeList = {
     SimpleMonster : {Move: SimpleMove, Type : "SimpleMonster", Color : "\x1b[37m  \x1b[0m", HitPoints : 3, Cost : 0, Damage: 0, AttackRange : 0},
     BigMonster : {Move : SimpleMove, Type : "BigMonster", Color : "\x1b[37m🦌\x1b[0m", HitPoints : 3, Cost : 0, Damage: 0, AttackRange : 0},
     SimpleTower : {Move: noMove, Type : "SimpleTower", Color : "\x1b[48;2;34;139;34m🏯\x1b[0m", HitPoints : 0, Cost : 1000, Damage: 5, AttackRange : 5},
@@ -57,7 +57,7 @@ const ActorsTypeList = {
     Fire : {Move: noMove, Type : "Fire", Color : "\x1b[48;2;34;139;34m 🔥\x1b[0m", HitPoints : 0, Cost : 0, Damage: 0, AttackRange : 0},
 };
 
-function noMove(anActor: actor, aWorld: world, type: string) : any {
+export const noMove=(anActor: actor, aWorld: world, type: string) : any =>{
     return ;
 }
 
@@ -66,7 +66,7 @@ function noMove(anActor: actor, aWorld: world, type: string) : any {
 
 //     }
 // }
-function CreateEmptyMatrix(width : number, height : number): position[][] {
+export const CreateEmptyMatrix=(width : number, height : number): position[][]=>{
     const tmp: position[][] = [];
     const b : actor = ActorsTypeList.Floor;
     const p : point = {x : 0, y : 0};
@@ -81,12 +81,12 @@ function CreateEmptyMatrix(width : number, height : number): position[][] {
     return tmp;
 }
 
-function CreateWorld(width : number, height : number): world {
+export const CreateWorld=(width : number, height : number): world =>{
     const emptyWorld : world = {Matrix : CreateEmptyMatrix(width, height), Width : width, Height : height, Score : 0, Actors : []};
     return emptyWorld;
 }
 
-function initializeWorld(world : world) : world {
+export const initializeWorld=(world : world) : world=> {
     world.Matrix = CreateEmptyMatrix(world.Width , world.Height);
     return world;
 }
@@ -110,7 +110,7 @@ function initializeWorld(world : world) : world {
 */
 
     
-function display(world : world): void {
+export const display=(world : world): void=> {
     let s2 : string ="";
     let count : number =0;
     for(let i : number =0; i<world.Height+19; i++){
@@ -182,7 +182,7 @@ function display(world : world): void {
 //         aWorld.actors[index].y = new_pos.y;
 //     }
 // }
-export {ActorsTypeList, display, initializeWorld, CreateWorld};
+//export {ActorsTypeList, display, initializeWorld, CreateWorld};
 
 
 /////////////////////////////////////           END           /////////////////////////////////////////////////////
