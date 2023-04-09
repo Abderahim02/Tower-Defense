@@ -1,5 +1,5 @@
 
-import { AvailablePosition, SimpleMove } from './movements';
+import { AvailablePosition, SimpleMove } from '../src/movements';
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,6 +45,11 @@ export type world = {
 //     Fire : {dx : 0, dy : 0, type : "Fire", Color : "\x1b[48;2;34;139;34m 🔥\x1b[0m"},
 // };
 
+export const noMove=(anActor: actor, aWorld: world, type: string) : any =>{
+    return ;
+}
+
+
 export const ActorsTypeList = {
     SimpleMonster : {Move: SimpleMove, Type : "SimpleMonster", Color : "\x1b[37m  \x1b[0m", HitPoints : 3, Cost : 0, Damage: 0, AttackRange : 0},
     BigMonster : {Move : SimpleMove, Type : "BigMonster", Color : "\x1b[37m🦌\x1b[0m", HitPoints : 3, Cost : 0, Damage: 0, AttackRange : 0},
@@ -57,9 +62,6 @@ export const ActorsTypeList = {
     Fire : {Move: noMove, Type : "Fire", Color : "\x1b[48;2;34;139;34m 🔥\x1b[0m", HitPoints : 0, Cost : 0, Damage: 0, AttackRange : 0},
 };
 
-export const noMove=(anActor: actor, aWorld: world, type: string) : any =>{
-    return ;
-}
 
 // function ActorGen( type : string){
 //     switch (type){
