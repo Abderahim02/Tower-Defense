@@ -3,7 +3,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-import { ActorsTypeList, world, actor, position} from "./world";
+import { ActorsTypeList, world, actor, position} from "../src/world";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////        MOVES            /////////////////////////////////////////////////////
@@ -11,13 +11,13 @@ import { ActorsTypeList, world, actor, position} from "./world";
 //This function return a possible place to move for the actor 
 
 //Return True if the move is available, else False
-function AvailablePosition(move:any, world:world):boolean{
+export const AvailablePosition=(move:any, world:world):boolean=>{
     if(move[0]<0 || move[0]>=world.Height || move[1]>=world.Width || move[1]<0 )
         return false;
     return world.Matrix[move[0]][move[1]].AnActor.Type==="Road";
 }
 
-function SimpleMove(anActor:position, aWorld:world,type:string){
+export const SimpleMove=(anActor:position, aWorld:world,type:string):number[]=>{
     let dx: number=2;
     let dy: number=2;
      if(type==="BigMonster"){
@@ -52,4 +52,4 @@ function SimpleMove(anActor:position, aWorld:world,type:string){
  }
 
 
-export {AvailablePosition, SimpleMove};
+//export {AvailablePosition, SimpleMove};

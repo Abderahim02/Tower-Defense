@@ -1,7 +1,7 @@
-import { ActorsTypeList, actor, point, position, world } from "./world";
+import { ActorsTypeList, actor, point, position, world } from "../src/world";
 
 // creat a matrix with i*WIDTH+j in the position(i,j) 
-function createMatrix(Width:number,Height:number) :number[][] {
+export const createMatrix=(Width:number,Height:number) :number[][]=> {
   const matrix:number [][]= [];
 
   for (let i:number = 0; i < Height; i++) {
@@ -16,7 +16,7 @@ function createMatrix(Width:number,Height:number) :number[][] {
 }
 
 // return the path between start and end 
-function randomPath(world:world, matrix:number[][],start:number, end:number) {
+export const randomPath=(world:world, matrix:number[][],start:number, end:number)=> {
   // Créer une copie de la matrice pour garder l'originale intacte
   const copyMatrix:number[][] = matrix.slice();
   // visited for cells visited with dfs
@@ -64,7 +64,7 @@ return path;
 //   return null;
 // }
 
-function dfs(world:world, currentPosition:number, visited: number[], matrix:number[][],end:number):number[] | null {
+export const dfs=(world:world, currentPosition:number, visited: number[], matrix:number[][],end:number):number[] | null=> {
   // Si on atteint la position finale, retourner le chemin
   if (currentPosition === end) {
 
@@ -108,7 +108,7 @@ function dfs(world:world, currentPosition:number, visited: number[], matrix:numb
 }
 
 
-function getNeighbors(position:number, Width:number, Height:number) {
+export const getNeighbors=(position:number, Width:number, Height:number) =>{
   const i:number = Math.floor(position / Width);
   const j:number = position % Width;
   const neighbors:number[] = [];
@@ -142,7 +142,7 @@ function getNeighbors(position:number, Width:number, Height:number) {
   return neighbors;
 }
 
-function shuffleArray(array: number[]) {
+export const shuffleArray=(array: number[]): void=> {
   for (let i = array.length - 1; i > 0; i--) {
     const j: number = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
@@ -151,7 +151,7 @@ function shuffleArray(array: number[]) {
 
 
 
-function Road(world: world,start:number,end: number){
+export const Road=(world: world,start:number,end: number):world=>{
   
   const t:number[] | null=randomPath(world, createMatrix(world.Width, world.Height),start, end);
   //console.log(t)
@@ -165,9 +165,9 @@ function Road(world: world,start:number,end: number){
   return world;
 }
 
-export {
+/*export {
   shuffleArray, getNeighbors, dfs, randomPath, createMatrix, Road
 
-};
+};*/
 
 

@@ -3,8 +3,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-import { ActorsTypeList, world } from "./world";
-import { AvailablePosition } from "./movements";
+import { ActorsTypeList, world } from "../src/world";
+import { AvailablePosition } from "../src/movements";
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -13,7 +13,7 @@ import { AvailablePosition } from "./movements";
 
 
 
-function CreateMagicTower(i:number, j:number, world:world){
+export const CreateMagicTower=(i:number, j:number, world:world):world=>{
     let move:any = Array(2);
     move = [i,j];
     if(!AvailablePosition(move, world)){
@@ -26,7 +26,7 @@ function CreateMagicTower(i:number, j:number, world:world){
     return world;
 }
 
-function CreateSimpleTower(i:number, j:number, world:world){
+export const CreateSimpleTower=(i:number, j:number, world:world):world=>{
     let move = Array(2);
     move = [i,j];
     if(!AvailablePosition(move, world)){
@@ -39,7 +39,7 @@ function CreateSimpleTower(i:number, j:number, world:world){
     return world;
 }
 
-function EnemiesInAttackRange(i: number,j: number,world: world){
+export const EnemiesInAttackRange=(i: number,j: number,world: world):any[]=>{
     // if(world.Matrix[i][j].typeActor.type != "Tower"){
     //     console.log("Select a Tower");
     // }
@@ -60,7 +60,7 @@ function EnemiesInAttackRange(i: number,j: number,world: world){
 }
 
  
-function TowerAttacks(i: number,j: number,world: world){
+export const TowerAttacks=(i: number,j: number,world: world):world=>{
     const enemies:any = EnemiesInAttackRange(i,j,world);
     if(enemies.length!==0){
         const rand: number  = Math.floor(Math.random()*enemies.length);
@@ -74,7 +74,7 @@ function TowerAttacks(i: number,j: number,world: world){
     return world;
 }
 
-export{TowerAttacks, CreateMagicTower, CreateSimpleTower, EnemiesInAttackRange};
+//export{TowerAttacks, CreateMagicTower, CreateSimpleTower, EnemiesInAttackRange};
 
 
 
