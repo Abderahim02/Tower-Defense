@@ -69,16 +69,22 @@ export const ActorsTypeList = {
 //     }
 // }
 export const CreateEmptyMatrix=(width : number, height : number): position[][]=>{
-    const tmp: position[][] = [];
+    let tmp: position[][] =new Array(height);
     const b : actor = ActorsTypeList.Floor;
-    const p : point = {x : 0, y : 0};
-    for (let i : number = 0; i < width; i++) {
-        for(let j : number= 0; j< height; ++j){
-            tmp[i][j].AnActor = b;
+    //const p : point = {x : 0, y : 0};
+    for (let i = 0; i < height; i++) {
+        tmp[i] = new Array(width);
+      }
+
+    for (let i = 0; i < height; i++) {
+        for(let j = 0; j< width; ++j){
+            tmp[i][j]={
+                AnActor:b,
             // p.x = i;
             // p.y=j;
-            tmp[i][j].Pos = {x : i, y : j};
+            Pos: {x : i, y : j}
         }
+    }
     }
     return tmp;
 }
