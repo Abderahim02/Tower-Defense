@@ -1,6 +1,6 @@
 import { ActorsTypeList, display, initializeWorld, world, CreateWorld, point, position} from "./world.js";
 import { Road } from "./rand_road.js";
-import { CreateSimpleTower, CreateMagicTower, TowersPlacement } from "./actors.js"; 
+import { CreateSimpleTower, CreateMagicTower, TowersPlacement, TowersAttacks } from "./actors.js"; 
 
 
 
@@ -32,6 +32,7 @@ function loop() : void {
         }
         
     display(world);
+    world=TowersAttacks(world);
     console.log();
 	
 	for(let j=0;j<world.Actors.length;j++){
