@@ -21,8 +21,12 @@ export const SimpleMove=(anActor:position, aWorld:world,type:string):number[]=>{
     let dx: number=2;
     let dy: number=2;
      if(type==="BigMonster"){
-          dx=1;
-          dy=1;
+          dx=2;
+          dy=2;
+     }
+     else if (type==="SimpleMonster"){
+        dx=1;
+        dy=1;
      }
     
      let move:number[] = [anActor.Pos.x+dx,anActor.Pos.y+dy];
