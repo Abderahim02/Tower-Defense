@@ -75,7 +75,7 @@ export const TowerAttacks=(i: number,j: number,world: world):world=>{
 };
 
 export const TowersPlacement=(world:world):world=>{
-    let max = 10;
+    const max = 10;
     let count=0;
     for(let i=0; i<world.Height; i++){
         for(let j=0; j<world.Width-1; j++){
@@ -89,7 +89,7 @@ export const TowersPlacement=(world:world):world=>{
         }
     }
     return world;
-}
+};
 
 //export{TowerAttacks, CreateMagicTower, CreateSimpleTower, EnemiesInAttackRange};
 

@@ -83,7 +83,7 @@ export const CreateEmptyMatrix=(width : number, height : number): position[][]=>
             // p.x = i;
             // p.y=j;
             Pos: {x : i, y : j}
-        }
+        };
     }
     }
     return tmp;
