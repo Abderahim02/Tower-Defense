@@ -65,11 +65,10 @@ export const TowersAttacks=(world:world):world=>{
     for(let k=0; k<world.Towers.length; k++){
         const i=world.Towers[k].Pos.x;
         const j=world.Towers[k].Pos.y;
-        function TowerAttacks(i:number, j:number, world:world){
+        function TowerAttacks(i:number, j:number, world:world) : world{
             const enemies:any = EnemiesInAttackRange(i,j,world);
             if(enemies.length!==0){
                 const rand: number  = Math.floor(Math.random()*enemies.length);
-                //console.log(enemies[0].x)
                 world.Matrix[enemies[rand].x][enemies[rand].y].AnActor.HitPoints-=world.Matrix[i][j].AnActor.Damage;
                 if(world.Matrix[enemies[rand].x][enemies[rand].y].AnActor.HitPoints <= 0){
                     world.Matrix[enemies[rand].x][enemies[rand].y].AnActor=ActorsTypeList.Road;
@@ -88,7 +87,7 @@ export const TowersPlacement=(world:world):world=>{
     const max = 10;
     let count=0;
     const floor = ActorsTypeList.Floor.Type;
-    const road = ActorsTypeList.Road.Type
+    const road = ActorsTypeList.Road.Type;
     for(let i=5; i<world.Height-5; i++){
         for(let j=5; j<world.Width-5; j++){
             if((world.Matrix[i][j].AnActor.Type===floor && world.Matrix[i][j+1].AnActor.Type===road && world.Matrix[i+1][j+1].AnActor.Type===road && world.Matrix[i-1][j+1].AnActor.Type===road )){
