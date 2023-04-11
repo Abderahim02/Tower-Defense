@@ -13,20 +13,20 @@ export const createMatrix=(Width:number,Height:number) :number[][]=> {
     matrix[i]=row;
   }
   return matrix;
-}
+};
 
 // return the path between start and end 
 export const randomPath=(world:world, matrix:number[][],start:number, end:number)=> {
   // Créer une copie de la matrice pour garder l'originale intacte
   const copyMatrix:number[][] = matrix.slice();
   // visited for cells visited with dfs
-  const visited:number[] = new Array();
+  const visited:number[] = [start];
   //adding the first element 
-  visited.push(start);
+  //visited(start);
   const path:number[]| null = dfs(world, start, visited, copyMatrix, end);
   
 return path;
-}
+};
 
 // function dfs(world:world, currentPosition:number, visited: number[], matrix:number[][],end:number):number[] | null {
 //   // Si on atteint la position finale, retourner le chemin
@@ -105,7 +105,7 @@ export const dfs=(world:world, currentPosition:number, visited: number[], matrix
 
   // Si aucun chemin n'a été trouvé, retourner null
   return null;
-}
+};
 
 
 export const getNeighbors=(position:number, Width:number, Height:number) =>{
@@ -140,14 +140,14 @@ export const getNeighbors=(position:number, Width:number, Height:number) =>{
   }*/
 
   return neighbors;
-}
+};
 
 export const shuffleArray=(array: number[]): void=> {
   for (let i = array.length - 1; i > 0; i--) {
     const j: number = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
-}
+};
 
 
 
@@ -163,7 +163,7 @@ export const Road=(world: world,start:number,end: number):world=>{
   }
   }
   return world;
-}
+};
 
 /*export {
   shuffleArray, getNeighbors, dfs, randomPath, createMatrix, Road
