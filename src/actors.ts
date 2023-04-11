@@ -82,7 +82,16 @@ export const TowersPlacement=(world:world):world=>{
     for(let i=1; i<world.Height-1; i++){
         for(let j=1; j<world.Width-1; j++){
             if((world.Matrix[i][j].AnActor.Type===floor && world.Matrix[i][j+1].AnActor.Type===road && world.Matrix[i+1][j+1].AnActor.Type===road && world.Matrix[i-1][j+1].AnActor.Type===road )){
-                world=CreateMagicTower(i,j,world);
+                if(Math.floor(Math.random())===0){
+                    world=CreateMagicTower(i,j,world);
+                }
+                else{
+                    world=CreateSimpleTower(i,j,world);
+                }
+                world.Towers.push({
+                    Pos : {x : i, y: j},
+                    AnActor : ActorsTypeList.MagicTower
+                });
                 count++;
             }
             if(max===count){

@@ -6,14 +6,14 @@ import { CreateSimpleTower, CreateMagicTower, TowersPlacement } from "./actors.j
 
 
 function loop() : void {
-    let world : world = CreateWorld(15,10);
+    let world : world = CreateWorld(25,15);
     const start : number = Math.floor(world.Height/2)*world.Width;
     const end : number = start-1;
     world = Road(initializeWorld(world),start,end);
     display(world);
     world = CreateSimpleTower(Math.floor(world.Height/2)+2,11,world);
     world=TowersPlacement(world);
-    for(let i : number = 0 ; i < 5 ; i++ ){
+    for(let i : number = 0 ; i < 50 ; i++ ){
         if(i%6===0){   
              world.Actors.push({
                 Pos:  { x: Math.floor(world.Height/2), y: 0 },

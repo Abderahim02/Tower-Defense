@@ -29,6 +29,7 @@ export type world = {
     Height : number;
     Score : number;
     Actors : position[];
+    Towers : position[];
 }
 
 // let actor : number = 5;
@@ -90,7 +91,7 @@ export const CreateEmptyMatrix=(width : number, height : number): position[][]=>
 };
 
 export const CreateWorld=(width : number, height : number): world =>{
-    const emptyWorld : world = {Matrix : CreateEmptyMatrix(width, height), Width : width, Height : height, Score : 0, Actors : []};
+    const emptyWorld : world = {Matrix : CreateEmptyMatrix(width, height), Width : width, Height : height, Score : 0, Actors : [], Towers : []};
     return emptyWorld;
 };
 
