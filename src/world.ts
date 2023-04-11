@@ -5,7 +5,7 @@ import {Road} from './rand_road.js'
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //the type that defines the world 
 export type actor = {
-    Move : Function; //(x: number, y: number) => boolean;
+    Move:(pos: position, world:world, type:string) => number[]  ;
     Type : string;
     Color : string;
     HitPoints : number;
@@ -41,9 +41,9 @@ export type action = {
     aMove : move ;
 }
 
-export const noMove=(anActor: actor, aWorld: world, type: string) : any =>{
+export const noMove=(pos: position, aWorld: world, type: string) : any =>{
     return ;
-}
+};
 
 
 export const ActorsTypeList = {
@@ -76,17 +76,17 @@ export const CreateEmptyMatrix = (width : number, height : number) : position[][
         }
     }
     return tmp;
-}
+};
 
 export const CreateWorld=(width : number, height : number): world =>{
     const emptyWorld : world = {Matrix : CreateEmptyMatrix(width, height), Width : width, Height : height, Score : 0, Actors : []};
     return emptyWorld;
-}
+};
 
 export const initializeWorld = (world : world) : world=> {
     world.Matrix = CreateEmptyMatrix(world.Width , world.Height);
     return world;
-}
+};
 
 // function initializeWorld(world : world) : world {
 //     world.Matrix = CreateEmptyMatrix(world.Width , world.Height);
@@ -157,7 +157,7 @@ export const display=(world : world): void=> {
         }
         console.log(s);
     }
-}
+};
 
 /*this function create a phase of the game, we see all possible moves for all actors
 and we return a list of actions */
@@ -190,5 +190,5 @@ function test():void{
     world = Road(initializeWorld(world),start,end);
     display(world);
 }
-test();
+// test();
 /////////////////////////////////////           END           /////////////////////////////////////////////////////

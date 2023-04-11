@@ -14,9 +14,8 @@
   },
   "keywords": [],
   "author": "",
-    "type" : "module",
-    "license": "ISC",
-    
+  "license": "ISC",
+  "type": "module",
   "dependencies": {
     "@types/jest": "^29.5.0",
     "@types/node": "^18.15.3",
