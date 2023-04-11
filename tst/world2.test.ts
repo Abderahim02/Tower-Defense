@@ -93,10 +93,10 @@ describe('a phase test ', () => {
             }
             }
         }  
-            let aPhase : W.action[] = W.gamePhase(world);
+            const aPhase : W.action[] = W.gamePhase(world);
             world = W.gameMotor( aPhase, world);
             for(let i=0; i<aPhase.length ; i++){
-                let act : W.action = aPhase[i];
+                const act : W.action = aPhase[i];
                 expect(world.Matrix[act.aMove.NewPos.x][act.aMove.NewPos.y].AnActor.Type).toBe(act.AnActorInfos.AnActor.Type);
             }     
     });

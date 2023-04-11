@@ -61,7 +61,7 @@ export const EnemiesInAttackRange=(i: number,j: number,world: world):any[]=>{
 
 
 
-export const TowersAttacks=(world:world):world=>{
+export const TowersAttacks= (world : world) : world=> {
     for(let k=0; k<world.Towers.length; k++){
         const i=world.Towers[k].Pos.x;
         const j=world.Towers[k].Pos.y;
@@ -81,7 +81,7 @@ export const TowersAttacks=(world:world):world=>{
         return TowerAttacks(i,j,world);
     }
     return world;
-}
+};
 
 export const TowersPlacement=(world:world):world=>{
     const max = 10;
@@ -96,7 +96,7 @@ export const TowersPlacement=(world:world):world=>{
                     world.Towers.push({
                         Pos : {x : i, y: j},
                         AnActor : ActorsTypeList.MagicTower
-                    });
+                    }); 
                 }
                 else{
                     world=CreateSimpleTower(i,j,world);
