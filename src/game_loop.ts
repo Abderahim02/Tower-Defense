@@ -1,6 +1,6 @@
-import { ActorsTypeList, display, initializeWorld, world, CreateWorld, point, position} from "../src/world";
-import { Road } from "../src/rand_road";
-import { CreateSimpleTower, CreateMagicTower } from "../src/actors"; 
+import { ActorsTypeList, display, initializeWorld, world, CreateWorld, point, position} from "./world.js";
+import { Road } from "./rand_road.js";
+import { CreateSimpleTower, CreateMagicTower } from "./actors.js"; 
 
 
 
@@ -58,7 +58,7 @@ function loop() : void {
 //     world=Road(initializeWorld(world),start,end);
 
 //     world=CreateSimpleTower(Math.floor(world.Height/2)+2,11,world);
-//     for(let i=0;i<60;i++){
+//     for(let i=0;i<16;i++){
 //         if(i%6==0){
             
 //              world.actors.push({
