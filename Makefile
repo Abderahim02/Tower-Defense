@@ -14,7 +14,7 @@ all: build
 build:
 	$(TSC) $(TSC_OPTIONS) --outDir $(DIST_DIR)
 
-run:
+game:
 	$(CONVERT)
 	node $(DIST_DIR)/game_loop.js
 
