@@ -153,11 +153,9 @@ export const shuffleArray=(array: number[]): void=> {
 
 export const Road = (world: world, start:number, end: number) : world=>{
   const t:number[] | null=randomPath(world, createMatrix(world.Width, world.Height), start, end);
-  console.log(t)
   if(t!==null){
   for(let i=0; i<t.length ;i++){
     const [x,y]: [number,number]=[Math.floor(t[i]/world.Width), t[i]%world.Width];
-    // world.Matrix[x][y] = [];
     world.Matrix[x][y].AnActor = ActorsTypeList.Road;
   }
   }

@@ -1,6 +1,7 @@
 
 import { AvailablePosition, SimpleMove } from './movements.js';
 import {Road} from './rand_road.js'
+import { CreateSimpleTower, CreateMagicTower, TowersPlacement } from "./actors.js"; 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //the type that defines the world 
@@ -161,7 +162,7 @@ export const display=(world : world): void=> {
 
 /*this function create a phase of the game, we see all possible moves for all actors
 and we return a list of actions */
-function gamePhase(aWorld : world) : action[] {
+export function gamePhase(aWorld : world) : action[] {
     let Phase : action[] = [];
     for (let i : number = 0; i < aWorld.Actors.length; ++i ){
         let tmp : number[] = SimpleMove(aWorld.Actors[i], aWorld, aWorld.Actors[i].AnActor.Type );
@@ -171,7 +172,7 @@ function gamePhase(aWorld : world) : action[] {
     return Phase;
 }
 
-function GameMotor(aPhase : action[] , aWorld : world) : world {
+export function gameMotor(aPhase : action[] , aWorld : world) : world {
     for(let i : number =0; i < aPhase.length; ++i){
         let act : action = aPhase[i];
         aWorld.Matrix[act.aMove.ExPos.x][act.aMove.ExPos.y].AnActor = ActorsTypeList.Road;
@@ -183,12 +184,5 @@ function GameMotor(aPhase : action[] , aWorld : world) : world {
 }
 
 
-function test():void{
-    let world : world = CreateWorld(15,10);
-    const start : number = Math.floor(world.Height/2)*world.Width;
-    const end : number = start-1;
-    world = Road(initializeWorld(world),start,end);
-    display(world);
-}
-// test();
+
 /////////////////////////////////////           END           /////////////////////////////////////////////////////
