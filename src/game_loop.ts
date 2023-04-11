@@ -1,19 +1,19 @@
 import { ActorsTypeList, display, initializeWorld, world, CreateWorld, point, position} from "./world.js";
 import { Road } from "./rand_road.js";
-import { CreateSimpleTower, CreateMagicTower, TowersPlacement } from "./actors.js"; 
+import { CreateSimpleTower, CreateMagicTower, TowersPlacement, TowersAttacks } from "./actors.js"; 
 
 
 
 
 function loop() : void {
-    let world : world = CreateWorld(15,10);
+    let world : world = CreateWorld(25,15);
     const start : number = Math.floor(world.Height/2)*world.Width;
     const end : number = start-1;
     world = Road(initializeWorld(world),start,end);
     display(world);
     world = CreateSimpleTower(Math.floor(world.Height/2)+2,11,world);
     world=TowersPlacement(world);
-    for(let i : number = 0 ; i < 5 ; i++ ){
+    for(let i : number = 0 ; i < 50 ; i++ ){
         if(i%6===0){   
              world.Actors.push({
                 Pos:  { x: Math.floor(world.Height/2), y: 0 },
@@ -32,6 +32,7 @@ function loop() : void {
         }
         
     display(world);
+    world=TowersAttacks(world);
     console.log();
 	
 	for(let j=0;j<world.Actors.length;j++){
