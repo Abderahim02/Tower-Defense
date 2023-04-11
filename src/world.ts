@@ -5,7 +5,7 @@ import { AvailablePosition, SimpleMove } from './movements.js';
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //the type that defines the world 
 export type actor = {
-    Move : Function; //(x: number, y: number) => boolean;
+    Move:(pos: position, world:world, type:string) => number[]  ;
     Type : string;
     Color : string;
     HitPoints : number;
@@ -45,9 +45,9 @@ export type world = {
 //     Fire : {dx : 0, dy : 0, type : "Fire", Color : "\x1b[48;2;34;139;34m 🔥\x1b[0m"},
 // };
 
-export const noMove=(anActor: actor, aWorld: world, type: string) : any =>{
+export const noMove=(pos: position, aWorld: world, type: string) : any =>{
     return ;
-}
+};
 
 
 export const ActorsTypeList = {
@@ -69,7 +69,7 @@ export const ActorsTypeList = {
 //     }
 // }
 export const CreateEmptyMatrix=(width : number, height : number): position[][]=>{
-    let tmp: position[][] =new Array(height);
+    const tmp: position[][] =new Array(height);
     const b : actor = ActorsTypeList.Floor;
     //const p : point = {x : 0, y : 0};
     for (let i = 0; i < height; i++) {
@@ -83,21 +83,21 @@ export const CreateEmptyMatrix=(width : number, height : number): position[][]=>
             // p.x = i;
             // p.y=j;
             Pos: {x : i, y : j}
-        }
+        };
     }
     }
     return tmp;
-}
+};
 
 export const CreateWorld=(width : number, height : number): world =>{
     const emptyWorld : world = {Matrix : CreateEmptyMatrix(width, height), Width : width, Height : height, Score : 0, Actors : []};
     return emptyWorld;
-}
+};
 
 export const initializeWorld=(world : world) : world=> {
     world.Matrix = CreateEmptyMatrix(world.Width , world.Height);
     return world;
-}
+};
 
 // function initializeWorld(world : world) : world {
 //     world.Matrix = CreateEmptyMatrix(world.Width , world.Height);
@@ -168,7 +168,7 @@ export const display=(world : world): void=> {
         }
         console.log(s);
     }
-}
+};
 
     /////////////////////////////////////        MONSTERS         /////////////////////////////////////////////////////
 

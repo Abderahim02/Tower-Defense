@@ -14,7 +14,7 @@ all: build
 build:
 	$(TSC) $(TSC_OPTIONS) --outDir $(DIST_DIR)
 
-game:
+run:
 	$(CONVERT)
 	node $(DIST_DIR)/game_loop.js
 
@@ -45,5 +45,3 @@ parcel:
 clean:
 	rm -rf $(DIST_DIR)/*
 	rm -f *~
-	src/*.js 
-	tst/*.js 
