@@ -45,5 +45,3 @@ parcel:
 clean:
 	rm -rf $(DIST_DIR)/*
 	rm -f *~
-	src/*.js 
-	tst/*.js 

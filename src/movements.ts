@@ -15,7 +15,7 @@ export const AvailablePosition=(move:any, world:world):boolean=>{
     if(move[0]<0 || move[0]>=world.Height || move[1]>=world.Width || move[1]<0 )
         return false;
     return world.Matrix[move[0]][move[1]].AnActor.Type==="Road";
-}
+};
 
 export const SimpleMove=(anActor:position, aWorld:world,type:string):number[]=>{
     let dx: number=2;
@@ -49,7 +49,7 @@ export const SimpleMove=(anActor:position, aWorld:world,type:string):number[]=>{
     
     
      return [anActor.Pos.x,anActor.Pos.y];
- }
+ };
 
 
 //export {AvailablePosition, SimpleMove};

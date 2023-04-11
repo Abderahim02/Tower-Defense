@@ -24,7 +24,7 @@ export const CreateMagicTower=(i:number, j:number, world:world):world=>{
         return world;
     }
     return world;
-}
+};
 
 export const CreateSimpleTower=(i:number, j:number, world:world):world=>{
     let move = Array(2);
@@ -37,7 +37,7 @@ export const CreateSimpleTower=(i:number, j:number, world:world):world=>{
         return world;
     }
     return world;
-}
+};
 
 export const EnemiesInAttackRange=(i: number,j: number,world: world):any[]=>{
     // if(world.Matrix[i][j].typeActor.type != "Tower"){
@@ -57,7 +57,7 @@ export const EnemiesInAttackRange=(i: number,j: number,world: world):any[]=>{
     }
     
     return enemies;
-}
+};
 
  
 export const TowerAttacks=(i: number,j: number,world: world):world=>{
@@ -72,7 +72,7 @@ export const TowerAttacks=(i: number,j: number,world: world):world=>{
         }
     }
     return world;
-}
+};
 
 //export{TowerAttacks, CreateMagicTower, CreateSimpleTower, EnemiesInAttackRange};
 
