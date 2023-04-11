@@ -77,9 +77,11 @@ export const TowerAttacks=(i: number,j: number,world: world):world=>{
 export const TowersPlacement=(world:world):world=>{
     const max = 10;
     let count=0;
-    for(let i=0; i<world.Height; i++){
-        for(let j=0; j<world.Width-1; j++){
-            if(world.Matrix[i][j].AnActor.Type===ActorsTypeList.Floor.Type && world.Matrix[i][j+1].AnActor.Type===ActorsTypeList.Road.Type){
+    const floor = ActorsTypeList.Floor.Type;
+    const road = ActorsTypeList.Road.Type
+    for(let i=1; i<world.Height-1; i++){
+        for(let j=1; j<world.Width-1; j++){
+            if((world.Matrix[i][j].AnActor.Type===floor && world.Matrix[i][j+1].AnActor.Type===road && world.Matrix[i+1][j+1].AnActor.Type===road && world.Matrix[i-1][j+1].AnActor.Type===road )){
                 world=CreateMagicTower(i,j,world);
                 count++;
             }
