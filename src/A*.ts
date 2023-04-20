@@ -20,10 +20,8 @@ function A_star(s: Vertex, t: Vertex, G: Graph): [number[], number[]] {
   const [distances, parents] = initialization(s, G);
   const GRIS = new Set([s]);
   const NOIR = new Set<Vertex>();
-  // let distances : number[] = new Array(G.size);
-  // let parents: number[] = new Array(G.size);
-  // const bool : number = 1;
-  while (true) {
+  const b : number = 1;
+  while (b !== 0) {
     if (GRIS.size === 0) {
       return [distances, parents];
     }
@@ -37,6 +35,7 @@ function A_star(s: Vertex, t: Vertex, G: Graph): [number[], number[]] {
     }
     color_node_black(x, GRIS, NOIR);
   }
+  return [distances, parents];
 }
 
 function relax(e: Arc, G: Graph, d: number[], parent: number[], GRIS: Set<Vertex>, NOIR: Set<Vertex>) {
@@ -88,7 +87,7 @@ function calculate_d_plus_h_min(GRIS: Set<Vertex>, d: number[], G: Graph): Verte
   let x: Vertex | null = null;
   let min_val = Infinity;
   for (let iter = GRIS.values(), val = iter.next(); !val.done; val = iter.next()) {
-      let v = val.value;
+      const v = val.value;
       if (d[v.s] + heuristic(v, G) < min_val) {
           x = v;
           min_val = d[v.s] + heuristic(v, G);
