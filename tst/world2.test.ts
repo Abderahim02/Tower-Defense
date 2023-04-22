@@ -33,7 +33,19 @@ describe('Actors test suite', () => {
         expect(A.CreateMagicTower(1,2,w).Matrix[1][2].AnActor).toBe(W.ActorsTypeList.MagicTower);
     });
 });
-
+describe('mouvement test suite', () => {
+    test(' mouvement changing test ', () => {
+        let w=W.CreateWorld(15, 10);
+        w = W.initializeWorld(w);
+            w.Matrix[1][2]={
+                Pos:     { x: 1,y: 2 },
+                AnActor:W.ActorsTypeList.BigMonster
+            };
+            console.log(W.ActorsTypeList.BigMonster.Type);
+            // console.log(M.SimpleMove(w.Matrix[1][2],w,W.ActorsTypeList.BigMonster.Type));
+        expect(M.SimpleMove(w.Matrix[1][2],w,W.ActorsTypeList.BigMonster.Type)).toBe([1,2]);
+    });
+});
 
 // describe('mouvement test suite', () => {
 //     test('avaliabale position ', () => {
