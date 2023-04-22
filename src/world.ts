@@ -1,6 +1,7 @@
 
 import { AvailablePosition, SimpleMove } from './movements.js';
-import {Road} from './rand_road.js'
+import {Road} from './rand_road.js';
+import { CreateSimpleTower, CreateMagicTower, TowersPlacement } from "./actors.js"; 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //the type that defines the world 
@@ -29,6 +30,7 @@ export type world = {
     Height : number;
     Score : number;
     Actors : position[];
+    Towers : position[];
 }
 
 export type move = {
@@ -50,7 +52,7 @@ export const ActorsTypeList = {
     SimpleMonster : {Move: SimpleMove, Type : "SimpleMonster", Color : "\x1b[37m  \x1b[0m", HitPoints : 3, Cost : 0, Damage: 0, AttackRange : 0},
     BigMonster : {Move : SimpleMove, Type : "BigMonster", Color : "\x1b[37m🦌\x1b[0m", HitPoints : 3, Cost : 0, Damage: 0, AttackRange : 0},
     SimpleTower : {Move: noMove, Type : "SimpleTower", Color : "\x1b[48;2;34;139;34m🏯\x1b[0m", HitPoints : 0, Cost : 1000, Damage: 5, AttackRange : 5},
-    MagicTower : {Move: noMove, Type : "MagicTower", Color : "\x1b[37m⛪\x1b[0m", Cost : 1500, HitPoints : 0, Damage: 5, AttackRange : 10},
+    MagicTower : {Move: noMove, Type : "MagicTower", Color : "\x1b[37m⛪\x1b[0m", HitPoints : 0, Cost : 1500, Damage: 5, AttackRange : 4},
     Floor : {Move: noMove, Type : "Floor", Color : "\x1b[48;2;34;139;34m ▒\x1b[0m", Cost : 0, HitPoints : 0, Damage: 0, AttackRange : 0},
     River : {Move: noMove, Type : "River" , Color : "\x1b[37m  \x1b[0m", HitPoints : 0, Cost : 0, Damage: 0, AttackRange : 0},
     Road : {Move: noMove, Type : "Road" , Color : "\x1b[48;2;76;70;50m  \x1b[0m", HitPoints : 0, Cost : 0, Damage: 0, AttackRange : 0},
@@ -79,7 +81,7 @@ export const CreateEmptyMatrix = (width : number, height : number) : position[][
 };
 
 export const CreateWorld=(width : number, height : number): world =>{
-    const emptyWorld : world = {Matrix : CreateEmptyMatrix(width, height), Width : width, Height : height, Score : 0, Actors : []};
+    const emptyWorld : world = {Matrix : CreateEmptyMatrix(width, height), Width : width, Height : height, Score : 0, Actors : [], Towers : []};
     return emptyWorld;
 };
 
@@ -161,19 +163,19 @@ export const display=(world : world): void=> {
 
 /*this function create a phase of the game, we see all possible moves for all actors
 and we return a list of actions */
-function gamePhase(aWorld : world) : action[] {
-    let Phase : action[] = [];
+export function gamePhase(aWorld : world) : action[] {
+    const Phase : action[] = [];
     for (let i : number = 0; i < aWorld.Actors.length; ++i ){
-        let tmp : number[] = SimpleMove(aWorld.Actors[i], aWorld, aWorld.Actors[i].AnActor.Type );
-        let mv : action = { AnActorIndex : i,  AnActorInfos : aWorld.Actors[i] , aMove : {ExPos : aWorld.Actors[i].Pos , NewPos : {x : tmp[0], y : tmp[1]} }};
+        const tmp : number[] = SimpleMove(aWorld.Actors[i], aWorld, aWorld.Actors[i].AnActor.Type );
+        const mv : action = { AnActorIndex : i,  AnActorInfos : aWorld.Actors[i] , aMove : {ExPos : aWorld.Actors[i].Pos , NewPos : {x : tmp[0], y : tmp[1]} }};
         Phase.push(mv);
     }
     return Phase;
 }
 
-function GameMotor(aPhase : action[] , aWorld : world) : world {
+export function gameMotor(aPhase : action[] , aWorld : world) : world {
     for(let i : number =0; i < aPhase.length; ++i){
-        let act : action = aPhase[i];
+        const act : action = aPhase[i];
         aWorld.Matrix[act.aMove.ExPos.x][act.aMove.ExPos.y].AnActor = ActorsTypeList.Road;
         aWorld.Matrix[act.aMove.NewPos.x][act.aMove.NewPos.y].AnActor = act.AnActorInfos.AnActor;
         aWorld.Actors[act.AnActorIndex].Pos.x = act.aMove.NewPos.x ;
@@ -183,12 +185,5 @@ function GameMotor(aPhase : action[] , aWorld : world) : world {
 }
 
 
-function test():void{
-    let world : world = CreateWorld(15,10);
-    const start : number = Math.floor(world.Height/2)*world.Width;
-    const end : number = start-1;
-    world = Road(initializeWorld(world),start,end);
-    display(world);
-}
-// test();
+
 /////////////////////////////////////           END           /////////////////////////////////////////////////////

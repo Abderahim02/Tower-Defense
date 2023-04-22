@@ -76,3 +76,40 @@ describe('mouvement test suite', () => {
 //         expect(A.CreateMagicTower(1,2,w).Matrix[1][2].AnActor).toBe(W.ActorsTypeList.MagicTower);
 //     });
 // });
+
+describe('a phase test ', () => {
+
+    test('a phase test ', () => {
+        let world= W.CreateWorld(15, 10);
+        world = W.initializeWorld(world);
+        const start : number = Math.floor(world.Height/2)*world.Width;
+        const end : number = start-1;
+        world = R.Road(W.initializeWorld(world),start,end);
+        world = A.CreateSimpleTower(Math.floor(world.Height/2)+2,11,world);
+        world=A.TowersPlacement(world);
+        for(let i : number = 0 ; i < 5 ; i++ ){
+            if(i%6===0){   
+                world.Actors.push({
+                    Pos:  { x: Math.floor(world.Height/2), y: 0 },
+                    AnActor : W.ActorsTypeList.BigMonster
+                });
+                world.Matrix[Math.floor(world.Height/2)][0].AnActor =W.ActorsTypeList.BigMonster;
+            }
+            if(i%6===3){
+                {
+                    world.Actors.push({
+                    Pos:     { x: Math.floor(world.Height/2)+1, y: 0 },
+                    AnActor : W.ActorsTypeList.SimpleMonster
+                });
+                world.Matrix[Math.floor(world.Height/2)+1][0].AnActor = W.ActorsTypeList.SimpleMonster;
+            }
+            }
+        }  
+            const aPhase : W.action[] = W.gamePhase(world);
+            world = W.gameMotor( aPhase, world);
+            for(let i=0; i<aPhase.length ; i++){
+                const act : W.action = aPhase[i];
+                expect(world.Matrix[act.aMove.NewPos.x][act.aMove.NewPos.y].AnActor.Type).toBe(act.AnActorInfos.AnActor.Type);
+            }     
+    });
+});

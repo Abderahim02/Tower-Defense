@@ -64,4 +64,3 @@ describe('Tower atacks test ', () => {
         expect(A.CreateMagicTower(1,2,w).Matrix[1][2].AnActor).toBe(W.ActorsTypeList.MagicTower);
     });
 });
-
