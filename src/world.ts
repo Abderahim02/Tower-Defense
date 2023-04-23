@@ -85,12 +85,6 @@ export const CreateEmptyMatrix = (width : number, height : number) : position[][
         });
     });
 
-    // for (let i : number = 0; i < height; i++) {
-    //     for(let j : number= 0; j< width; ++j){
-    //         tmp[i][j] = {AnActor : ActorsTypeList.Floor, Pos : {x : i, y : j}};
-    //     }
-    // }
-    
     
 };
 
@@ -194,9 +188,9 @@ export function gameMotor(aPhase : action[] , aWorld : world) : world {
 }
 
 
-export function gameover(world: world): number{
+export function gameover(world: world,end:number): number{
     for(let j=0; j<world.Actors.length; j++){
-        if(world.Actors[j].Pos.x===world.Width){
+        if(world.Actors[j].Pos.x===Math.floor(end/world.Width) && world.Actors[j].Pos.y===end%world.Width){
             return 1;
         }
     }

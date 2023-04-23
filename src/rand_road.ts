@@ -2,67 +2,27 @@ import { ActorsTypeList, actor, point, position, world } from "./world.js";
 
 // creat a matrix with i*WIDTH+j in the position(i,j) 
 export const createMatrix=(Width:number,Height:number) :number[][]=> {
-  const matrix:number [][]= [];
-
-  for (let i:number = 0; i < Height; i++) {
-    const row :number[] = new Array(Width);
-    for (let j = 0; j < Width; j++) {
-      const value:number = i * Width + j;
-      row[j]=value;
-    }
-    matrix[i]=row;
-  }
-  return matrix;
+  const matrix:number [][]=Array(Height).fill(0);
+  
+  return matrix.map((x)=>Array(Height).fill(0)).map((x,i)=>{
+    return x.map((y,j)=>{
+     return i*Width+j;
+             });
+       });
 };
 
 // return the path between start and end 
 export const randomPath=(world:world, matrix:number[][],start:number, end:number)=> {
   // Créer une copie de la matrice pour garder l'originale intacte
   const copyMatrix:number[][] = matrix.slice();
-  // visited for cells visited with dfs
+  // visited to take cells visited with dfs
   const visited:number[] = [start];
-  //adding the first element 
-  //visited(start);
   const path:number[]| null = dfs(world, start, visited, copyMatrix, end);
   
 return path;
 };
 
-// function dfs(world:world, currentPosition:number, visited: number[], matrix:number[][],end:number):number[] | null {
-//   // Si on atteint la position finale, retourner le chemin
-//   if (currentPosition === end) {
 
-//     return [currentPosition];
-//   }
-
-//   // Obtenir les positions voisines
-//   const neighbors: number[] = getNeighbors(currentPosition, world.Width, world.Height);
-
-//   // Mélanger les positions voisines pour obtenir un ordre aléatoire
-//   shuffleArray(neighbors);
-
-//   // Parcourir les positions voisines
-//   for (const neighbor of neighbors) {
-//     if (!visited.includes(neighbor)) {
-//       // Marquer la position voisine comme visitée
-//       visited.push(neighbor);
-//       // Appeler récursivement l'algorithme DFS pour la position voisine
-      
-       
-//       const path: number[] | null = dfs(world, neighbor, visited, matrix,end);
-//       if (path !== null) {
-//         // Ajouter la position courante au début du chemin trouvé
-//        //console.log(path);
-//         path.unshift(currentPosition);
-       
-//         return path;
-//       }
-//     }
-//   }
-
-//   // Si aucun chemin n'a été trouvé, retourner null
-//   return null;
-// }
 
 export const dfs=(world:world, currentPosition:number, visited: number[], matrix:number[][],end:number):number[] | null=> {
   // Si on atteint la position finale, retourner le chemin
@@ -161,10 +121,5 @@ export const Road = (world: world, start:number, end: number) : world=>{
   }
   return world;
 };
-
-/*export {
-  shuffleArray, getNeighbors, dfs, randomPath, createMatrix, Road
-
-};*/
 
 

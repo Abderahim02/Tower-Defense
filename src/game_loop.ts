@@ -34,7 +34,8 @@ function loop() : void {
         
         world=TowersAttacks(world);
         display(world);
-        if(gameover(world)===1){
+        //to check if any monster reach end position
+        if(gameover(world,end)===1){
             console.log("####### GAME OVER MONSTERS WIN ########");
             break;
         }
