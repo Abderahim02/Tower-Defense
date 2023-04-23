@@ -34,11 +34,11 @@ function loop() : void {
         
         world=TowersAttacks(world);
         display(world);
-        if(gameover(world)==1){
-            return console.log("####### GAME OVER MONSTERS WIN ########");
+        if(gameover(world)===1){
+            console.log("####### GAME OVER MONSTERS WIN ########");
+            break;
         }
         console.log();
-	
 	    for(let j=0;j<world.Actors.length;j++){
             const actor=world.Actors[j];
             const t = actor.AnActor.Move(actor,world, actor.AnActor.Type);
@@ -46,8 +46,7 @@ function loop() : void {
             world.Matrix[world.Actors[j].Pos.x][world.Actors[j].Pos.y].AnActor = ActorsTypeList.Road;
             world.Matrix[a][b].AnActor = world.Actors[j].AnActor;
             world.Actors[j].Pos={x:a,y:b};
-	    }
-	
+        }
     }
     console.log(world.Actors.length);
 }
