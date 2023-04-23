@@ -181,7 +181,7 @@ export const updatetower=(world: world, i: number, j: number): world=>{
     }
 
     return world;
-}
+};
 
 //export{TowerAttacks, CreateMagicTower, CreateSimpleTower, EnemiesInAttackRange};
 
