@@ -6,7 +6,7 @@ import { CreateSimpleTower, CreateMagicTower, TowersPlacement, TowersAttacks } f
 
 
 function loop() : void {
-    let world : world = CreateWorld(30,15);
+    let world : world = CreateWorld(15,13);
     const start : number = Math.floor(world.Height/2)*world.Width;
     const end : number = start-1;
     world = Road(initializeWorld(world),start,end);
