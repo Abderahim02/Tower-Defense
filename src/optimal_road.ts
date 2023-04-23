@@ -132,6 +132,7 @@ function DisplayGraph(G : Graph) : string {
     return gridStr;
   }
 
+//this function returns a possible exit position for monsters
 function GetAnExitPosition(world: world) : point{
     for(let i = 0; i<world.Height; ++i){
         if(GetActorType(world, {x : i, y : world.Width - 1}) === "Road"){
@@ -140,7 +141,8 @@ function GetAnExitPosition(world: world) : point{
     }
     return {x : -1, y : -1};
 }
-  
+
+//this function returns the best road for a monster to exit the map and win
 function OptimalRoad( p : point , world : world){
     const Roads: point[] = GetRoadInWorld(world);
     const G : Graph = ConvertRoadsToGraph( p, world);
