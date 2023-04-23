@@ -40,7 +40,7 @@ function loop() : void {
             break;
         }
         console.log();
-	    for(let j=0;j<world.Actors.length;j++){
+            for(let j=0; j<world.Actors.length ;j++){
             const actor=world.Actors[j];
             const t = actor.AnActor.Move(actor,world, actor.AnActor.Type);
             const [a,b]=t;

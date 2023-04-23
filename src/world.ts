@@ -4,7 +4,9 @@ import {Road} from './rand_road.js';
 import { CreateSimpleTower, CreateMagicTower, TowersPlacement } from "./actors.js"; 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//the type that defines the world 
+/*this is a type that defines an actor ,we suppose that floor and road are also 
+    actors but with  no power
+*/
 export type actor = {
     Move:(pos: position, world:world, type:string) => number[]  ;
     Type : string;
@@ -15,16 +17,18 @@ export type actor = {
     Damage : number;
     AttackRange : number;
 }
-
+//thsi is the point type : a position x,y in the grid
 export type point = {
     x : number;
     y : number;
 }
+//a position is defined by two coordinates and an actor occupying that position
 export type position = {
     Pos: point;
     AnActor : actor;
 }
 
+//the type that defines the world 
 export type world = {
     Matrix : position[][] ;
     Width : number;
@@ -34,21 +38,29 @@ export type world = {
     Towers : position[];
 }
 
+//the type defining a move, from ex_pos to new_pos
 export type move = {
     NewPos : point;
     ExPos : point;
 }
+
+/* a type defining an acyion in the grid, its useful for the gamePhase,
+ which gonna be a list of actions, its defined as move with an actor that has 
+ AnActorInfos as data and  AnActorIndex as index in the array world.Actors */
 export type action = {
     AnActorInfos : position ;
     AnActorIndex : number;
     aMove : move ;
 }
 
+//this function caracterizes the inactive actors in the world, floor and road
 export const noMove=(pos: position, aWorld: world, type: string) : any =>{
     return ;
 };
 
 
+/*this is the list of actors types that exists in the world, we use a different 
+sticker for each actor, and different powers */
 export const ActorsTypeList = {
     SimpleMonster : {Move: SimpleMove, Type : "SimpleMonster", Color : "\x1b[37m  \x1b[0m", HitPoints : 3, Cost : 0, gain: 0, Damage: 0, AttackRange : 0},
     BigMonster : {Move : SimpleMove, Type : "BigMonster", Color : "\x1b[37m🦌\x1b[0m", HitPoints : 3, Cost : 0, gain : 0, Damage: 0, AttackRange : 0},
@@ -65,15 +77,7 @@ export const ActorsTypeList = {
     Fire : {Move: noMove, Type : "Fire", Color : "\x1b[48;2;34;139;34m 🔥\x1b[0m", HitPoints : 0, Cost : 0, gain : 0,Damage: 0, AttackRange : 0},
 };
 
-
-// function ActorGen( type : string){
-//     switch (type){
-
-//     }
-// }
-
-
-
+//this function create an empty matrix
 export const CreateEmptyMatrix = (width : number, height : number) : position[][]=> {
     let tmp: position[][] = Array(height).fill(0);
     const b : actor = ActorsTypeList.Floor;
@@ -88,6 +92,7 @@ export const CreateEmptyMatrix = (width : number, height : number) : position[][
     
 };
 
+//this function create the world with no actors , towers and no road
 export const CreateWorld=(width : number, height : number): world =>{
     const emptyWorld : world = {Matrix : CreateEmptyMatrix(width, height), Width : width, Height : height, Score : 0, Actors : [], Towers : []};
     return emptyWorld;
@@ -99,7 +104,7 @@ export const initializeWorld = (world : world) : world=> {
 };
 
 
-    
+//this a function that displays the world
 export const display=(world : world): void=> {
     let s2 : string ="";
     let count : number =0;
