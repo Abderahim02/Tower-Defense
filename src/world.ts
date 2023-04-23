@@ -71,18 +71,27 @@ export const ActorsTypeList = {
 
 //     }
 // }
+
+
+
 export const CreateEmptyMatrix = (width : number, height : number) : position[][]=> {
-    const tmp: position[][] = new Array(height);
+    let tmp: position[][] = Array(height).fill(0);
     const b : actor = ActorsTypeList.Floor;
-    for(let i : number = 0; i< height; ++i){
-        tmp[i] = new Array(width);
-    }
-    for (let i : number = 0; i < height; i++) {
-        for(let j : number= 0; j< width; ++j){
-            tmp[i][j] = {AnActor : b, Pos : {x : i, y : j}};
-        }
-    }
-    return tmp;
+    tmp=tmp.map((x)=> Array(width).fill(0));
+    
+   return tmp.map((x,i)=>{
+        return x.map((y,j)=>{
+            return {AnActor : ActorsTypeList.Floor, Pos : {x : i, y : j}};
+        });
+    });
+
+    // for (let i : number = 0; i < height; i++) {
+    //     for(let j : number= 0; j< width; ++j){
+    //         tmp[i][j] = {AnActor : ActorsTypeList.Floor, Pos : {x : i, y : j}};
+    //     }
+    // }
+    
+    
 };
 
 export const CreateWorld=(width : number, height : number): world =>{
@@ -95,23 +104,6 @@ export const initializeWorld = (world : world) : world=> {
     return world;
 };
 
-// function initializeWorld(world : world) : world {
-//     world.Matrix = CreateEmptyMatrix(world.Width , world.Height);
-//     for(let i=0;i<world.Height;i++){
-// 	world.Matrix[i]=Array(world.Width);
-//     }
-//     for(let i=0; i<world.Height; i++){
-//         for(let j=0;j<world.Width; j++){
-//             world.Matrix[i][j]={
-//                 pos:     { x: i, y: j },
-//                 typeActor:ActorsTypeList.Floor
-//             };
-//         }
-//     }
-//     return world;
-// }
-/*
-*/
 
     
 export const display=(world : world): void=> {
