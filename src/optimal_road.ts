@@ -97,7 +97,7 @@ one we found, its size is M*M Where M is the number of these positions */
 function ConvertRoadsToGraph(s : point, world : world): Graph{
     const Roads: point[] = GetRoadInWorld(world);//we collect the road positions 
     Roads.push(s); // we add the starting position to consiedr it as road
-    let l : number = Roads.length;
+    const l : number = Roads.length;
     const G : Graph = {mat : InitializedMatrix(l), size : l  }; //we create an empty graph
     for(let i=0; i<l; ++i){ //we explore all the roads
         //for each road we see all its neighbors that are with type road
