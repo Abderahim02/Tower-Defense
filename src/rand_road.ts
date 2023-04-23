@@ -162,9 +162,5 @@ export const Road = (world: world, start:number, end: number) : world=>{
   return world;
 };
 
-/*export {
-  shuffleArray, getNeighbors, dfs, randomPath, createMatrix, Road
-
-};*/
 
 

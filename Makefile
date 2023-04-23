@@ -23,12 +23,15 @@ test:
 
 # world: 
 # 	$(TSC) ${SRC_DIR}/world.ts $(TSC_OPTIONS)
+optimal_road: 
+	$(CONVERT)
+	node $(DIST_DIR)/optimal_road.js
 
 # actors: 
 # 	$(TSC) ${SRC_DIR}/actors.ts $(TSC_OPTIONS)
 
-# movements:
-	$(TSC) ${SRC_DIR}/movements.ts $(TSC_OPTIONS)
+# # movements:
+# 	$(TSC) ${SRC_DIR}/movements.ts $(TSC_OPTIONS)
 
 html: index.html
 	tidy -q -o index.html index.html
@@ -45,3 +48,4 @@ parcel:
 clean:
 	rm -rf $(DIST_DIR)/*
 	rm -f *~
+	rm src/*.js
