@@ -150,6 +150,39 @@ export const TowersPlacement=(world:world):world=>{
     return world;
 };
 
+
+export const updatetower=(world: world, i: number, j: number): world=>{
+    const rand: number = Math.floor(Math.random()*2);
+    if(rand===1){
+        if(world.Matrix[i][j].AnActor.Type==="SimpleTower"){
+            world.Matrix[i][j]={
+                Pos:     { x: i, y: j },
+                AnActor:ActorsTypeList.SimpleTowerII
+            };
+        }
+        else if(world.Matrix[i][j].AnActor.Type==="SimpleTowerII"){
+            world.Matrix[i][j]={
+                Pos:     { x: i, y: j },
+                AnActor:ActorsTypeList.SimpleTowerIII
+            };
+        }
+        if(world.Matrix[i][j].AnActor.Type==="MagicTower"){
+            world.Matrix[i][j]={
+                Pos:     { x: i, y: j },
+                AnActor:ActorsTypeList.MagicTowerII
+            };
+        }
+        else if(world.Matrix[i][j].AnActor.Type==="MagicTowerII"){
+            world.Matrix[i][j]={
+                Pos:     { x: i, y: j },
+                AnActor:ActorsTypeList.MagicTowerIII
+            };
+        }
+    }
+
+    return world;
+}
+
 //export{TowerAttacks, CreateMagicTower, CreateSimpleTower, EnemiesInAttackRange};
 
 

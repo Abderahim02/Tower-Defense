@@ -14,7 +14,7 @@ function loop() : void {
     world = CreateSimpleTower(Math.floor(world.Height/2)+2,11,world);
     world=TowersPlacement(world);
     display(world);
-    for(let i : number = 0 ; i < 2000 ; i++ ){
+    for(let i : number = 0 ; i < 50 ; i++ ){
         if(i%6===0){   
              world.Actors.push({
                 Pos:  { x: Math.floor(world.Height/2), y: 0 },
