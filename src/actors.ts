@@ -93,6 +93,7 @@ export const TowersAttacks = (world: world): world => {
           world.Matrix[i][j].AnActor.Damage;
         if (world.Matrix[enemies[rand].x][enemies[rand].y].AnActor.HitPoints <= 0) {
           world.Matrix[enemies[rand].x][enemies[rand].y].AnActor = ActorsTypeList.Road;
+          world=killActor(world, enemies[rand].x, enemies[rand].y);
           console.log(world.Score);
           world.Score++;
         }
@@ -106,7 +107,16 @@ export const TowersAttacks = (world: world): world => {
     }
     return world;
   };
-  
+
+export function killActor(world: world, x:number, y:number): world{
+    for(let i=0; i<world.Actors.length; i++){
+        if(world.Actors[i].Pos.x===x && world.Actors[i].Pos.y===y){
+            world.Actors.splice(i);
+            return world;
+        }
+    }
+    return world;
+}
 
 export const TowersPlacement=(world:world):world=>{
     const max = 10;
