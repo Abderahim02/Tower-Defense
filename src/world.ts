@@ -13,6 +13,7 @@ export type actor = {
     Color : string;
     HitPoints : number;
     Cost : number;
+    gain : number;
     Damage : number;
     AttackRange : number;
 }
@@ -61,30 +62,40 @@ export const noMove=(pos: position, aWorld: world, type: string) : any =>{
 /*this is the list of actors types that exists in the world, we use a different 
 sticker for each actor, and different powers */
 export const ActorsTypeList = {
-    SimpleMonster : {Move: SimpleMove, Type : "SimpleMonster", Color : "\x1b[37m  \x1b[0m", HitPoints : 3, Cost : 0, Damage: 0, AttackRange : 0},
-    BigMonster : {Move : SimpleMove, Type : "BigMonster", Color : "\x1b[37m🦌\x1b[0m", HitPoints : 3, Cost : 0, Damage: 0, AttackRange : 0},
-    SimpleTower : {Move: noMove, Type : "SimpleTower", Color : "\x1b[48;2;34;139;34m🏯\x1b[0m", HitPoints : 0, Cost : 1000, Damage: 5, AttackRange : 5},
-    MagicTower : {Move: noMove, Type : "MagicTower", Color : "\x1b[37m⛪\x1b[0m", HitPoints : 0, Cost : 1500, Damage: 5, AttackRange : 4},
-    Floor : {Move: noMove, Type : "Floor", Color : "\x1b[48;2;34;139;34m ▒\x1b[0m", Cost : 0, HitPoints : 0, Damage: 0, AttackRange : 0},
-    River : {Move: noMove, Type : "River" , Color : "\x1b[37m  \x1b[0m", HitPoints : 0, Cost : 0, Damage: 0, AttackRange : 0},
-    Road : {Move: noMove, Type : "Road" , Color : "\x1b[48;2;76;70;50m  \x1b[0m", HitPoints : 0, Cost : 0, Damage: 0, AttackRange : 0},
-    Tree : {Move: noMove, Type : "Tree", Color : "\x1b[48;2;34;139;34m 🎄\x1b[0m", HitPoints : 0, Cost : 0, Damage: 0, AttackRange : 0},
-    Fire : {Move: noMove, Type : "Fire", Color : "\x1b[48;2;34;139;34m 🔥\x1b[0m", HitPoints : 0, Cost : 0, Damage: 0, AttackRange : 0},
+    SimpleMonster : {Move: SimpleMove, Type : "SimpleMonster", Color : "\x1b[37m  \x1b[0m", HitPoints : 3, Cost : 0, gain: 0, Damage: 0, AttackRange : 0},
+    BigMonster : {Move : SimpleMove, Type : "BigMonster", Color : "\x1b[37m🦌\x1b[0m", HitPoints : 3, Cost : 0, gain : 0, Damage: 0, AttackRange : 0},
+    SimpleTower : {Move: noMove, Type : "SimpleTower", Color : "\x1b[48;2;34;139;34m🏯\x1b[0m", HitPoints : 0, Cost : 1000,gain : 0, Damage: 1, AttackRange : 3},
+    SimpleTowerII : {Move: noMove, Type : "SimpleTowerII", Color : "\x1b[48;2;34;139;34m🏯\x1b[0m", HitPoints : 0, Cost : 1500, gain : 0,Damage: 3, AttackRange : 5},
+    SimpleTowerIII : {Move: noMove, Type : "SimpleTowerIII", Color : "\x1b[48;2;34;139;34m🏯\x1b[0m", HitPoints : 0, Cost : 2000, gain : 0,Damage: 5, AttackRange : 7},
+    MagicTower : {Move: noMove, Type : "MagicTower", Color : "\x1b[37m⛪\x1b[0m", HitPoints : 0, Cost : 1000, gain : 0,Damage: 1, AttackRange : 3},
+    MagicTowerII : {Move: noMove, Type : "MagicTowerII", Color : "\x1b[37m⛪\x1b[0m", HitPoints : 0, Cost : 1500, gain : 0,Damage: 3, AttackRange : 5},
+    MagicTowerIII : {Move: noMove, Type : "MagicTowerIII", Color : "\x1b[37m⛪\x1b[0m", HitPoints : 0, Cost : 2000, gain : 0,Damage: 5, AttackRange : 7},
+    Floor : {Move: noMove, Type : "Floor", Color : "\x1b[48;2;34;139;34m ▒\x1b[0m", Cost : 0, HitPoints : 0, gain : 0,Damage: 0, AttackRange : 0},
+    River : {Move: noMove, Type : "River" , Color : "\x1b[37m  \x1b[0m", HitPoints : 0, Cost : 0, gain : 0,Damage: 0, AttackRange : 0},
+    Road : {Move: noMove, Type : "Road" , Color : "\x1b[48;2;76;70;50m  \x1b[0m", HitPoints : 0, Cost : 0, gain : 0,Damage: 0, AttackRange : 0},
+    Tree : {Move: noMove, Type : "Tree", Color : "\x1b[48;2;34;139;34m 🎄\x1b[0m", HitPoints : 0, Cost : 0, gain : 0,Damage: 0, AttackRange : 0},
+    Fire : {Move: noMove, Type : "Fire", Color : "\x1b[48;2;34;139;34m 🔥\x1b[0m", HitPoints : 0, Cost : 0, gain : 0,Damage: 0, AttackRange : 0},
 };
 
 //this function create an empty matrix
 export const CreateEmptyMatrix = (width : number, height : number) : position[][]=> {
-    const tmp: position[][] = new Array(height);
+    let tmp: position[][] = Array(height).fill(0);
     const b : actor = ActorsTypeList.Floor;
-    for(let i : number = 0; i< height; ++i){
-        tmp[i] = new Array(width);
-    }
-    for (let i : number = 0; i < height; i++) {
-        for(let j : number= 0; j< width; ++j){
-            tmp[i][j] = {AnActor : b, Pos : {x : i, y : j}};
-        }
-    }
-    return tmp;
+    tmp=tmp.map((x)=> Array(width).fill(0));
+    
+   return tmp.map((x,i)=>{
+        return x.map((y,j)=>{
+            return {AnActor : ActorsTypeList.Floor, Pos : {x : i, y : j}};
+        });
+    });
+
+    // for (let i : number = 0; i < height; i++) {
+    //     for(let j : number= 0; j< width; ++j){
+    //         tmp[i][j] = {AnActor : ActorsTypeList.Floor, Pos : {x : i, y : j}};
+    //     }
+    // }
+    
+    
 };
 
 //this function create the world with no actors , towers and no road
@@ -98,23 +109,6 @@ export const initializeWorld = (world : world) : world=> {
     return world;
 };
 
-// function initializeWorld(world : world) : world {
-//     world.Matrix = CreateEmptyMatrix(world.Width , world.Height);
-//     for(let i=0;i<world.Height;i++){
-// 	world.Matrix[i]=Array(world.Width);
-//     }
-//     for(let i=0; i<world.Height; i++){
-//         for(let j=0;j<world.Width; j++){
-//             world.Matrix[i][j]={
-//                 pos:     { x: i, y: j },
-//                 typeActor:ActorsTypeList.Floor
-//             };
-//         }
-//     }
-//     return world;
-// }
-/*
-*/
 
 //this a function that displays the world
 export const display=(world : world): void=> {
@@ -146,6 +140,18 @@ export const display=(world : world): void=> {
                     s+=ActorsTypeList.SimpleTower.Color;
                     break;
                 case 'MagicTower':
+                    s+=ActorsTypeList.MagicTower.Color;
+                    break;
+                case 'SimpleTowerII':
+                    s+=ActorsTypeList.SimpleTower.Color;
+                    break;
+                case 'MagicTowerII':
+                    s+=ActorsTypeList.MagicTower.Color;
+                    break;
+                case 'SimpleTowerIII':
+                    s+=ActorsTypeList.SimpleTower.Color;
+                    break;
+                case 'MagicTowerIII':
                     s+=ActorsTypeList.MagicTower.Color;
                     break;
                 case 'Floor':
@@ -192,6 +198,16 @@ export function gameMotor(aPhase : action[] , aWorld : world) : world {
     return aWorld;
 }
 
+
+export function gameover(world: world): number{
+    for(let j=0; j<world.Actors.length; j++){
+        if(world.Actors[j].Pos.x===world.Width){
+            return 1;
+        }
+    }
+    
+    return 0;
+}
 
 
 /////////////////////////////////////           END           /////////////////////////////////////////////////////
