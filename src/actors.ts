@@ -93,6 +93,7 @@ export const TowersAttacks = (world: world): world => {
           world.Matrix[i][j].AnActor.Damage;
         if (world.Matrix[enemies[rand].x][enemies[rand].y].AnActor.HitPoints <= 0) {
           world.Matrix[enemies[rand].x][enemies[rand].y].AnActor = ActorsTypeList.Road;
+          world=killActor(world, enemies[rand].x, enemies[rand].y);
           console.log(world.Score);
           world.Score++;
         }
@@ -106,7 +107,16 @@ export const TowersAttacks = (world: world): world => {
     }
     return world;
   };
-  
+
+export function killActor(world: world, x:number, y:number): world{
+    for(let i=0; i<world.Actors.length; i++){
+        if(world.Actors[i].Pos.x===x && world.Actors[i].Pos.y===y){
+            world.Actors.splice(i);
+            return world;
+        }
+    }
+    return world;
+}
 
 export const TowersPlacement=(world:world):world=>{
     const max = 10;
@@ -137,6 +147,39 @@ export const TowersPlacement=(world:world):world=>{
             }
         }
     }
+    return world;
+};
+
+
+export const updatetower=(world: world, i: number, j: number): world=>{
+    const rand: number = Math.floor(Math.random()*2);
+    if(rand===1){
+        if(world.Matrix[i][j].AnActor.Type==="SimpleTower"){
+            world.Matrix[i][j]={
+                Pos:     { x: i, y: j },
+                AnActor:ActorsTypeList.SimpleTowerII
+            };
+        }
+        else if(world.Matrix[i][j].AnActor.Type==="SimpleTowerII"){
+            world.Matrix[i][j]={
+                Pos:     { x: i, y: j },
+                AnActor:ActorsTypeList.SimpleTowerIII
+            };
+        }
+        if(world.Matrix[i][j].AnActor.Type==="MagicTower"){
+            world.Matrix[i][j]={
+                Pos:     { x: i, y: j },
+                AnActor:ActorsTypeList.MagicTowerII
+            };
+        }
+        else if(world.Matrix[i][j].AnActor.Type==="MagicTowerII"){
+            world.Matrix[i][j]={
+                Pos:     { x: i, y: j },
+                AnActor:ActorsTypeList.MagicTowerIII
+            };
+        }
+    }
+
     return world;
 };
 
