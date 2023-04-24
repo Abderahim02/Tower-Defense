@@ -2,9 +2,8 @@ import { ActorsTypeList, actor, point, position, world } from "./world.js";
 
 // creat a matrix with i*WIDTH+j in the position(i,j) 
 export const createMatrix=(Width:number,Height:number) :number[][]=> {
-  const matrix:number [][]=Array(Height).fill(0);
-  
-  return matrix.map((x)=>Array(Height).fill(0)).map((x,i)=>{
+  const matrix: number[][] = Array.from({ length: Height }, () => Array.from({ length: Width }, () => 0));
+  return matrix.map((x,i)=>{
     return x.map((y,j)=>{
      return i*Width+j;
              });
@@ -13,7 +12,7 @@ export const createMatrix=(Width:number,Height:number) :number[][]=> {
 
 // return the path between start and end 
 export const randomPath=(world:world, matrix:number[][],start:number, end:number)=> {
-  // Créer une copie de la matrice pour garder l'originale intacte
+  // to take a copy of matrix and save the origin matrix
   const copyMatrix:number[][] = matrix.slice();
   // visited to take cells visited with dfs
   const visited:number[] = [start];
@@ -25,37 +24,36 @@ return path;
 
 
 export const dfs=(world:world, currentPosition:number, visited: number[], matrix:number[][],end:number):number[] | null=> {
-  // Si on atteint la position finale, retourner le chemin
+  // if we find the end postion
   if (currentPosition === end) {
 
     return [currentPosition];
   }
 
-  // Obtenir les positions voisines
+  // to take all neighbors of currentPosition
   const neighbors: number[] = getNeighbors(currentPosition, world.Width, world.Height);
 
-  // Mélanger les positions voisines pour obtenir un ordre aléatoire
+  // Shuffle neighboring positions to get a random order
   shuffleArray(neighbors);
 
-  // Parcourir les positions voisines
+  //to visite all neighbors
   for (const neighbor of neighbors) {
     let isVisited = false;
+    // to check if the neighbor was visited  or no
     for (let i = 0; i < visited.length; i++) {
       if (visited[i] === neighbor) {
         isVisited = true;
         break;
       }
     }
+
     if (!isVisited) {
-      // Marquer la position voisine comme visitée
+      // we add neighbor to visited table
       visited.push(neighbor);
-      // Appeler récursivement l'algorithme DFS pour la position voisine
-      
-       
+      // dfs to neighbor
       const path: number[] | null = dfs(world, neighbor, visited, matrix,end);
       if (path !== null) {
-        // Ajouter la position courante au début du chemin trouvé
-       //console.log(path);
+        // add currentPosition to the begining of the path
         path.unshift(currentPosition);
        
         return path;
@@ -63,7 +61,7 @@ export const dfs=(world:world, currentPosition:number, visited: number[], matrix
     }
   }
 
-  // Si aucun chemin n'a été trouvé, retourner null
+// return null if there is no path 
   return null;
 };
 
@@ -71,36 +69,19 @@ export const dfs=(world:world, currentPosition:number, visited: number[], matrix
 export const getNeighbors=(position:number, Width:number, Height:number) =>{
   const i:number = Math.floor(position / Width);
   const j:number = position % Width;
-  const neighbors:number[] = [];
 
-  // Ajouter les positions voisines valides
-  if (i > 0) {
-    neighbors.push(position - Width); // Haut
-  }
-  if (j > 0) {
-    neighbors.push(position - 1); // Gauche
-  }
-  if (i < Height-1) {
-    neighbors.push(position + Width); // Bas
-  }
-  if (j < Width-1) {
-    neighbors.push(position + 1); // Droite
-  }
-  /*if (j < 9 && i<world.Height-1) {
-    neighbors.push(position + 1+world.Width); // Droite
-  }
-  if (j < world.Width-1 && i<0) {
-    neighbors.push(position -world.Width+ 1); // Droite
-  }
-  if (j > 0 && i>0 ) {
-    neighbors.push(position -world.Width- 1); // Droite
-  }
-  if (j>0 && i<world.Height-1) {
-    neighbors.push(position +world.Width-1); // Droite
-  }*/
+  const availableNeighbors:number[]= [
+    i > 0 ? position - Width : -2, // up
+    j > 0 ? position - 1 : -2, // left
+    i < Height-1 ? position + Width : -2, // down
+    j < Width-1 ? position + 1 : -2 // right
+  ];
+  const neighbors = availableNeighbors.filter(neighbor => neighbor !== -2);
 
   return neighbors;
 };
+
+
 
 export const shuffleArray=(array: number[]): void=> {
   for (let i = array.length - 1; i > 0; i--) {

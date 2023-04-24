@@ -25,10 +25,10 @@ function loop() : void {
         if(i%6===3){
             {
                 world.Actors.push({
-                   Pos:     { x: Math.floor(world.Height/2)+1, y: 0 },
+                   Pos:     { x: Math.floor(world.Height/2), y: 0 },
                    AnActor : ActorsTypeList.SimpleMonster
                });
-               world.Matrix[Math.floor(world.Height/2)+1][0].AnActor =ActorsTypeList.SimpleMonster;
+               world.Matrix[Math.floor(world.Height/2)][0].AnActor =ActorsTypeList.SimpleMonster;
            }
         }
         
