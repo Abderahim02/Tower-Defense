@@ -79,10 +79,9 @@ export const ActorsTypeList = {
 
 //this function create an empty matrix
 export const CreateEmptyMatrix = (width : number, height : number) : position[][]=> {
-    let tmp: position[][] = Array(height).fill(0);
+    //let tmp: position[][] = [...Array(height)].fill(0);
     const b : actor = ActorsTypeList.Floor;
-    tmp=tmp.map((x)=> Array(width).fill(0));
-    
+    const tmp: number[][] = Array.from({ length: height }, () => Array.from({ length: width }, () => 0));
    return tmp.map((x,i)=>{
         return x.map((y,j)=>{
             return {AnActor : ActorsTypeList.Floor, Pos : {x : i, y : j}};
@@ -99,8 +98,10 @@ export const CreateWorld=(width : number, height : number): world =>{
 };
 
 export const initializeWorld = (world : world) : world=> {
-    world.Matrix = CreateEmptyMatrix(world.Width , world.Height);
-    return world;
+    const {Matrix:m, ...other}:world=world;
+    const w:world={Matrix:CreateEmptyMatrix(world.Width , world.Height), ...other};
+    return w;
+   
 };
 
 
@@ -192,15 +193,16 @@ export function gameMotor(aPhase : action[] , aWorld : world) : world {
     return aWorld;
 }
 
-
+// recursive terminale gameover
 export function gameover(world: world,end:number): number{
-    for(let j=0; j<world.Actors.length; j++){
-        if(world.Actors[j].Pos.x===Math.floor(end/world.Width) && world.Actors[j].Pos.y===end%world.Width){
+    function rec(ac:position[]):number{
+        if(ac.length===0) return 0;
+        if(ac[0].Pos.x===Math.floor(end/world.Width) && ac[0].Pos.y===end%world.Width) 
             return 1;
-        }
+        return rec(ac.slice(1));
     }
-    
-    return 0;
+        
+     return rec(world.Actors);
 }
 
 
