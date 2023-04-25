@@ -47,7 +47,7 @@ function loop() : void {
             world.Matrix[a][b].AnActor = world.Actors[j].AnActor;
             world.Actors[j].Pos={x:a,y:b};
         }
-    }
+     }
     console.log(world.Actors.length);
 }
 

@@ -171,7 +171,7 @@ export const display=(world : world): void=> {
                     break;
             }
         }
-        console.log(s);
+        console.log(`${s}`+`${i}`);
     }
 };
 

@@ -1,7 +1,7 @@
 import { ActorsTypeList, display, initializeWorld, world, CreateWorld, point, position} from "./world.js";
 import { Road } from "./rand_road.js";
 import { CreateSimpleTower, CreateMagicTower, TowersPlacement, TowersAttacks } from "./actors.js"; 
-import { Graph , Astar} from "./A*.js";
+import { Graph , Astar, Vertex} from "./Astar.js";
 import { actor } from "./world.js";
 import {AvailablePosition} from "./movements.js";
 
@@ -94,11 +94,11 @@ one we found, its size is M*M Where M is the number of these positions */
 //     return G;
 // }
 
-function ConvertRoadsToGraph(s : point, world : world): Graph{
-    const Roads: point[] = GetRoadInWorld(world);//we collect the road positions 
-    Roads.push(s); // we add the starting position to consiedr it as road
+function ConvertRoadsToGraph( Roads : point[], world : world): Graph{
+    // const Roads: point[] = GetRoadInWorld(world);//we collect the road positions 
+    // Roads.push(s); // we add the starting position to consiedr it as road
     const l : number = Roads.length;
-    const G : Graph = {mat : InitializedMatrix(l), size : l  }; //we create an empty graph
+    const G : Graph = {mat : InitializedMatrix(l), size : l }; //we create an empty graph
     for(let i=0; i<l; ++i){ //we explore all the roads
         //for each road we see all its neighbors that are with type road
         const neighbors : point[] = ConstructNeighbors(world, Roads[i]); 
@@ -143,16 +143,30 @@ function GetAnExitPosition(world: world) : point{
 }
 
 //this function returns the best road for a monster to exit the map and win
-function OptimalRoad( p : point , world : world){
+function OptimalRoad( p : point , world : world, end : number ) {
     const Roads: point[] = GetRoadInWorld(world);
-    const G : Graph = ConvertRoadsToGraph( p, world);
-    const tab : [number[], number[]] = Astar({s : Roads.length }, {s : 0 }, G);
-    console.log(tab);
+    Roads.push(p); // we add the starting position to consiedr it as road
+    const G : Graph = ConvertRoadsToGraph( Roads, world);
+    const EndVertex : Vertex = {s : SearchForVertex(Roads, {x : Math.floor(end/world.Height) , y:  end%world.Width}) } ;
+    const StartVertex : Vertex = {s : Roads.length - 1 };
+    const tab : [number[], number[]] = Astar(StartVertex, EndVertex , G);
+    const Chemin : point [] = [];
+    //cette function contruit le chemin d'apres l'arborescence (parents) retourne par Astar
+    function ConstructRoad(t : number[], curseur : number) : point[]{
+        if (curseur === t.length - 1) {
+            return Chemin;
+        } else {
+            Chemin.push(Roads[curseur]);
+            curseur = t[curseur];
+            return ConstructRoad(t, curseur);
+        }
+    }
+    return ConstructRoad(tab[1], EndVertex.s);;
 }
 
 //this is a test function for the convertion algorithm
 function TestOptimalRoad(){
-    let world : world = CreateWorld(6,6);
+    let world : world = CreateWorld(10,10);
     const start : number = Math.floor(world.Height/2)*world.Width;
     const end : number = start-1;
     world = Road(initializeWorld(world),start,end);
@@ -169,16 +183,15 @@ function TestOptimalRoad(){
         if(i%6===3){
             {
                 world.Actors.push({
-                   Pos:     { x: Math.floor(world.Height/2)+1, y: 0 },
+                   Pos:     { x: Math.floor(world.Height/2), y: 0 },
                    AnActor : ActorsTypeList.SimpleMonster
                });
-               world.Matrix[Math.floor(world.Height/2)+1][0].AnActor =ActorsTypeList.SimpleMonster;
+               world.Matrix[Math.floor(world.Height/2)][0].AnActor =ActorsTypeList.SimpleMonster;
            }
         }
         
     }
     display(world);
-    console.log(GetAnExitPosition(world));
-    console.log(OptimalRoad({x : 3, y : 0},world));
+    console.log(OptimalRoad({x : Math.floor(start/world.Width), y : start%world.Height},world, end));
 }
 TestOptimalRoad();
