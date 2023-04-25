@@ -13,6 +13,13 @@ export const AvailablePosition=(move:any, world:world):boolean=>{
     return world.Matrix[move[0]][move[1]].AnActor.Type==="Road";
 };
 
+
+//this function caracterizes the inactive actors in the world, floor and road
+export const noMove=(pos: position, aWorld: world, type: string) : any =>{
+    return ;
+};
+
+
 export const SimpleMove=(anActor:position, aWorld:world, type:string) : number[]=>{
     let dx: number=2;
     let dy: number=2;
