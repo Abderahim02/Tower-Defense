@@ -9,7 +9,7 @@
     "eslint": "npx eslint src tst",
     "main": "node --experimental-specifier-resolution=node dist/main.js",
     "parcel": "npx parcel html/tower.html",
-    "test": "npx jest",
+    "test": "npx jest --coverage",
     "watch": "npx tsc -p tsconfig.json --watch"
   },
   "keywords": [],
