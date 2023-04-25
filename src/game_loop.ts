@@ -1,53 +1,38 @@
-import { ActorsTypeList, display, initializeWorld, world, CreateWorld, point, position, gameover} from "./world.js";
+import {display, initializeWorld, CreateWorld, gameover, gamePhase, gameMotor} from "./world.js";
 import { Road } from "./rand_road.js";
-import { CreateSimpleTower, CreateMagicTower, TowersPlacement, TowersAttacks } from "./actors.js"; 
-
+import { CreateSimpleTower, TowersPlacement, TowersAttacks, addActorsToWorld } from "./actors.js"; 
+import {ActorsTypeList, world} from "./defineType.js"
 
 
 
 function loop() : void {
-    let world : world = CreateWorld(30,15);
+    let world : world = CreateWorld(15,13);
     const start : number = Math.floor(world.Height/2)*world.Width;
     const end : number = start-1;
     world = Road(initializeWorld(world),start,end);
-    display(world);
+    display(world,end);
     world = CreateSimpleTower(Math.floor(world.Height/2)+2,11,world);
     world=TowersPlacement(world);
-    display(world);
+    display(world,end);
     for(let i : number = 0 ; i < 50 ; i++ ){
+        //to add bigMonstres in the begining of Road
         if(i%6===0){   
-             world.Actors.push({
-                Pos:  { x: Math.floor(world.Height/2), y: 0 },
-                AnActor : ActorsTypeList.BigMonster
-            });
-            world.Matrix[Math.floor(world.Height/2)][0].AnActor =ActorsTypeList.BigMonster;
+            world.Actors=addActorsToWorld(world,ActorsTypeList.BigMonster, Math.floor(world.Height/2));
         }
+        //to add simpleMonstres in the begining of Road
         if(i%6===3){
-            {
-                world.Actors.push({
-                   Pos:     { x: Math.floor(world.Height/2)+1, y: 0 },
-                   AnActor : ActorsTypeList.SimpleMonster
-               });
-               world.Matrix[Math.floor(world.Height/2)+1][0].AnActor =ActorsTypeList.SimpleMonster;
-           }
+            world.Actors=addActorsToWorld(world,ActorsTypeList.SimpleMonster, Math.floor(world.Height/2));
         }
-        
         world=TowersAttacks(world);
-        display(world);
-        if(gameover(world)===1){
+        display(world,end);
+        //to check if any monster reach end position
+        if(gameover(world,end)===1){
             console.log("####### GAME OVER MONSTERS WIN ########");
             break;
         }
         console.log();
-            for(let j=0; j<world.Actors.length ;j++){
-            const actor=world.Actors[j];
-            const t = actor.AnActor.Move(actor,world, actor.AnActor.Type);
-            const [a,b]=t;
-            world.Matrix[world.Actors[j].Pos.x][world.Actors[j].Pos.y].AnActor = ActorsTypeList.Road;
-            world.Matrix[a][b].AnActor = world.Actors[j].AnActor;
-            world.Actors[j].Pos={x:a,y:b};
-        }
-     }
+        world=gameMotor(gamePhase(world),world);
+    }
     console.log(world.Actors.length);
 }
 

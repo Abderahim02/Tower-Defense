@@ -1,9 +1,8 @@
-import { ActorsTypeList, display, initializeWorld, world, CreateWorld, point, position} from "./world.js";
+import {display, initializeWorld, CreateWorld} from "./world.js";
 import { Road } from "./rand_road.js";
-import { CreateSimpleTower, CreateMagicTower, TowersPlacement, TowersAttacks } from "./actors.js"; 
+import{ActorsTypeList, world,  point} from "./defineType.js"
+import {TowersPlacement} from "./actors.js"; 
 import { Graph , Astar, Vertex} from "./Astar.js";
-import { actor } from "./world.js";
-import {AvailablePosition} from "./movements.js";
 
 //this function returns the type of the actor in position p in the grid
 function GetActorType(world: world, p:point) : string{
@@ -170,7 +169,7 @@ function TestOptimalRoad(){
     const start : number = Math.floor(world.Height/2)*world.Width;
     const end : number = start-1;
     world = Road(initializeWorld(world),start,end);
-    display(world);
+    //display(world);
     world=TowersPlacement(world);
     for(let i : number = 0 ; i < 50 ; i++ ){
         if(i%6===0){   
@@ -191,7 +190,7 @@ function TestOptimalRoad(){
         }
         
     }
-    display(world);
+    display(world, start);
     console.log(OptimalRoad({x : Math.floor(start/world.Width), y : start%world.Height},world, end));
 }
 TestOptimalRoad();

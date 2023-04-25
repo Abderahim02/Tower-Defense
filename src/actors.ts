@@ -3,7 +3,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-import { ActorsTypeList, world } from "./world.js";
+import { ActorsTypeList, actor, position, world } from "./defineType.js";
 import { AvailablePosition } from "./movements.js";
 
 
@@ -60,28 +60,6 @@ export const EnemiesInAttackRange=(i: number,j: number,world: world):any[]=>{
 };
 
 
-
-// export const TowersAttacks= (world : world) : world=> {
-//     for(let k=0; k<world.Towers.length; k++){
-//         const i=world.Towers[k].Pos.x;
-//         const j=world.Towers[k].Pos.y;
-//         function TowerAttacks (i:number, j:number, world:world) : world {
-//             const enemies:any = EnemiesInAttackRange(i,j,world);
-//             if(enemies.length!==0){
-//                 const rand: number  = Math.floor(Math.random()*enemies.length);
-//                 world.Matrix[enemies[rand].x][enemies[rand].y].AnActor.HitPoints-=world.Matrix[i][j].AnActor.Damage;
-//                 if(world.Matrix[enemies[rand].x][enemies[rand].y].AnActor.HitPoints <= 0){
-//                     world.Matrix[enemies[rand].x][enemies[rand].y].AnActor=ActorsTypeList.Road;
-//                     console.log(world.Score);
-//                     world.Score ++;
-//                 }
-//             }
-//             return world;
-//         }
-//         return TowerAttacks(i,j,world);
-//     }
-//     return world;
-// };
 
 
 export const TowersAttacks = (world: world): world => {
@@ -182,6 +160,15 @@ export const updatetower=(world: world, i: number, j: number): world=>{
 
     return world;
 };
+
+
+
+export function addActorsToWorld(w:world,actr:actor,xPosition: number):position[]{
+   
+   return  w.Actors.concat({Pos:  { x: Math.floor(w.Height/2), y: 0 },
+                             AnActor : actr}
+                             );
+}
 
 //export{TowerAttacks, CreateMagicTower, CreateSimpleTower, EnemiesInAttackRange};
 

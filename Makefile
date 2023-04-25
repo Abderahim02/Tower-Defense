@@ -3,19 +3,19 @@ SRC_DIR = src
 DIST_DIR = dist
 
 # TypeScript compiler options
-TSC = tsc 
+TSC = tsc
+NPX = npx 
 TSC_OPTIONS = --project .
-CONVERT=npx tsc -p .
+CONVERT=$(NPX) $(TSC) -p .
 # Define targets
 .PHONY: all build run test eslint parcel clean
 
-all: build
+all: build run
 
 build:
-	$(TSC) $(TSC_OPTIONS) --outDir $(DIST_DIR)
-
-game:
 	$(CONVERT)
+
+run:
 	node $(DIST_DIR)/game_loop.js
 
 test:
@@ -23,15 +23,12 @@ test:
 
 # world: 
 # 	$(TSC) ${SRC_DIR}/world.ts $(TSC_OPTIONS)
-optimal_road: 
-	$(CONVERT)
-	node $(DIST_DIR)/optimal_road.js
 
 # actors: 
 # 	$(TSC) ${SRC_DIR}/actors.ts $(TSC_OPTIONS)
 
-# # movements:
-# 	$(TSC) ${SRC_DIR}/movements.ts $(TSC_OPTIONS)
+# movements:
+	$(TSC) ${SRC_DIR}/movements.ts $(TSC_OPTIONS)
 
 html: index.html
 	tidy -q -o index.html index.html
@@ -48,4 +45,3 @@ parcel:
 clean:
 	rm -rf $(DIST_DIR)/*
 	rm -f *~
-	rm src/*.js
