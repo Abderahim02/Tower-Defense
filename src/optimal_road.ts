@@ -1,6 +1,6 @@
 import {display, initializeWorld, CreateWorld} from "./world.js";
 import { Road } from "./rand_road.js";
-import{ActorsTypeList, world,  point} from "./type.js"
+import{ActorsTypeList, world,  point} from "./defineType.js"
 import {TowersPlacement} from "./actors.js"; 
 import { Graph , Astar} from "./A*.js";
 

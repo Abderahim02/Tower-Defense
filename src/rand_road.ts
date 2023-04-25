@@ -1,4 +1,4 @@
-import { ActorsTypeList, world } from "./type.js";
+import { ActorsTypeList, world } from "./defineType.js";
 
 // creat a matrix with i*WIDTH+j in the position(i,j) 
 export const createMatrix=(Width:number,Height:number) :number[][]=> {

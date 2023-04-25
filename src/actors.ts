@@ -3,7 +3,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-import { ActorsTypeList, actor, position, world } from "./type.js";
+import { ActorsTypeList, actor, position, world } from "./defineType.js";
 import { AvailablePosition } from "./movements.js";
 
 

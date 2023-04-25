@@ -1,6 +1,6 @@
 
 import {SimpleMove } from './movements.js';
-import {action, world, position, actor, ActorsTypeList } from './type.js';
+import {action, world, position, actor, ActorsTypeList } from './defineType.js';
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
