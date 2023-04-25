@@ -1,60 +1,12 @@
 
-import { AvailablePosition, SimpleMove } from './movements.js';
-import {Road} from './rand_road.js';
-import { CreateSimpleTower, CreateMagicTower, TowersPlacement } from "./actors.js"; 
-import { ActorsTypeList } from './typeactors.js';
+import {SimpleMove } from './movements.js';
+import {action, world, position, actor, ActorsTypeList } from './defineType.js';
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*this is a type that defines an actor ,we suppose that floor and road are also 
     actors but with  no power
 */
-export type actor = {
-    Move:(pos: position, world:world, type:string) => number[]  ;
-    Type : string;
-    Color : string;
-    HitPoints : number;
-    Cost : number;
-    gain : number;
-    Damage : number;
-    AttackRange : number;
-}
-//thsi is the point type : a position x,y in the grid
-export type point = {
-    x : number;
-    y : number;
-}
-//a position is defined by two coordinates and an actor occupying that position
-export type position = {
-    Pos: point;
-    AnActor : actor;
-}
-
-//the type that defines the world 
-export type world = {
-    Matrix : position[][] ;
-    Width : number;
-    Height : number;
-    Score : number;
-    Actors : position[];
-    Towers : position[];
-}
-
-//the type defining a move, from ex_pos to new_pos
-export type move = {
-    NewPos : point;
-    ExPos : point;
-}
-
-/* a type defining an acyion in the grid, its useful for the gamePhase,
- which gonna be a list of actions, its defined as move with an actor that has 
- AnActorInfos as data and  AnActorIndex as index in the array world.Actors */
-export type action = {
-    AnActorInfos : position ;
-    AnActorIndex : number;
-    aMove : move ;
-}
-
-
 
 //this function create an empty matrix
 export const CreateEmptyMatrix = (width : number, height : number) : position[][]=> {
@@ -85,7 +37,7 @@ export const initializeWorld = (world : world) : world=> {
 
 
 //this a function that displays the world
-export const display=(world : world): void=> {
+export const display=(world : world,end: number): void=> {
     let s2 : string ="";
     let count : number =0;
     for(let i : number =0; i<world.Height+19; i++){
@@ -141,7 +93,11 @@ export const display=(world : world): void=> {
                     s+=ActorsTypeList.Fire.Color;
                     break;
                 case 'Road':
-                    s+=ActorsTypeList.Road.Color;
+                    if(Math.floor(end/world.Width)===i && end%world.Width===j)
+                     s+="\x1b[48;2;76;70;50m✴ \x1b[0m";
+                    else{
+                     s+=ActorsTypeList.Road.Color;
+                    }
                     break;
             }
         }

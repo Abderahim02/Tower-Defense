@@ -3,9 +3,9 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-import { world } from "./world.js";
+import { ActorsTypeList, actor, position, world } from "./defineType.js";
 import { AvailablePosition } from "./movements.js";
-import { ActorsTypeList } from "./typeactors.js";
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////        TOWER            /////////////////////////////////////////////////////
@@ -160,6 +160,15 @@ export const updatetower=(world: world, i: number, j: number): world=>{
 
     return world;
 };
+
+
+
+export function addActorsToWorld(w:world,actr:actor,xPosition: number):position[]{
+   
+   return  w.Actors.concat({Pos:  { x: Math.floor(w.Height/2), y: 0 },
+                             AnActor : actr}
+                             );
+}
 
 //export{TowerAttacks, CreateMagicTower, CreateSimpleTower, EnemiesInAttackRange};
 

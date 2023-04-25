@@ -1,5 +1,4 @@
-import {actor, point, position, world } from "./world.js";
-import { ActorsTypeList } from "./typeactors.js";
+import { ActorsTypeList, world } from "./defineType.js";
 
 // creat a matrix with i*WIDTH+j in the position(i,j) 
 export const createMatrix=(Width:number,Height:number) :number[][]=> {

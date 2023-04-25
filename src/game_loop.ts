@@ -1,7 +1,7 @@
-import { display, initializeWorld, world, CreateWorld, point, position, gameover, gameMotor, gamePhase} from "./world.js";
+import {display, initializeWorld, CreateWorld, gameover, gamePhase, gameMotor} from "./world.js";
 import { Road } from "./rand_road.js";
-import { CreateSimpleTower, CreateMagicTower, TowersPlacement, TowersAttacks } from "./actors.js"; 
-import { ActorsTypeList } from "./typeactors.js";
+import { CreateSimpleTower, TowersPlacement, TowersAttacks, addActorsToWorld } from "./actors.js"; 
+import {ActorsTypeList, world} from "./defineType.js"
 
 
 
@@ -10,30 +10,21 @@ function loop() : void {
     const start : number = Math.floor(world.Height/2)*world.Width;
     const end : number = start-1;
     world = Road(initializeWorld(world),start,end);
-    display(world);
+    display(world,end);
     world = CreateSimpleTower(Math.floor(world.Height/2)+2,11,world);
     world=TowersPlacement(world);
-    display(world);
+    display(world,end);
     for(let i : number = 0 ; i < 50 ; i++ ){
+        //to add bigMonstres in the begining of Road
         if(i%6===0){   
-             world.Actors.push({
-                Pos:  { x: Math.floor(world.Height/2), y: 0 },
-                AnActor : ActorsTypeList.BigMonster
-            });
-            world.Matrix[Math.floor(world.Height/2)][0].AnActor =ActorsTypeList.BigMonster;
+            world.Actors=addActorsToWorld(world,ActorsTypeList.BigMonster, Math.floor(world.Height/2));
         }
+        //to add simpleMonstres in the begining of Road
         if(i%6===3){
-            {
-                world.Actors.push({
-                   Pos:     { x: Math.floor(world.Height/2), y: 0 },
-                   AnActor : ActorsTypeList.SimpleMonster
-               });
-               world.Matrix[Math.floor(world.Height/2)][0].AnActor =ActorsTypeList.SimpleMonster;
-           }
+            world.Actors=addActorsToWorld(world,ActorsTypeList.SimpleMonster, Math.floor(world.Height/2));
         }
-        
         world=TowersAttacks(world);
-        display(world);
+        display(world,end);
         //to check if any monster reach end position
         if(gameover(world,end)===1){
             console.log("####### GAME OVER MONSTERS WIN ########");
