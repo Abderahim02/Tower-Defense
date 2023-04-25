@@ -1,6 +1,6 @@
 import {display, initializeWorld, CreateWorld} from "./world.js";
 import { Road } from "./rand_road.js";
-import{ActorsTypeList, world,  point} from "./defineType.js"
+import{ActorsTypeList, world,  point} from "./defineType.js";
 import {TowersPlacement} from "./actors.js"; 
 import { Graph , Astar, Vertex} from "./Astar.js";
 
@@ -160,7 +160,7 @@ function OptimalRoad( p : point , world : world, end : number ) {
             return ConstructRoad(t, curseur);
         }
     }
-    return ConstructRoad(tab[1], EndVertex.s);;
+    return ConstructRoad(tab[1], EndVertex.s);
 }
 
 //this is a test function for the convertion algorithm
