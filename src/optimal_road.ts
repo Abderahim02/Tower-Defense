@@ -74,25 +74,6 @@ function InitializedMatrix(n : number) : number[][]{
 /*this id the main function that converts a world to a graph, in the graph we put only 
 positions with type road indexed by the order we found theme: from the first to the last 
 one we found, its size is M*M Where M is the number of these positions */
-// function ConvertRoadsToGraph(world : world): Graph{
-//     const Roads: point[] = GetRoadInWorld(world); //we collect the road positions 
-//     const l : number = Roads.length;
-//     const G : Graph = {mat : InitializedMatrix(l), size : l  }; //we create an empty graph
-//     for(let i=0; i<l; ++i){ //we explore all the roads
-//         //for each road we see all its neighbors that are with type road
-//         const neighbors : point[] = ConstructNeighbors(world, Roads[i]); 
-//         for(let v = 0; v<neighbors.length; ++v){
-//             if(GetActorType(world,neighbors[v]) === "Road"){
-//                 //we make an arc between the two vertexes
-//                 const index : number = SearchForVertex(Roads, neighbors[v]); 
-//                 G.mat[i][index] = 1;  //we set all arcs to the value 1
-//                 // console.log(`i = ${i}, j = ${index}\t`);
-//             }
-//         }
-//     }
-//     return G;
-// }
-
 function ConvertRoadsToGraph( Roads : point[], world : world): Graph{
     // const Roads: point[] = GetRoadInWorld(world);//we collect the road positions 
     // Roads.push(s); // we add the starting position to consiedr it as road
