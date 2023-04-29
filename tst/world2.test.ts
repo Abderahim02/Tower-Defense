@@ -2,6 +2,11 @@ import * as W from '../src/world.js';
 import * as A from '../src/actors.js';
 import * as M from '../src/movements.js';
 import * as R from '../src/rand_road.js';
+import * as T from '../src/typeactors.js';
+import * as D from '../src/defineType.js';
+
+
+
 
 //all world creatiion functions are to be modified after ts transformation 
 
@@ -14,7 +19,7 @@ describe('world test suite', () => {
             for(let j=0;j<15; j++){  
                 //    expect(w.Matrix[i][j].Pos ).toBe({ x: i, y: j });
                     //console.log(W.ActorsTypeList.Floor);
-                    expect(w.Matrix[i][j].AnActor).toBe(W.ActorsTypeList.Floor);
+                    expect(w.Matrix[i][j].AnActor).toBe(T.ActorsTypeList.Floor);
             }
         }     
     });
@@ -30,7 +35,7 @@ describe('Actors test suite', () => {
     test('magic tower existance', () => {
         let w=W.CreateWorld(15, 10);
         w = W.initializeWorld(w);
-        expect(A.CreateMagicTower(1,2,w).Matrix[1][2].AnActor).toBe(W.ActorsTypeList.MagicTower);
+        expect(A.CreateMagicTower(1,2,w).Matrix[1][2].AnActor).toBe(T.ActorsTypeList.MagicTower);
     });
 });
 describe('mouvement test suite', () => {
@@ -39,11 +44,11 @@ describe('mouvement test suite', () => {
         w = W.initializeWorld(w);
             w.Matrix[1][2]={
                 Pos:     { x: 1,y: 2 },
-                AnActor:W.ActorsTypeList.BigMonster
+                AnActor:T.ActorsTypeList.BigMonster
             };
-            console.log(W.ActorsTypeList.BigMonster.Type);
+            console.log(T.ActorsTypeList.BigMonster.Type);
             // console.log(M.SimpleMove(w.Matrix[1][2],w,W.ActorsTypeList.BigMonster.Type));
-        expect(M.SimpleMove(w.Matrix[1][2],w,W.ActorsTypeList.BigMonster.Type)).toStrictEqual([1,2]);
+        expect(M.SimpleMove(w.Matrix[1][2],w,T.ActorsTypeList.BigMonster.Type)).toStrictEqual([1,2]);
     });
 });
 
@@ -91,24 +96,24 @@ describe('a phase test ', () => {
             if(i%6===0){   
                 world.Actors.push({
                     Pos:  { x: Math.floor(world.Height/2), y: 0 },
-                    AnActor : W.ActorsTypeList.BigMonster
+                    AnActor : T.ActorsTypeList.BigMonster
                 });
-                world.Matrix[Math.floor(world.Height/2)][0].AnActor =W.ActorsTypeList.BigMonster;
+                world.Matrix[Math.floor(world.Height/2)][0].AnActor =T.ActorsTypeList.BigMonster;
             }
             if(i%6===3){
                 {
                     world.Actors.push({
                     Pos:     { x: Math.floor(world.Height/2)+1, y: 0 },
-                    AnActor : W.ActorsTypeList.SimpleMonster
+                    AnActor : T.ActorsTypeList.SimpleMonster
                 });
-                world.Matrix[Math.floor(world.Height/2)+1][0].AnActor = W.ActorsTypeList.SimpleMonster;
+                world.Matrix[Math.floor(world.Height/2)+1][0].AnActor = T.ActorsTypeList.SimpleMonster;
             }
             }
         }  
-            const aPhase : W.action[] = W.gamePhase(world);
+            const aPhase : D.action[] = W.gamePhase(world);
             world = W.gameMotor( aPhase, world);
             for(let i=0; i<aPhase.length ; i++){
-                const act : W.action = aPhase[i];
+                const act : D.action = aPhase[i];
                 expect(world.Matrix[act.aMove.NewPos.x][act.aMove.NewPos.y].AnActor.Type).toBe(act.AnActorInfos.AnActor.Type);
             }     
     });
@@ -127,7 +132,7 @@ describe('CreateMagicTower', () => {
       
       expect(result.Matrix[i][j]).toEqual({
         Pos: { x: i, y: j },
-        AnActor: W.ActorsTypeList.MagicTower,
+        AnActor: T.ActorsTypeList.MagicTower,
       });
     });
     
@@ -153,7 +158,7 @@ describe('CreateSimpleTower', () => {
       
       expect(result.Matrix[i][j]).toEqual({
         Pos: { x: i, y: j },
-        AnActor: W.ActorsTypeList.SimpleTower,
+        AnActor: T.ActorsTypeList.SimpleTower,
       });
     });
     
@@ -177,19 +182,19 @@ describe('EnemiesInAttackRange', () => {
     world = {
       Matrix: [
         [
-          { Pos: { x: 0, y: 0 }, AnActor: W.ActorsTypeList.Floor },
-          { Pos: { x: 0, y: 1 }, AnActor: W.ActorsTypeList.Floor },
-          { Pos: { x: 0, y: 2 }, AnActor: W.ActorsTypeList.Floor },
+          { Pos: { x: 0, y: 0 }, AnActor: T.ActorsTypeList.Floor },
+          { Pos: { x: 0, y: 1 }, AnActor: T.ActorsTypeList.Floor },
+          { Pos: { x: 0, y: 2 }, AnActor: T.ActorsTypeList.Floor },
         ],
         [
-          { Pos: { x: 1, y: 0 }, AnActor: W.ActorsTypeList.Floor },
-          { Pos: { x: 1, y: 1 }, AnActor: W.ActorsTypeList.BigMonster },
-          { Pos: { x: 1, y: 2 }, AnActor:{Move: W.noMove, Type : "SimpleTower", Color : "\x1b[48;2;34;139;34m🏯\x1b[0m", HitPoints : 0, Cost : 1000,gain : 0, Damage: 1, AttackRange : 1}, },
+          { Pos: { x: 1, y: 0 }, AnActor: T.ActorsTypeList.Floor },
+          { Pos: { x: 1, y: 1 }, AnActor: T.ActorsTypeList.BigMonster },
+          { Pos: { x: 1, y: 2 }, AnActor:{Move: D.noMove, Type : "SimpleTower", Color : "\x1b[48;2;34;139;34m🏯\x1b[0m", HitPoints : 0, Cost : 1000,gain : 0, Damage: 1, AttackRange : 1}, },
         ],
         [
-          { Pos: { x: 2, y: 0 }, AnActor: W.ActorsTypeList.Floor },
-          { Pos: { x: 2, y: 1 }, AnActor: W.ActorsTypeList.Floor },
-          { Pos: { x: 2, y: 2 }, AnActor: W.ActorsTypeList.Floor },
+          { Pos: { x: 2, y: 0 }, AnActor: T.ActorsTypeList.Floor },
+          { Pos: { x: 2, y: 1 }, AnActor: T.ActorsTypeList.Floor },
+          { Pos: { x: 2, y: 2 }, AnActor: T.ActorsTypeList.Floor },
         ],
       ],
         Actors: [],
@@ -218,8 +223,8 @@ describe('EnemiesInAttackRange', () => {
   it('should handle attack range greater than 1', () => {
     const i = 1;
     const j = 2;
-    world.Matrix[0][0].AnActor.Type =  W.ActorsTypeList.BigMonster.Type ;
-    world.Matrix[2][2].AnActor.Type = W.ActorsTypeList.BigMonster.Type ;
+    world.Matrix[0][0].AnActor.Type =  T.ActorsTypeList.BigMonster.Type ;
+    world.Matrix[2][2].AnActor.Type = T.ActorsTypeList.BigMonster.Type ;
     const result = A.EnemiesInAttackRange(i, j, world);
     console.log(result);
     expect(result).toEqual([{ x: 0, y: 0 }, { x: 1, y: 1 }, { x: 2, y: 2 }]);
@@ -233,11 +238,11 @@ describe('TowerAttacks', () => {
   test('should damage an enemy within range and increase the score', () => {
     const tower = {
       Pos: { x: 3, y: 3 },
-      AnActor: W.ActorsTypeList.MagicTower,
+      AnActor: T.ActorsTypeList.MagicTower,
     };
     const enemy = {
       Pos: { x: 5, y: 5 },
-      AnActor: W.ActorsTypeList.BigMonster,
+      AnActor: T.ActorsTypeList.BigMonster,
     };
     world.Matrix[tower.Pos.x][tower.Pos.y] = tower;
     world.Matrix[enemy.Pos.x][enemy.Pos.y] = enemy;
@@ -255,7 +260,7 @@ describe('TowerAttacks', () => {
   test('should not damage any enemy if none are within range', () => {
     const tower = {
       Pos: { x: 3, y: 3 },
-      AnActor: W.ActorsTypeList.MagicTower,
+      AnActor: T.ActorsTypeList.MagicTower,
     };
     world.Matrix[tower.Pos.x][tower.Pos.y] = tower;
 
@@ -283,18 +288,18 @@ describe('display', () => {
         [
           {
             Pos: { x: 0, y: 0 },
-            AnActor: W.ActorsTypeList.SimpleMonster ,
+            AnActor: T.ActorsTypeList.SimpleMonster ,
           },
           {Pos: { x: 0, y: 1 },
-            AnActor: W.ActorsTypeList.SimpleTower ,
+            AnActor: T.ActorsTypeList.SimpleTower ,
           },
         ],
         [
           {Pos: { x: 1, y: 0 },
-            AnActor: W.ActorsTypeList.Road ,
+            AnActor: T.ActorsTypeList.Road ,
           },
           {Pos  : { x: 1, y: 1 },
-            AnActor: W.ActorsTypeList.Tree ,
+            AnActor: T.ActorsTypeList.Tree ,
           },
         ],
       ],
@@ -306,25 +311,25 @@ describe('display', () => {
 
   it('should display the world with correct colors', () => {
     const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
-    W.display(mockWorld);
+    W.display(mockWorld, 1);
     expect(mockConsoleLog).toHaveBeenCalledWith(
-      expect.stringContaining(W.ActorsTypeList.SimpleMonster.Color)
+      expect.stringContaining(T.ActorsTypeList.SimpleMonster.Color)
     );
     expect(mockConsoleLog).toHaveBeenCalledWith(
-      expect.stringContaining(W.ActorsTypeList.SimpleTower.Color)
+      expect.stringContaining(T.ActorsTypeList.SimpleTower.Color)
     );
     expect(mockConsoleLog).toHaveBeenCalledWith(
-      expect.stringContaining(W.ActorsTypeList.Road.Color)
+      expect.stringContaining(T.ActorsTypeList.Road.Color)
     );
     expect(mockConsoleLog).toHaveBeenCalledWith(
-      expect.stringContaining(W.ActorsTypeList.Tree.Color)
+      expect.stringContaining(T.ActorsTypeList.Tree.Color)
     );
     mockConsoleLog.mockRestore();
   });
 
   it('should display the score', () => {
     const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
-    W.display(mockWorld);
+    W.display(mockWorld,1);
     expect(mockConsoleLog).toHaveBeenCalledWith(
       expect.stringContaining(`Score : ${mockWorld.Score}`)
     );
