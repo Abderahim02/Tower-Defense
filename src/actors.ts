@@ -14,7 +14,7 @@ import { AvailablePosition } from "./movements.js";
 
 
 export const CreateMagicTower=(i:number, j:number, world:world):world=>{
-    let move : point = {x : i, y : j};
+    const move : point = {x : i, y : j};
     if(!AvailablePosition(move, world)){
         world.Matrix[i][j]={
             Pos:     { x: i,y: j },
@@ -26,7 +26,7 @@ export const CreateMagicTower=(i:number, j:number, world:world):world=>{
 };
 
 export const CreateSimpleTower=(i:number, j:number, world:world):world=>{
-    let move : point = {x : i, y : j};
+    const move : point = {x : i, y : j};
     if(!AvailablePosition(move, world)){
         world.Matrix[i][j]={
             Pos:     { x: i, y: j },

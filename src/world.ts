@@ -126,7 +126,7 @@ export function gamePhase(aWorld : world, OptimalRoad : point[]) : action[] {
             Phase.push(sm);
         }
         else if(GetActorType(aWorld, aWorld.Actors[i].Pos) === "BigMonster"){
-            let bestMove : point = NextOptimalMove( aWorld.Actors[i].Pos, aWorld,OptimalRoad);
+            const bestMove : point = NextOptimalMove( aWorld.Actors[i].Pos, aWorld,OptimalRoad);
             // //if the Astar road is occupied, we do a simple move
             // if(bestMove.x === aWorld.Actors[i].Pos.x && bestMove.y === aWorld.Actors[i].Pos.y){
             //     Phase.push(mv);
