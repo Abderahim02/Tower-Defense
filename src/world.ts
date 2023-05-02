@@ -109,6 +109,7 @@ export const display=(world : world,end: number): void=> {
 and we return a list of actions */
 export function gamePhase(aWorld : world) : action[] {
     const Phase : action[] = [];
+
     for (let i : number = 0; i < aWorld.Actors.length; ++i ){
         const tmp : number[] = SimpleMove(aWorld.Actors[i], aWorld, aWorld.Actors[i].AnActor.Type );
         const mv : action = { AnActorIndex : i,  AnActorInfos : aWorld.Actors[i] , aMove : {ExPos : aWorld.Actors[i].Pos , NewPos : {x : tmp[0], y : tmp[1]} }};
