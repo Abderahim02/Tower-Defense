@@ -1,7 +1,7 @@
 import {display, initializeWorld, CreateWorld, gameover, gamePhase, gameMotor} from "./world.js";
 import { Road } from "./rand_road.js";
 import { CreateSimpleTower, TowersPlacement, TowersAttacks, addActorsToWorld } from "./actors.js"; 
-import {ActorsTypeList, world} from "./defineType.js"
+import {ActorsTypeList, world} from "./defineType.js";
 
 
 
@@ -14,7 +14,7 @@ function loop() : void {
     world = CreateSimpleTower(Math.floor(world.Height/2)+2,11,world);
     world=TowersPlacement(world);
     display(world,end);
-    for(let i : number = 0 ; i < 50 ; i++ ){
+    for(let i : number = 0 ; i < 10 ; i++ ){
         //to add bigMonstres in the begining of Road
         if(i%6===0){   
             world.Actors=addActorsToWorld(world,ActorsTypeList.BigMonster, Math.floor(world.Height/2));
@@ -36,6 +36,6 @@ function loop() : void {
     console.log(world.Actors.length);
 }
 
-loop();
+//loop();
 
 /////////////////////////////////////           END           /////////////////////////////////////////////////////
