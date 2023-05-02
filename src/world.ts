@@ -117,6 +117,7 @@ export const display=(world : world,end: number): void=> {
 and we return a list of actions */
 export function gamePhase(aWorld : world, OptimalRoad : point[]) : action[] {
     const Phase : action[] = [];
+
     for (let i : number = 0; i < aWorld.Actors.length; ++i ){
         // console.log(GetActorType(aWorld, aWorld.Actors[i].Pos) );
         if(GetActorType(aWorld, aWorld.Actors[i].Pos) === "SimpleMonster"){
