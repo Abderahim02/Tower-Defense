@@ -1,4 +1,3 @@
-
 import { SimpleMove, noMove } from './movements.js';
 /*this is the list of actors types that exists in the world, we use a different 
 sticker for each actor, and different powers */

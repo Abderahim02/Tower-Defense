@@ -1,6 +1,7 @@
 
 import {SimpleMove } from './movements.js';
-import {action, world, position, actor, ActorsTypeList } from './defineType.js';
+import {action, world, position, actor, ActorsTypeList , point} from './defineType.js';
+import {OptimalRoad, NextOptimalMove, GetActorType } from "./optimal_road.js";
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,7 +45,7 @@ export const display=(world : world,end: number): void=> {
         if(i<world.Height/2 +15 && i >world.Height/2+5 && count===0){
             s2+=" Score : ";
             s2+=world.Score;
-            s2+=" 💀 ";
+            s2+=" 💀 "; 
             count ++;
         }
         else{
@@ -94,7 +95,8 @@ export const display=(world : world,end: number): void=> {
                     break;
                 case 'Road':
                     if(Math.floor(end/world.Width)===i && end%world.Width===j)
-                     s+="\x1b[48;2;76;70;50m✴ \x1b[0m";
+                     s+="\x1b[48;2;76;70;50m💀\x1b[0m";
+                        // s+="\x1b[48;2;76;70;50m* \x1b[0m";
                     else{
                      s+=ActorsTypeList.Road.Color;
                     }
@@ -105,28 +107,89 @@ export const display=(world : world,end: number): void=> {
     }
 };
 
+// //this function returns the type of the actor in position p in the grid
+// export function GetActorType(w: world, p:point) : string{
+//     return w.Matrix[p.x][p.y].AnActor.Type;
+// }
+
+
 /*this function create a phase of the game, we see all possible moves for all actors
 and we return a list of actions */
-export function gamePhase(aWorld : world) : action[] {
+export function gamePhase(aWorld : world, OptimalRoad : point[]) : action[] {
     const Phase : action[] = [];
     for (let i : number = 0; i < aWorld.Actors.length; ++i ){
-        const tmp : number[] = SimpleMove(aWorld.Actors[i], aWorld, aWorld.Actors[i].AnActor.Type );
-        const mv : action = { AnActorIndex : i,  AnActorInfos : aWorld.Actors[i] , aMove : {ExPos : aWorld.Actors[i].Pos , NewPos : {x : tmp[0], y : tmp[1]} }};
-        Phase.push(mv);
+        // console.log(GetActorType(aWorld, aWorld.Actors[i].Pos) );
+        if(GetActorType(aWorld, aWorld.Actors[i].Pos) === "SimpleMonster"){
+            const basicMove : point = SimpleMove(aWorld.Actors[i], aWorld, aWorld.Actors[i].AnActor.Type );
+            const sm : action = {  AnActorInfos : aWorld.Actors[i] , aMove : {ExPos : aWorld.Actors[i].Pos , NewPos : {x : basicMove.x, y : basicMove.y} }};
+            Phase.push(sm);
+        }
+        else if(GetActorType(aWorld, aWorld.Actors[i].Pos) === "BigMonster"){
+            let bestMove : point = NextOptimalMove( aWorld.Actors[i].Pos, aWorld,OptimalRoad);
+            // //if the Astar road is occupied, we do a simple move
+            // if(bestMove.x === aWorld.Actors[i].Pos.x && bestMove.y === aWorld.Actors[i].Pos.y){
+            //     Phase.push(mv);
+            // }
+            // //else we go with the astar move
+            // else{
+                // console.log("i am a big monster");
+                const m : action = {  AnActorInfos : aWorld.Actors[i] , aMove : {ExPos : aWorld.Actors[i].Pos , NewPos : {x : bestMove.x, y : bestMove.y} }};    
+                // console.log(m.aMove.NewPos);
+                Phase.push(m);
+            // }
+        }
     }
     return Phase;
 }
 
 export function gameMotor(aPhase : action[] , aWorld : world) : world {
+    const predicate = (value : action) => value.AnActorInfos.AnActor.Type === "BigMonster";
+    aPhase  = aPhase.filter((value, index, arr) => {
+      return arr.indexOf(value) === index && (index === arr.lastIndexOf(value) || predicate(value));
+    });
     for(let i : number =0; i < aPhase.length; ++i){
         const act : action = aPhase[i];
         aWorld.Matrix[act.aMove.ExPos.x][act.aMove.ExPos.y].AnActor = ActorsTypeList.Road;
         aWorld.Matrix[act.aMove.NewPos.x][act.aMove.NewPos.y].AnActor = act.AnActorInfos.AnActor;
-        aWorld.Actors[act.AnActorIndex].Pos.x = act.aMove.NewPos.x ;
-        aWorld.Actors[act.AnActorIndex].Pos.y = act.aMove.NewPos.y ;
+        aWorld.Actors[i].Pos.x = act.aMove.NewPos.x ;
+        aWorld.Actors[i].Pos.y = act.aMove.NewPos.y ;
     }
     return aWorld;
 }
+// function compareActions(action1: action, action2: action): boolean {
+//     return (
+//       action1.AnActorInfos.AnActor === action2.AnActorInfos.AnActor &&
+//       action1.aMove.ExPos.x === action2.aMove.ExPos.x &&
+//       action1.aMove.ExPos.y === action2.aMove.ExPos.y &&
+//       action1.aMove.NewPos.x === action2.aMove.NewPos.x &&
+//       action1.aMove.NewPos.y === action2.aMove.NewPos.y 
+//     );
+//   }
+// export function gameMotor(aPhase: action[], aWorld: world): world {
+//     const filteredActions: action[] = [];
+  
+//     for (const action of aPhase) {
+//       const index = filteredActions.findIndex((filteredAction) =>
+//         compareActions(action, filteredAction)
+//       );
+//       if (index !== -1) {
+//         if (action.AnActorInfos.AnActor.Type === "BigMonster") {
+//           filteredActions[index] = action;
+//         }
+//       } else {
+//         filteredActions.push(action);
+//       }
+//     }
+//     // aPhase = filteredActions;
+//     for(let i : number =0; i < filteredActions.length; ++i){
+//         const act : action = filteredActions[i];
+//         aWorld.Matrix[act.aMove.ExPos.x][act.aMove.ExPos.y].AnActor = ActorsTypeList.Road;
+//         aWorld.Matrix[act.aMove.NewPos.x][act.aMove.NewPos.y].AnActor = act.AnActorInfos.AnActor;
+//         aWorld.Actors[i].Pos.x = act.aMove.NewPos.x ;
+//         aWorld.Actors[i].Pos.y = act.aMove.NewPos.y ;
+//     }
+//     return aWorld;
+//   }
 
 // recursive terminale gameover
 export function gameover(world: world,end:number): number{

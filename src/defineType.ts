@@ -8,7 +8,7 @@ import { SimpleMove } from "./movements.js";
     actors but with  no power
 */
 export type actor = {
-    Move(pos: position, world:world, type:string): number[]  ;
+    Move(pos: position, world:world, type:string): point;
     Type : string;
     Color : string;
     HitPoints : number;
@@ -50,7 +50,6 @@ export type move = {
  AnActorInfos as data and  AnActorIndex as index in the array world.Actors */
 export type action = {
     AnActorInfos : position ;
-    AnActorIndex : number;
     aMove : move ;
 }
 
@@ -63,7 +62,7 @@ export const noMove=(pos: position, aWorld: world, type: string) : any =>{
 /*this is the list of actors types that exists in the world, we use a different
 sticker for each actor, and different powers */
 export const ActorsTypeList = {
-    SimpleMonster : {Move: SimpleMove, Type : "SimpleMonster", Color : "\x1b[37m  \x1b[0m", HitPoints : 3, Cost : 0, gain: 0, Damage: 0, AttackRange : 0},
+    SimpleMonster : {Move: SimpleMove, Type : "SimpleMonster", Color : "\x1b[37m🫎 \x1b[0m", HitPoints : 3, Cost : 0, gain: 0, Damage: 0, AttackRange : 0},
     BigMonster : {Move : SimpleMove, Type : "BigMonster", Color : "\x1b[37m🦌\x1b[0m", HitPoints : 3, Cost : 0, gain : 0, Damage: 0, AttackRange : 0},
     SimpleTower : {Move: noMove, Type : "SimpleTower", Color : "\x1b[48;2;34;139;34m🏯\x1b[0m", HitPoints : 0, Cost : 1000,gain : 0, Damage: 1, AttackRange : 3},
     SimpleTowerII : {Move: noMove, Type : "SimpleTowerII", Color : "\x1b[48;2;34;139;34m🏯\x1b[0m", HitPoints : 0, Cost : 1500, gain : 0,Damage: 3, AttackRange : 5},

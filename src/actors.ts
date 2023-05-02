@@ -3,7 +3,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-import { ActorsTypeList, actor, position, world } from "./defineType.js";
+import { ActorsTypeList, actor, position, world, point } from "./defineType.js";
 import { AvailablePosition } from "./movements.js";
 
 
@@ -14,8 +14,7 @@ import { AvailablePosition } from "./movements.js";
 
 
 export const CreateMagicTower=(i:number, j:number, world:world):world=>{
-    let move:any = Array(2);
-    move = [i,j];
+    let move : point = {x : i, y : j};
     if(!AvailablePosition(move, world)){
         world.Matrix[i][j]={
             Pos:     { x: i,y: j },
@@ -27,8 +26,7 @@ export const CreateMagicTower=(i:number, j:number, world:world):world=>{
 };
 
 export const CreateSimpleTower=(i:number, j:number, world:world):world=>{
-    let move = Array(2);
-    move = [i,j];
+    let move : point = {x : i, y : j};
     if(!AvailablePosition(move, world)){
         world.Matrix[i][j]={
             Pos:     { x: i, y: j },
@@ -39,19 +37,13 @@ export const CreateSimpleTower=(i:number, j:number, world:world):world=>{
     return world;
 };
 
-export const EnemiesInAttackRange=(i: number,j: number,world: world):any[]=>{
-    // if(world.Matrix[i][j].typeActor.type != "Tower"){
-    //     console.log("Select a Tower");
-    // }
-    const enemies: any =[];
-
+export const EnemiesInAttackRange=(i: number,j: number,world: world) : point[]=>{
+    const enemies: point[] =[];
     const range: number = world.Matrix[i][j].AnActor.AttackRange;
     for(let k: number =i-range; k<i+range; k++){
         for(let l:number =j-range; l<j+range; l++){
             if(world.Matrix[k][l].AnActor.Type === ActorsTypeList.BigMonster.Type){
                 enemies.push({x:world.Matrix[k][l].Pos.x, y:world.Matrix[k][l].Pos.y});
-                
-                
             }
         }
     }
@@ -64,14 +56,14 @@ export const EnemiesInAttackRange=(i: number,j: number,world: world):any[]=>{
 
 export const TowersAttacks = (world: world): world => {
     function TowerAttack(i: number, j: number, world: world): world {
-      const enemies: any = EnemiesInAttackRange(i, j, world);
+      const enemies: point[] = EnemiesInAttackRange(i, j, world);
       if (enemies.length !== 0) {
         const rand: number = Math.floor(Math.random() * enemies.length);
         world.Matrix[enemies[rand].x][enemies[rand].y].AnActor.HitPoints -=
           world.Matrix[i][j].AnActor.Damage;
         if (world.Matrix[enemies[rand].x][enemies[rand].y].AnActor.HitPoints <= 0) {
           world.Matrix[enemies[rand].x][enemies[rand].y].AnActor = ActorsTypeList.Road;
-          world=killActor(world, enemies[rand].x, enemies[rand].y);
+          world=killActor(world, enemies[rand]);
           console.log(world.Score);
           world.Score++;
         }
@@ -86,9 +78,11 @@ export const TowersAttacks = (world: world): world => {
     return world;
   };
 
-export function killActor(world: world, x:number, y:number): world{
+export function killActor(world: world, p:point): world{
+    console.log("killed monster in position :"+`${p}`);
     for(let i=0; i<world.Actors.length; i++){
-        if(world.Actors[i].Pos.x===x && world.Actors[i].Pos.y===y){
+        if(world.Actors[i].Pos.x===p.x && world.Actors[i].Pos.y===p.y){
+            world.Matrix[world.Actors[i].Pos.x][world.Actors[i].Pos.y].AnActor = ActorsTypeList.Road;
             world.Actors.splice(i);
             return world;
         }
@@ -163,11 +157,15 @@ export const updatetower=(world: world, i: number, j: number): world=>{
 
 
 
-export function addActorsToWorld(w:world,actr:actor,xPosition: number):position[]{
-   
-   return  w.Actors.concat({Pos:  { x: Math.floor(w.Height/2), y: 0 },
-                             AnActor : actr}
-                             );
+export function addActorsToWorld(w : world, actr : actor, xPosition: number):world{
+    if(AvailablePosition({ x: xPosition, y: 0 } , w)){
+        console.log("Added monster");
+        w.Matrix[xPosition][0].AnActor = actr;
+        w.Actors = w.Actors.concat({Pos:  { x: xPosition, y: 0 },
+                                 AnActor : actr}
+                                 );
+    }
+   return w;
 }
 
 //export{TowerAttacks, CreateMagicTower, CreateSimpleTower, EnemiesInAttackRange};

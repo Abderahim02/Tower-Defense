@@ -100,6 +100,7 @@ export const Road = (world: world, start:number, end: number) : world=>{
       world.Matrix[x][y].AnActor = ActorsTypeList.Road;
     }
   }
+  world.Matrix[Math.floor(end/world.Width)][end%world.Width].AnActor = ActorsTypeList.Road;
   return world;
 };
 
