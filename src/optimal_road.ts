@@ -1,7 +1,4 @@
-import {display, initializeWorld, CreateWorld} from "./world.js";
-import { Road } from "./rand_road.js";
-import{ActorsTypeList, world,  point, position} from "./defineType.js";
-import {TowersPlacement} from "./actors.js"; 
+import{ world,  point} from "./defineType.js";
 import { Graph , Astar, Vertex} from "./Astar.js";
 
 
@@ -12,18 +9,11 @@ export function GetActorType(w: world, p:point) : string{
 
 
 //this function returns a list of positions in the grid that are with type road
-function GetRoadInWorld(w : world): point[]{
-    const Roads : point[] = [];
-    for(let i=0; i<w.Height; ++i){
-        for(let j=0; j<w.Width; ++j){
-            if (GetActorType(w, w.Matrix[i][j].Pos) === "Road" ){
-                Roads.push(w.Matrix[i][j].Pos);
-            }
-        }
-    }
-    // console.log(Roads);
-    return Roads;
-}
+function GetRoadInWorld(w : world): point[] {
+    return w.Matrix.flatMap(row =>
+      row.filter(cell => GetActorType(w, cell.Pos) === "Road").map(cell => cell.Pos)
+    );
+  }
 
 //this function test if the position p belongs to the grid
 function isValidPosition(w : world, p : point){
@@ -50,43 +40,28 @@ function ConstructNeighbors(w: world, p : point) : point[]{
 
 //this function look for the position p in the list of positions R
 function SearchForVertex(R : point[], p : point) : number{
-    for(let i=0; i<R.length; ++i){
-        if(R[i].x === p.x && R[i].y === p.y){
-            return i;
-        }
-    }
-    return -1;
-}
+    const index = R.findIndex(vertex => vertex.x === p.x && vertex.y === p.y);
+    return index !== -1 ? index : -1;
+  }
 
 
 //this function returns an empty matrix of size n*n
 function InitializedMatrix(n : number) : number[][]{
-    const matrix:number [][]= [];
-    for (let i:number = 0; i < n; i++) {
-      matrix[i]= new Array(n);
-    }
-    for (let i:number = 0; i < n; i++) {
-        for (let j:number = 0; j < n; j++) {
-            matrix[i][j] = 0;
-          }
-      }
+    const matrix = Array.from({ length: n }, () => new Array(n).fill(0));
     return matrix;
-}
+  }
 
 
 /*this id the main function that converts a world to a graph, in the graph we put only 
 positions with type road indexed by the order we found theme: from the first to the last 
 one we found, its size is M*M Where M is the number of these positions */
 function ConvertRoadsToGraph( Roads : point[], w : world): Graph{
-    // const Roads: point[] = GetRoadInWorld(w);//we collect the road positions 
-    // Roads.push(s); // we add the starting position to consiedr it as road
     const l : number = Roads.length;
     const G : Graph = {mat : InitializedMatrix(l), size : l }; //we create an empty graph
     for(let i=0; i<l; ++i){ //we explore all the roads
         //for each road we see all its neighbors that are with type road
         const neighbors : point[] = ConstructNeighbors(w, Roads[i]);
         for(let v = 0; v<neighbors.length; ++v){
-            // console.log(`${neighbors[v].x}` + `\t ${neighbors[v].y}\n`);
             if(GetActorType(w, neighbors[v]) === "Road" ){
                 //we make an arc between the two vertexes
                 const index : number = SearchForVertex(Roads, neighbors[v]); 
@@ -99,48 +74,27 @@ function ConvertRoadsToGraph( Roads : point[], w : world): Graph{
     return G;
 }
 
-//this function diplays the graph G as a 2D matrix
-function DisplayGraph(G : Graph) : string {
-    let gridStr : string = "";
-    for (let i = 0; i < G.size; i++) {
-      let rowStr = "[";
-      for (let j = 0; j < G.size; j++) {
-        rowStr += G.mat[i][j];
-        if (j < G.size - 1) {
-          rowStr += ", ";
-        }
-      }
-      rowStr += "]\n";
-      gridStr += rowStr;
-    }
-    return gridStr;
-  }
-
-//this function returns a possible exit position for monsters
-function GetAnExitPosition(w: world) : point{
-    for(let i = 0; i<w.Height; ++i){
-        if(GetActorType(w, {x : i, y : w.Width - 1}) === "Road"){
-            return w.Matrix[i][w.Width - 1].Pos;
-        }
-    }
-    return {x : -1, y : -1};
+/*this function diplays the graph G as a 2D matrix, its useful for debbuging*/
+function displayGraph (G : Graph) {
+    const grid = G.mat.map(row => `[${row.join(", ")}]\n`).join("");
+    return grid;
 }
 
-//this function returns the best road for a monster to exit the map and win
+/*  this function returns the best road for a monster to exit the map and win
+    p : the begining position (=== the source) 
+    end : is the ending point of the road (the position where we want to go)
+*/
 export function OptimalRoad( p : point , w : world, end : point ) : point[]{
     const Roads: point[] = GetRoadInWorld(w);
     Roads.push(p); // we add the starting position to consiedr it as road
     const G : Graph = ConvertRoadsToGraph( Roads, w); // we construct the graph
-    // console.log(   DisplayGraph(G));
     //the starting / ending vertexes of the road
     const EndVertex : Vertex = {s : SearchForVertex(Roads, end) } ;
     const StartVertex : Vertex = {s : Roads.length - 1 };
     const tab : [number[], number[]] = Astar(StartVertex, EndVertex , G);
-    // console.log(tab);
     const Chemin : point [] = [];
-    //cette function contruit le chemin d'apres l'arborescence (parents) retourne par Astar
+    //This function constructs the path based on the hierarchy (parents) returned by Astar.
     function ConstructRoad(t : number[], curseur : number) : point[]{
-        // console.log(curseur);
         if (curseur === t.length - 1 || curseur < 0 ) {
             return Chemin;
         } else {
@@ -153,15 +107,16 @@ export function OptimalRoad( p : point , w : world, end : point ) : point[]{
 }
 
 
-
+/*  this function returns the next move for an actor using Astar road,
+    if the position is not empty(!== road) the actor stays in his place with no move.
+    p: is the actual position of the actor
+    OptimalRoad : is an array of points of the Astar road
+*/
 export function NextOptimalMove(p: point, w : world, OptimalRoad : point[] ) : point {
     const ActorIndex : number = SearchForVertex(OptimalRoad, p );
     if (ActorIndex === 0) return OptimalRoad[0];
     const m : point = OptimalRoad[ActorIndex - 1];
-    // console.log(ActorIndex);
-    // console.log("p = {"+ `${p.x},${p.y}` + "} m = {"+`${m.x}, ${m.y}`+"}");
     if ( isValidPosition(w, m) && GetActorType(w, m) === "Road" ) {
-        // console.log("khkhkhkhkh");
         return m;
     }
     return p;
@@ -213,3 +168,4 @@ function TestOptimalRoad(){
 export {
     TestOptimalRoad
 };
+/////////////////////////////////////           END           /////////////////////////////////////////////////////

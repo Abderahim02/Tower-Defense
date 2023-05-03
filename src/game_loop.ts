@@ -2,9 +2,9 @@ import {display, initializeWorld, CreateWorld, gameover, gamePhase, gameMotor} f
 import { Road } from "./rand_road.js";
 import { CreateSimpleTower, TowersPlacement, TowersAttacks, addActorsToWorld } from "./actors.js"; 
 import {ActorsTypeList, world, point} from "./defineType.js";
-import {TestOptimalRoad, OptimalRoad, NextOptimalMove} from "./optimal_road.js";
+import {OptimalRoad} from "./optimal_road.js";
 
-
+//The main loop of the game 
 function loop() : void {
     let w : world = CreateWorld(15,13);
     const start : number = Math.floor(w.Height/2)*w.Width;
@@ -43,9 +43,7 @@ function loop() : void {
         console.log(w.Actors.map(elem => elem.Pos));
         display(w,end);
     }
-    // display(w,end);
 }
 
-//loop();
-//TestOptimalRoad();
+// loop();
 /////////////////////////////////////           END           /////////////////////////////////////////////////////

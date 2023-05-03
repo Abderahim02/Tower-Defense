@@ -1,21 +1,11 @@
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////        BEGIN            /////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 import { ActorsTypeList, actor, position, world, point } from "./defineType.js";
 import { AvailablePosition } from "./movements.js";
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////        TOWER            /////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
+//this function creates a magic tower in the position {i,j} 
 export const CreateMagicTower=(i:number, j:number, world:world):world=>{
-    const move : point = {x : i, y : j};
-    if(!AvailablePosition(move, world)){
+    const m : point = {x : i, y : j};
+    if(!AvailablePosition(m, world)){
         world.Matrix[i][j]={
             Pos:     { x: i,y: j },
             AnActor:ActorsTypeList.MagicTower
@@ -24,7 +14,7 @@ export const CreateMagicTower=(i:number, j:number, world:world):world=>{
     }
     return world;
 };
-
+//this function creates a simple tower in the position {i,j} 
 export const CreateSimpleTower=(i:number, j:number, world:world):world=>{
     const move : point = {x : i, y : j};
     if(!AvailablePosition(move, world)){
@@ -47,7 +37,6 @@ export const EnemiesInAttackRange=(i: number,j: number,world: world) : point[]=>
             }
         }
     }
-    
     return enemies;
 };
 
@@ -82,8 +71,8 @@ export function killActor(world: world, p:point): world{
     console.log("killed monster in position :"+`${p}`);
     for(let i=0; i<world.Actors.length; i++){
         if(world.Actors[i].Pos.x===p.x && world.Actors[i].Pos.y===p.y){
-            world.Matrix[world.Actors[i].Pos.x][world.Actors[i].Pos.y].AnActor = ActorsTypeList.Road;
             world.Actors.splice(i);
+            world.Matrix[world.Actors[i].Pos.x][world.Actors[i].Pos.y].AnActor = ActorsTypeList.Road;
             return world;
         }
     }
@@ -168,11 +157,4 @@ export function addActorsToWorld(w : world, actr : actor, xPosition: number):wor
    return w;
 }
 
-//export{TowerAttacks, CreateMagicTower, CreateSimpleTower, EnemiesInAttackRange};
-
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////           END           /////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,9 +1,5 @@
 import { SimpleMove } from "./movements.js";
 
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*this is a type that defines an actor ,we suppose that floor and road are also
     actors but with  no power
 */
@@ -76,3 +72,4 @@ export const ActorsTypeList = {
     Tree : {Move: noMove, Type : "Tree", Color : "\x1b[48;2;34;139;34m 🎄\x1b[0m", HitPoints : 0, Cost : 0, gain : 0,Damage: 0, AttackRange : 0},
     Fire : {Move: noMove, Type : "Fire", Color : "\x1b[48;2;34;139;34m 🔥\x1b[0m", HitPoints : 0, Cost : 0, gain : 0,Damage: 0, AttackRange : 0},
 };
+/////////////////////////////////////           END           /////////////////////////////////////////////////////
