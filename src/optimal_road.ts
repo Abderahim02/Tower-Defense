@@ -17,11 +17,11 @@ function GetRoadInWorld(w : world): point[] {
 
 //this function test if the position p belongs to the grid
 function isValidPosition(w : world, p : point){
-    return  p.x < w.Height && p.y < w.Width && p.x >= 0 && p.y >= 0; //p!== undefined &&
+    return  p!== undefined && p.x < w.Height && p.y < w.Width && p.x >= 0 && p.y >= 0; //
 }
 
 //this function construct a list of neighbors of the position p
-function ConstructNeighbors(w: world, p : point) : point[]{
+export function ConstructNeighbors(w: world, p : point) : point[]{
     const neighbors : point[] = [];
     if(isValidPosition(w, p)){
     //we add all the neighbors even if they arent in the grid 
@@ -122,50 +122,4 @@ export function NextOptimalMove(p: point, w : world, OptimalRoad : point[] ) : p
     return p;
 }
 
-
-
-//this is a test function for the convertion algorithm
-function TestOptimalRoad(){
-    // let w : world = CreateWorld(10,15);
-    // const start : number = Math.floor(w.Height/2)*w.Width;
-    // const end : number = start-1;
-    // w = Road(initializeWorld(w),start,end);
-    // //display(w);
-    // w=TowersPlacement(w);
-    // for(let i : number = 0 ; i < 50 ; i++ ){
-    //     if(i%6===0){   
-    //          w.Actors.push({
-    //             Pos:  { x: Math.floor(w.Height/2), y: 0 },
-    //             AnActor : ActorsTypeList.BigMonster
-    //         });
-    //         w.Matrix[Math.floor(w.Height/2)][0].AnActor =ActorsTypeList.BigMonster;
-    //     }
-    //     if(i%6===3){
-    //         {
-    //             w.Actors.push({
-    //                Pos:     { x: Math.floor(w.Height/2), y: 0 },
-    //                AnActor : ActorsTypeList.SimpleMonster
-    //            });
-    //            w.Matrix[Math.floor(w.Height/2)][0].AnActor =ActorsTypeList.SimpleMonster;
-    //        }
-    //     }
-        
-    // }
-    // // w=gameMotor(gamePhase(w),w);
-    // display(w, end);
-    // const startPoint : point = {x : Math.floor(start/w.Width), y : start%w.Width};
-    // const endPoint : point = {x : Math.floor(end/w.Width) , y:  end%w.Width}
-    // const AstarRoad : point[] = OptimalRoad(startPoint, w, endPoint);
-    // console.log(startPoint);
-    // console.log(endPoint);
-    // // const AstarRoad : point[] = OptimalRoad({x : 5, y : 0}, w, endPoint);
-
-    // console.log(AstarRoad);
-    // console.log(NextOptimalMove(startPoint,w, AstarRoad));
-}
-//TestOptimalRoad();
-
-export {
-    TestOptimalRoad
-};
 /////////////////////////////////////           END           /////////////////////////////////////////////////////

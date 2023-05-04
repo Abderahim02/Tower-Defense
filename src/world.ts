@@ -128,49 +128,78 @@ export function gamePhase(aWorld : world, OptimalRoad : point[]) : action[] {
     return Phase;
 }
 
-export function gameMotor(aPhase : action[] , aWorld : world) : world {
-    const predicate = (value : action) => value.AnActorInfos.AnActor.Type === "BigMonster";
-    /*we filter the moves of the phase, if there will be a conflict between two actors going to
-    same new position*/
-    aPhase  = aPhase.filter((value, index, arr) => {
-      return arr.indexOf(value) === index && (index === arr.lastIndexOf(value) || predicate(value));
-    });
-    for(let i : number =0; i < aPhase.length; ++i){
-        const act : action = aPhase[i];
-        aWorld.Matrix[act.aMove.ExPos.x][act.aMove.ExPos.y].AnActor = ActorsTypeList.Road;
-        aWorld.Matrix[act.aMove.NewPos.x][act.aMove.NewPos.y].AnActor = act.AnActorInfos.AnActor;
-        aWorld.Actors[i].Pos.x = act.aMove.NewPos.x ;
-        aWorld.Actors[i].Pos.y = act.aMove.NewPos.y ;
-    }
-    return aWorld;
-}
+// export function gameMotor(aPhase : action[] , aWorld : world) : world {
+//     const predicate = (value : action) => value.AnActorInfos.AnActor.Type === "BigMonster";
+//     /*we filter the moves of the phase, if there will be a conflict between two actors going to
+//     same new position*/
+//     aPhase  = aPhase.filter((value, index, arr) => {
+//       return arr.indexOf(value) === index && (index === arr.lastIndexOf(value) || predicate(value));
+//     });
+//     for(let i : number =0; i < aPhase.length; ++i){
+//         const act : action = aPhase[i];
+//         aWorld.Matrix[act.aMove.ExPos.x][act.aMove.ExPos.y].AnActor = ActorsTypeList.Road;
+//         aWorld.Matrix[act.aMove.NewPos.x][act.aMove.NewPos.y].AnActor = act.AnActorInfos.AnActor;
+//         aWorld.Actors[i].Pos.x = act.aMove.NewPos.x ;
+//         aWorld.Actors[i].Pos.y = act.aMove.NewPos.y ;
+//     }
+//     return aWorld;
+// }
 //NE PAS SUPPRIMER 
 
-/* function compareActions(action1: action, action2: action): boolean {
-    return (
-      action1.AnActorInfos.AnActor === action2.AnActorInfos.AnActor &&
-      action1.aMove.ExPos.x === action2.aMove.ExPos.x &&
-      action1.aMove.ExPos.y === action2.aMove.ExPos.y &&
-      action1.aMove.NewPos.x === action2.aMove.NewPos.x &&
-      action1.aMove.NewPos.y === action2.aMove.NewPos.y 
-    );
+// function compareActions(action1: action, action2: action): boolean {
+//     const t : boolean = action1.AnActorInfos.AnActor === action2.AnActorInfos.AnActor &&
+//     action1.aMove.ExPos.x === action2.aMove.ExPos.x &&
+//     action1.aMove.ExPos.y === action2.aMove.ExPos.y &&
+//     action1.aMove.NewPos.x === action2.aMove.NewPos.x &&
+//     action1.aMove.NewPos.y === action2.aMove.NewPos.y ;
+//     if(t === true) console.log("oooooooooooo");
+//     return t;
+//   }
+function compareActions(action1: action, action2: action): boolean {
+    const t : boolean = 
+    action1.aMove.NewPos.x === action2.aMove.NewPos.x &&
+    action1.aMove.NewPos.y === action2.aMove.NewPos.y ;
+    // if(t === true) console.log("oooooooooooo");
+    return t;
   }
-export function gameMotor(aPhase: action[], aWorld: world): world {
-    const filteredActions: action[] = [];
-  
+// export function FilterActions(aPhase : action[]) : action[]{
+//     let filteredActions: action[] = [];
+//     for (const action of aPhase) {
+//         const index = filteredActions.findIndex((filteredAction) =>
+//           compareActions(action, filteredAction)
+//         );
+//         if (index !== -1) {
+//           if (action.AnActorInfos.AnActor.Type === "BigMonster") {
+//             filteredActions[index] = action;
+//           }
+//         } else {
+//           filteredActions.push(action);
+//         }
+//       }
+//     return filteredActions;
+//   }
+
+export function FilterActions(aPhase : action[]) : action[]{
+    let filteredActions: action[] = [];
     for (const action of aPhase) {
-      const index = filteredActions.findIndex((filteredAction) =>
-        compareActions(action, filteredAction)
-      );
-      if (index !== -1) {
-        if (action.AnActorInfos.AnActor.Type === "BigMonster") {
-          filteredActions[index] = action;
+        const index = filteredActions.findIndex((filteredAction) =>
+          compareActions(action, filteredAction)
+        );
+        if (index !== -1) {
+          if (action.AnActorInfos.AnActor.Type === "BigMonster") {
+            filteredActions[index] = action;
+          }
+        } 
+        else {
+          filteredActions.push(action);
         }
-      } else {
-        filteredActions.push(action);
       }
-    }
-    // aPhase = filteredActions;
+    return filteredActions;
+  }
+
+export function gameMotor(aPhase: action[], aWorld: world): world {
+    const filteredActions: action[] = FilterActions(aPhase);
+    // console.log(filteredActions.map(elt =>elt.aMove));
     for(let i : number =0; i < filteredActions.length; ++i){
         const act : action = filteredActions[i];
         aWorld.Matrix[act.aMove.ExPos.x][act.aMove.ExPos.y].AnActor = ActorsTypeList.Road;
@@ -179,7 +208,7 @@ export function gameMotor(aPhase: action[], aWorld: world): world {
         aWorld.Actors[i].Pos.y = act.aMove.NewPos.y ;
     }
     return aWorld;
-  } */
+  } 
 
 // recursive terminal gameover
 export function gameover(world: world,end:number): number{

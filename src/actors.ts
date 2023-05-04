@@ -1,39 +1,76 @@
 import { ActorsTypeList, actor, position, world, point } from "./defineType.js";
 import { AvailablePosition } from "./movements.js";
+import {ConstructNeighbors, GetActorType} from "./optimal_road.js"
 
+
+
+
+//this function puts an actor  in the position {i,j} 
+export const CreateActor=(p: point, act : actor ,w:world):world=>{
+    if(!AvailablePosition(p, w)){
+        w.Matrix[p.x][p.y]={
+            Pos:   p,
+            AnActor:act
+        };
+        return w;
+    }
+    return w;
+};
+
+function IsGoodTreePlacement(p: point, w: world): boolean {
+    const IsRoad: (p: point) => boolean = (p: point) => {
+        return GetActorType(w, p) === "Road";
+    };
+    const t: point[] = ConstructNeighbors(w, p).filter(IsRoad);
+    return t.length > 3;
+  }
+
+export const TreesPlacement = (w: world): world=> {
+    const IsFloor: (p: point) => boolean = (p: point) => {
+        return GetActorType(w, p) === "Floor";
+      };
+    const treePositions: point[] = w.Matrix.flatMap((row, y) =>
+      row.map((_, x) => ({ x, y })).filter((p) => IsGoodTreePlacement(p, w))
+    ).filter(IsFloor);
+    //on ajoute la moitié 
+    for(let i : number = 0 ; i<treePositions.length; i+=2 ){
+        CreateActor(treePositions[i], ActorsTypeList.Tree, w);
+    }
+    return w;
+  };
 
 //this function creates a magic tower in the position {i,j} 
-export const CreateMagicTower=(i:number, j:number, world:world):world=>{
+export const CreateMagicTower=(i:number, j:number, w:world):world=>{
     const m : point = {x : i, y : j};
-    if(!AvailablePosition(m, world)){
-        world.Matrix[i][j]={
+    if(!AvailablePosition(m, w)){
+        w.Matrix[i][j]={
             Pos:     { x: i,y: j },
             AnActor:ActorsTypeList.MagicTower
         };
-        return world;
+        return w;
     }
-    return world;
+    return w;
 };
 //this function creates a simple tower in the position {i,j} 
-export const CreateSimpleTower=(i:number, j:number, world:world):world=>{
+export const CreateSimpleTower=(i:number, j:number, w:world) : world => {
     const move : point = {x : i, y : j};
-    if(!AvailablePosition(move, world)){
-        world.Matrix[i][j]={
+    if(!AvailablePosition(move, w)){
+        w.Matrix[i][j]={
             Pos:     { x: i, y: j },
             AnActor:ActorsTypeList.SimpleTower
         };
-        return world;
+        return w;
     }
-    return world;
+    return w;
 };
 
-export const EnemiesInAttackRange=(i: number,j: number,world: world) : point[]=>{
+export const EnemiesInAttackRange=(i: number,j: number,w: world) : point[]=>{
     const enemies: point[] =[];
-    const range: number = world.Matrix[i][j].AnActor.AttackRange;
+    const range: number = w.Matrix[i][j].AnActor.AttackRange;
     for(let k: number =i-range; k<i+range; k++){
         for(let l:number =j-range; l<j+range; l++){
-            if(world.Matrix[k][l].AnActor.Type === ActorsTypeList.BigMonster.Type){
-                enemies.push({x:world.Matrix[k][l].Pos.x, y:world.Matrix[k][l].Pos.y});
+            if(w.Matrix[k][l].AnActor.Type === ActorsTypeList.BigMonster.Type){
+                enemies.push({x:w.Matrix[k][l].Pos.x, y:w.Matrix[k][l].Pos.y});
             }
         }
     }
@@ -43,60 +80,59 @@ export const EnemiesInAttackRange=(i: number,j: number,world: world) : point[]=>
 
 
 
-export const TowersAttacks = (world: world): world => {
-    function TowerAttack(i: number, j: number, world: world): world {
-      const enemies: point[] = EnemiesInAttackRange(i, j, world);
+export const TowersAttacks = (w: world): world => {
+    function TowerAttack(i: number, j: number, w: world): world {
+      const enemies: point[] = EnemiesInAttackRange(i, j, w);
       if (enemies.length !== 0) {
         const rand: number = Math.floor(Math.random() * enemies.length);
-        world.Matrix[enemies[rand].x][enemies[rand].y].AnActor.HitPoints -=
-          world.Matrix[i][j].AnActor.Damage;
-        if (world.Matrix[enemies[rand].x][enemies[rand].y].AnActor.HitPoints <= 0) {
-          world.Matrix[enemies[rand].x][enemies[rand].y].AnActor = ActorsTypeList.Road;
-          world=killActor(world, enemies[rand]);
-          console.log(world.Score);
-          world.Score++;
+        w.Matrix[enemies[rand].x][enemies[rand].y].AnActor.HitPoints -=
+          w.Matrix[i][j].AnActor.Damage;
+        if (w.Matrix[enemies[rand].x][enemies[rand].y].AnActor.HitPoints <= 0) {
+        //   w.Matrix[enemies[rand].x][enemies[rand].y].AnActor = ActorsTypeList.Road;
+          w=killActor(w, enemies[rand]);
+          w.Score++;
         }
       }
-      return world;
+      return w;
     }
-    for (let k = 0; k < world.Towers.length; k++) {
-      const i = world.Towers[k].Pos.x;
-      const j = world.Towers[k].Pos.y;
-      TowerAttack(i, j, world);
+    for (let k = 0; k < w.Towers.length; k++) {
+      const i = w.Towers[k].Pos.x;
+      const j = w.Towers[k].Pos.y;
+      TowerAttack(i, j, w);
     }
-    return world;
+    return w;
   };
 
-export function killActor(world: world, p:point): world{
-    console.log("killed monster in position :"+`${p}`);
-    for(let i=0; i<world.Actors.length; i++){
-        if(world.Actors[i].Pos.x===p.x && world.Actors[i].Pos.y===p.y){
-            world.Actors.splice(i);
-            world.Matrix[world.Actors[i].Pos.x][world.Actors[i].Pos.y].AnActor = ActorsTypeList.Road;
-            return world;
+export function killActor(w: world, p:point): world{
+    console.log("killed monster in position :"+`x :${p.x} y: ${p.y}`);
+    for(let i=0; i<w.Actors.length; i++){
+        if(w.Actors[i].Pos.x===p.x && w.Actors[i].Pos.y===p.y){
+            w.Actors.splice(i, 1);
+            w.Matrix[p.x][p.y].AnActor = ActorsTypeList.Road;
+            return w;
         }
     }
-    return world;
+    return w;
 }
 
-export const TowersPlacement=(world:world):world=>{
+export const TowersPlacement=(w:world):world=>{
     const max = 10;
     let count=0;
     const floor = ActorsTypeList.Floor.Type;
     const road = ActorsTypeList.Road.Type;
-    for(let i=5; i<world.Height-5; i++){
-        for(let j=5; j<world.Width-5; j++){
-            if((world.Matrix[i][j].AnActor.Type===floor && world.Matrix[i][j+1].AnActor.Type===road && world.Matrix[i+1][j+1].AnActor.Type===road && world.Matrix[i-1][j+1].AnActor.Type===road )){
+    for(let i=5; i<w.Height-5; i++){
+        for(let j=5; j<w.Width-5; j++){
+            if((w.Matrix[i][j].AnActor.Type===floor && w.Matrix[i][j+1].AnActor.Type===road && w.Matrix[i+1][j+1].AnActor.Type===road && w.Matrix[i-1][j+1].AnActor.Type===road )){
                 if(Math.floor(Math.random()*2)===0){
-                    world=CreateMagicTower(i,j,world);
-                    world.Towers.push({
+                    w=CreateMagicTower(i,j,w);
+                    w.Towers.push({
                         Pos : {x : i, y: j},
                         AnActor : ActorsTypeList.MagicTower
                     }); 
                 }
                 else{
-                    world=CreateSimpleTower(i,j,world);
-                    world.Towers.push({
+                    w=CreateSimpleTower(i,j,w);
+                    w.Towers.push({
                         Pos : {x : i, y: j},
                         AnActor : ActorsTypeList.SimpleTower
                     });
@@ -104,51 +140,50 @@ export const TowersPlacement=(world:world):world=>{
                 count++;
             }
             if(max===count){
-                return world;
+                return w;
             }
         }
     }
-    return world;
+    return w;
 };
 
 
-export const updatetower=(world: world, i: number, j: number): world=>{
+export const updatetower=(w: world, i: number, j: number): world=>{
     const rand: number = Math.floor(Math.random()*2);
     if(rand===1){
-        if(world.Matrix[i][j].AnActor.Type==="SimpleTower"){
-            world.Matrix[i][j]={
+        if(w.Matrix[i][j].AnActor.Type==="SimpleTower"){
+            w.Matrix[i][j]={
                 Pos:     { x: i, y: j },
                 AnActor:ActorsTypeList.SimpleTowerII
             };
         }
-        else if(world.Matrix[i][j].AnActor.Type==="SimpleTowerII"){
-            world.Matrix[i][j]={
+        else if(w.Matrix[i][j].AnActor.Type==="SimpleTowerII"){
+            w.Matrix[i][j]={
                 Pos:     { x: i, y: j },
                 AnActor:ActorsTypeList.SimpleTowerIII
             };
         }
-        if(world.Matrix[i][j].AnActor.Type==="MagicTower"){
-            world.Matrix[i][j]={
+        if(w.Matrix[i][j].AnActor.Type==="MagicTower"){
+            w.Matrix[i][j]={
                 Pos:     { x: i, y: j },
                 AnActor:ActorsTypeList.MagicTowerII
             };
         }
-        else if(world.Matrix[i][j].AnActor.Type==="MagicTowerII"){
-            world.Matrix[i][j]={
+        else if(w.Matrix[i][j].AnActor.Type==="MagicTowerII"){
+            w.Matrix[i][j]={
                 Pos:     { x: i, y: j },
                 AnActor:ActorsTypeList.MagicTowerIII
             };
         }
     }
 
-    return world;
+    return w;
 };
 
 
 
 export function addActorsToWorld(w : world, actr : actor, xPosition: number):world{
     if(AvailablePosition({ x: xPosition, y: 0 } , w)){
-        console.log("Added monster");
         w.Matrix[xPosition][0].AnActor = actr;
         w.Actors = w.Actors.concat({Pos:  { x: xPosition, y: 0 },
                                  AnActor : actr}
