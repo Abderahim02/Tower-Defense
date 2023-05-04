@@ -180,7 +180,7 @@ function compareActions(action1: action, action2: action): boolean {
 //   }
 
 export function FilterActions(aPhase : action[]) : action[]{
-    let filteredActions: action[] = [];
+    const filteredActions: action[] = [];
     for (const action of aPhase) {
         const index = filteredActions.findIndex((filteredAction) =>
           compareActions(action, filteredAction)

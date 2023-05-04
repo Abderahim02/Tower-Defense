@@ -1,6 +1,6 @@
 import { ActorsTypeList, actor, position, world, point } from "./defineType.js";
 import { AvailablePosition } from "./movements.js";
-import {ConstructNeighbors, GetActorType} from "./optimal_road.js"
+import {ConstructNeighbors, GetActorType} from "./optimal_road.js";
 
 
 
