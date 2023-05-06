@@ -110,8 +110,8 @@ describe('a phase test ', () => {
             }
             }
         }  
-            const aPhase : T.action[] = W.gamePhase(world, AstarRoad);
-            world = W.gameMotor( aPhase, world);
+            const aPhase : T.action[] = A.gamePhase(world, AstarRoad);
+            world = A.gameMotor( aPhase, world);
             for(let i=0; i<aPhase.length ; i++){
                 const act : T.action = aPhase[i];
                 expect(world.Matrix[act.aMove.NewPos.x][act.aMove.NewPos.y].AnActor.Type).toBe(act.AnActorInfos.AnActor.Type);
@@ -209,14 +209,14 @@ describe('EnemiesInAttackRange', () => {
   it('should return an empty array if no enemies are in attack range', () => {
     const i = 0;
     const j = 0;
-    const result = A.EnemiesInAttackRange(i, j, world);
+    const result = A.EnemiesInAttackRange({x:i, y : j}, world);
     expect(result).toEqual([]);
   });
 
   it('should return an array of enemies in attack range', () => {
     const i = 1;
     const j = 2;
-    const result = A.EnemiesInAttackRange(i, j, world);
+    const result = A.EnemiesInAttackRange({x:i, y : j}, world);
     expect(result).toEqual([{ x: 1, y: 1 }]);
   });
 
@@ -225,7 +225,7 @@ describe('EnemiesInAttackRange', () => {
     const j = 2;
     world.Matrix[0][0].AnActor.Type =  T.ActorsTypeList.BigMonster.Type ;
     world.Matrix[2][2].AnActor.Type = T.ActorsTypeList.BigMonster.Type ;
-    const result = A.EnemiesInAttackRange(i, j, world);
+    const result = A.EnemiesInAttackRange({x:i, y : j}, world);
     console.log(result);
     expect(result).toEqual([{ x: 0, y: 0 }, { x: 1, y: 1 }, { x: 2, y: 2 }]);
   });
@@ -349,7 +349,7 @@ describe('TestFilterActions', () =>  {
   actions.push({AnActorInfos : {Pos: {x : 10, y :2}, AnActor :T.ActorsTypeList.SimpleMonster}, aMove : {ExPos : {x : 10, y :2 }, NewPos : {x : 10, y : 6}}});
   actions.push({AnActorInfos : {Pos: {x : 10, y :5}, AnActor :T.ActorsTypeList.SimpleMonster}, aMove : {ExPos : {x : 10, y : 5}, NewPos : {x : 10, y : 8}}});
   actions.push({AnActorInfos : {Pos: {x : 10, y :5}, AnActor :T.ActorsTypeList.BigMonster}, aMove : {ExPos : {x : 10, y : 5}, NewPos : {x : 0, y : 6}}});
-  actions = W.FilterActions(actions);
+  actions = A.FilterActions(actions);
   console.log(actions.map(e=>e.aMove));
 
   test('Filtering a game phase from conflicting moves', () => {

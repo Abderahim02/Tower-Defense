@@ -1,27 +1,27 @@
-import {display, initializeWorld, CreateWorld, gameover, gamePhase, gameMotor, FilterActions} from "./world.js";
+import {display, initializeWorld, CreateWorld} from "./world.js";
 import { Road } from "./rand_road.js";
-import { CreateSimpleTower, TowersPlacement, TowersAttacks, addActorsToWorld , TreesPlacement} from "./actors.js"; 
-import {ActorsTypeList, world, point, action} from "./defineType.js";
+import {  gameover, gamePhase, gameMotor, TowersPlacement, TowersAttacks, addActorsToWorld , TreesPlacement} from "./actors.js"; 
+import {ActorsTypeList, world, point} from "./defineType.js";
 import {OptimalRoad, GetActorType} from "./optimal_road.js";
 
 //The main loop of the game 
-function loop() : void {
-    let w : world = CreateWorld(15,13);
+function loop() : number {
+    let w : world = CreateWorld(20,15);
     const start : number = Math.floor(w.Height/2)*w.Width;
     const end : number = start-1;
     w = Road(initializeWorld(w),start,end);
     display(w,end);
-    w = CreateSimpleTower(Math.floor(w.Height/2)+2,11,w);
     w=TowersPlacement(w);
     w =TreesPlacement(w);
     const startPoint : point = {x : Math.floor(start/w.Width), y : start%w.Width};
     const endPoint : point = {x : Math.floor(end/w.Width) , y:  end%w.Width};
     const AstarRoad : point[] = OptimalRoad(startPoint, w, endPoint);
     // console.log(AstarRoad);
-    for(let i : number = 0 ; i < 40 ; i++ ){
+    const MaxTurns : number = 100;
+    for(let i : number = 0 ; i < MaxTurns ; i++ ){
         display(w,end);
-        //to add bigMonstres in the begining of Road
-        if(i%6===0){   
+        //to add bigMonstres in the begining of Road, in the second part of the game 
+        if(i%6===0  ){    //
             w = addActorsToWorld(w,ActorsTypeList.BigMonster, Math.floor(w.Height/2));
         }
         //to add simpleMonstres in the begining of Road
@@ -35,12 +35,14 @@ function loop() : void {
         if(gameover(w,end) === 1){
             console.log("####### GAME OVER MONSTERS WIN ########");
             w=gameMotor(gamePhase(w, AstarRoad),w);
-            break;
+            return 0;
         }
         w=gameMotor(gamePhase(w, AstarRoad),w);        
     }
+    console.log("####### GAME OVER : CONGRATULATIONS YOU WON ########");
+    return 1;
 }
 
 
-// loop();
+loop();
 /////////////////////////////////////           END           /////////////////////////////////////////////////////
