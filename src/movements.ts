@@ -55,13 +55,13 @@ export const noMove=(pos: position, aWorld: world, type: string) : any =>{
   }
   
  export const SimpleMove=(anActor:position, aWorld:world, type:string) : point=>{
-    let dx: number=1;
-    let dy: number=1;
+    const dx: number=1;
+    const dy: number=1;
      let move : point =  {x : anActor.Pos.x,y : anActor.Pos.y+dy};
      if(AvailablePosition(move, aWorld)){
          return move;
      }
-     const dirs : point[] = []
+     const dirs : point[] = [];
      move = {x : anActor.Pos.x+dx,y : anActor.Pos.y+dy};
      if(AvailablePosition(move, aWorld)){
          dirs.push(move);
