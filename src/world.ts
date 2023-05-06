@@ -18,7 +18,6 @@ export const CreateEmptyMatrix = (width : number, height : number) : position[][
             return {AnActor : ActorsTypeList.Floor, Pos : {x : i, y : j}};
         });
     });
-
     
 };
 
