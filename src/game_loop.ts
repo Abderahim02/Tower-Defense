@@ -6,8 +6,8 @@ import {OptimalRoad, GetActorType} from "./optimal_road.js";
 
 //The main loop of the game 
 function loop() : number {
-    let width: number = 20;
-    let height: number = 15;
+    const width: number = 20;
+    const height: number = 15;
     let w : world = CreateWorld(width,height);
     const start : number = Math.floor(w.Height/2)*w.Width;
     const end : number = start-1;

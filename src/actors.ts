@@ -117,11 +117,11 @@ function FlameTowerAttack(p : point, w: world): world {
 export function MagicPortal(w: world): world{
     let i: number =0;
     let j: number =0;
-    let pos1: point={x:0, y:0};
+    const pos1: point={x:0, y:0};
     while(i<w.Height){
         let rand=1;
         while(j<w.Width/3){
-            if(rand==1 && w.Matrix[i][j].AnActor.Type!==undefined && w.Matrix[i][j].AnActor.Type===ActorsTypeList.Floor.Type){
+            if(rand===1 && w.Matrix[i][j].AnActor.Type!==undefined && w.Matrix[i][j].AnActor.Type===ActorsTypeList.Floor.Type){
                 pos1.x=i;
                 pos1.y=j;
                 j=w.Width/3;
@@ -133,11 +133,11 @@ export function MagicPortal(w: world): world{
     }
     i=0;
     j=(2*w.Width)/3;
-    let pos2: point={x:0, y:0};
+    const pos2: point={x:0, y:0};
     while(i<w.Height){
-        let rand2=1;
+        const rand2=1;
         while(j<w.Width){
-            if(rand2==1 && w.Matrix[i][j].AnActor.Type!==undefined && w.Matrix[i][j].AnActor.Type===ActorsTypeList.Floor.Type){
+            if(rand2===1 && w.Matrix[i][j].AnActor.Type!==undefined && w.Matrix[i][j].AnActor.Type===ActorsTypeList.Floor.Type){
                 pos2.x=i;
                 pos2.y=j;
                 j=w.Width;
@@ -236,7 +236,7 @@ export const TowersPlacement=(w:world, numberoftowers: number):world=>{
     for(let i:number =0; i<numberoftowers; i++){
         const rand_f: number = Math.floor(Math.random()*TowersPositions.length);
         const rand = Math.floor(Math.random()*2);
-        if(rand==0){
+        if(rand===0){
             if(rand_f!== undefined){
                 CreateActor(TowersPositions[rand_f], ActorsTypeList.MagicTower, w);
                 w.Towers.push({
