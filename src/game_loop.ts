@@ -19,8 +19,9 @@ function loop() : number {
     const AstarRoad : point[] = OptimalRoad(startPoint, w, endPoint);
     // console.log(AstarRoad);
     const MaxTurns : number = 100;
+    display(w,end);
     for(let i : number = 0 ; i < MaxTurns ; i++ ){
-        display(w,end);
+       
         //to add bigMonstres in the begining of Road, in the second part of the game 
         if(i%6===0 ){    //
             w = addActorsToWorld(w,ActorsTypeList.BigMonster, Math.floor(w.Height/2));
@@ -30,17 +31,18 @@ function loop() : number {
         else if(i%6===3){
             w = addActorsToWorld(w,ActorsTypeList.SimpleMonster, Math.floor(w.Height/2));
         }
-        console.log("list of actors" );
-        console.log(w.Actors.map(elem => elem.Pos));
-        w=TowersAttacks(w);
+       w=TowersAttacks(w);
         //to check if any monster reach end position
         w=gameMotor(gamePhase(w, AstarRoad),w);
        
         if(gameover(w,end) === 1){
+            display(w,end);
             console.log("####### GAME OVER MONSTERS WIN ########");
             i=MaxTurns+3;
+           
             return 0;
         }
+        display(w,end);
     }
     console.log("####### GAME OVER : CONGRATULATIONS YOU WON ########");
     return 1;
