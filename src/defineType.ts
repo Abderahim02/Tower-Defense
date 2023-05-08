@@ -1,14 +1,10 @@
 import { SimpleMove } from "./movements.js";
 
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*this is a type that defines an actor ,we suppose that floor and road are also
     actors but with  no power
 */
 export type actor = {
-    Move(pos: position, world:world, type:string): number[]  ;
+    Move(pos: position, world:world, type:string): point;
     Type : string;
     Color : string;
     HitPoints : number;
@@ -50,7 +46,6 @@ export type move = {
  AnActorInfos as data and  AnActorIndex as index in the array world.Actors */
 export type action = {
     AnActorInfos : position ;
-    AnActorIndex : number;
     aMove : move ;
 }
 
@@ -74,6 +69,8 @@ export const ActorsTypeList = {
     Floor : {Move: noMove, Type : "Floor", Color : "\x1b[48;2;34;139;34m ▒\x1b[0m", Cost : 0, HitPoints : 0, gain : 0,Damage: 0, AttackRange : 0},
     River : {Move: noMove, Type : "River" , Color : "\x1b[37m  \x1b[0m", HitPoints : 0, Cost : 0, gain : 0,Damage: 0, AttackRange : 0},
     Road : {Move: noMove, Type : "Road" , Color : "\x1b[48;2;76;70;50m  \x1b[0m", HitPoints : 0, Cost : 0, gain : 0,Damage: 0, AttackRange : 0},
-    Tree : {Move: noMove, Type : "Tree", Color : "\x1b[48;2;34;139;34m 🎄\x1b[0m", HitPoints : 0, Cost : 0, gain : 0,Damage: 0, AttackRange : 0},
+    Tree : {Move: noMove, Type : "Tree", Color : "\x1b[48;2;34;139;34m🍁\x1b[0m", HitPoints : 0, Cost : 0, gain : 0,Damage: 0, AttackRange : 0},
     Fire : {Move: noMove, Type : "Fire", Color : "\x1b[48;2;34;139;34m 🔥\x1b[0m", HitPoints : 0, Cost : 0, gain : 0,Damage: 0, AttackRange : 0},
 };
+/////////////////////////////////////           END           /////////////////////////////////////////////////////
+//🎄
