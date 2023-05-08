@@ -119,7 +119,7 @@ export function MagicPortal(w: world): world{
     let j: number =0;
     const pos1: point={x:0, y:0};
     while(i<w.Height){
-        let rand=1;
+        const rand=1;
         while(j<w.Width/3){
             if(rand===1 && w.Matrix[i][j].AnActor.Type!==undefined && w.Matrix[i][j].AnActor.Type===ActorsTypeList.Floor.Type){
                 pos1.x=i;
