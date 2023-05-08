@@ -20,7 +20,7 @@ function loop() : number {
     const endPoint : point = {x : Math.floor(end/w.Width) , y:  end%w.Width};
     const AstarRoad : point[] = OptimalRoad(startPoint, w, endPoint);
     // console.log(AstarRoad);
-    const MaxTurns : number = 0;
+    const MaxTurns : number = 5;
     display(w,end);
     //w=MagicPortal(w);
     for(let i : number = 0 ; i < MaxTurns ; i++ ){
