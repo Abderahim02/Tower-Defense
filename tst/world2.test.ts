@@ -3,84 +3,29 @@ import * as A from '../src/actors.js';
 import * as M from '../src/movements.js';
 import * as R from '../src/rand_road.js';
 import * as T from '../src/defineType.js';
-
+import * as O from '../src/optimal_road.js';
 
 //all world creatiion functions are to be modified after ts transformation 
 
-// describe('world test suite', () => {
+describe('world test suite', () => {
 
-//     test('world elements test', () => {
-//         let w=W.CreateWorld(15, 10);
-//         w = W.initializeWorld(w);
-//         for(let i=0; i<10; i++){
-//             for(let j=0;j<15; j++){  
-//                 //    expect(w.Matrix[i][j].Pos ).toBe({ x: i, y: j });
-//                     //console.log(T.ActorsTypeList.Floor);
-//                     expect(w.Matrix[i][j].AnActor).toBe(T.ActorsTypeList.Floor);
-//             }
-//         }     
-//     });
-//     test('raise error if position not avaliable', () => {
-//         let w=W.CreateWorld(15, 10);
-//         w = W.initializeWorld(w);
-//         expect(M.AvailablePosition([0,1],w)).toBe(false);
+    test('world elements test', () => {
+        let w=W.CreateWorld(15, 10);
+        w = W.initializeWorld(w);
+        for(let i=0; i<10; i++){
+            for(let j=0;j<15; j++){  
+                //    expect(w.Matrix[i][j].Pos ).toBe({ x: i, y: j });
+                    //console.log(T.ActorsTypeList.Floor);
+                    expect(w.Matrix[i][j].AnActor).toBe(T.ActorsTypeList.Floor);
+            }
+        }     
+    });
+    test('raise error if position not avaliable', () => {
+        let w=W.CreateWorld(15, 10);
+        w = W.initializeWorld(w);
+        expect(M.AvailablePosition({x:0, y: 1},w)).toBe(false);
 
-//     });
-// });
-describe('AvailablePosition function', () => {
-  let world=W.CreateWorld(5, 5);
-  world = W.initializeWorld(world);
-
-  beforeEach(() => {
-    world = {
-      Matrix: [
-        [
-          { Pos: { x: 0, y: 0 }, AnActor: T.ActorsTypeList.Road },
-          { Pos: { x: 0, y: 1 }, AnActor: T.ActorsTypeList.Floor },
-          { Pos: { x: 0, y: 2 }, AnActor: T.ActorsTypeList.River },
-          { Pos: { x: 0, y: 3 }, AnActor: T.ActorsTypeList.Tree },
-          { Pos: { x: 0, y: 4 }, AnActor: T.ActorsTypeList.Fire },
-
-          
-        ],
-      ],
-        Actors: [],
-        Width: 5,
-        Height: 5,
-        Score: 0,
-        Towers: [],
-        
-    };
-  });
-  // const world = {
-  //   Height: 5,
-  //   Width: 5,
-  //   Matrix: [
-  //     [
-  //       { AnActor: { Type: 'Road' }, Pos: { x: 0, y: 0 } },
-  //       { AnActor: { Type: 'Floor' }, Pos: { x: 0, y: 1 } },
-  //       { AnActor: { Type: 'River' }, Pos: { x: 0, y: 2 } },
-  //       { AnActor: { Type: 'Tree' }, Pos: { x: 0, y: 3 } },
-  //       { AnActor: { Type: 'Fire' }, Pos: { x: 0, y: 4 } },
-  //     ],
-  //     // ... more rows ...
-  //   ],
-  // };
-
-  test('should return true if move is available', () => {
-    expect(M.AvailablePosition([1, 0], world)).toBeTruthy(); // Road
-    expect(M.AvailablePosition([1, 1], world)).toBeFalsy(); // Floor
-    expect(M.AvailablePosition([1, 2], world)).toBeFalsy(); // River
-    expect(M.AvailablePosition([1, 3], world)).toBeFalsy(); // Tree
-    expect(M.AvailablePosition([1, 4], world)).toBeFalsy(); // Fire
-  });
-
-  test('should return false if move is out of bounds', () => {
-    expect(M.AvailablePosition([-1, 0], world)).toBeFalsy(); // out of bounds
-    expect(M.AvailablePosition([5, 0], world)).toBeFalsy(); // out of bounds
-    expect(M.AvailablePosition([1, -1], world)).toBeFalsy(); // out of bounds
-    expect(M.AvailablePosition([1, 5], world)).toBeFalsy(); // out of bounds
-  });
+    });
 });
 
 describe('Actors test suite', () => {
@@ -144,6 +89,9 @@ describe('a phase test ', () => {
         world = R.Road(W.initializeWorld(world),start,end);
         world = A.CreateSimpleTower(Math.floor(world.Height/2)+2,11,world);
         world=A.TowersPlacement(world);
+        const startPoint : T.point = {x : Math.floor(start/world.Width), y : start%world.Width};
+        const endPoint : T.point = {x : Math.floor(end/world.Width) , y:  end%world.Width};
+        const AstarRoad : T.point[] = O.OptimalRoad(startPoint, world, endPoint);
         for(let i : number = 0 ; i < 5 ; i++ ){
             if(i%6===0){   
                 world.Actors.push({
@@ -162,8 +110,8 @@ describe('a phase test ', () => {
             }
             }
         }  
-            const aPhase : T.action[] = W.gamePhase(world);
-            world = W.gameMotor( aPhase, world);
+            const aPhase : T.action[] = A.gamePhase(world, AstarRoad);
+            world = A.gameMotor( aPhase, world);
             for(let i=0; i<aPhase.length ; i++){
                 const act : T.action = aPhase[i];
                 expect(world.Matrix[act.aMove.NewPos.x][act.aMove.NewPos.y].AnActor.Type).toBe(act.AnActorInfos.AnActor.Type);
@@ -261,14 +209,14 @@ describe('EnemiesInAttackRange', () => {
   it('should return an empty array if no enemies are in attack range', () => {
     const i = 0;
     const j = 0;
-    const result = A.EnemiesInAttackRange(i, j, world);
+    const result = A.EnemiesInAttackRange({x:i, y : j}, world);
     expect(result).toEqual([]);
   });
 
   it('should return an array of enemies in attack range', () => {
     const i = 1;
     const j = 2;
-    const result = A.EnemiesInAttackRange(i, j, world);
+    const result = A.EnemiesInAttackRange({x:i, y : j}, world);
     expect(result).toEqual([{ x: 1, y: 1 }]);
   });
 
@@ -277,7 +225,7 @@ describe('EnemiesInAttackRange', () => {
     const j = 2;
     world.Matrix[0][0].AnActor.Type =  T.ActorsTypeList.BigMonster.Type ;
     world.Matrix[2][2].AnActor.Type = T.ActorsTypeList.BigMonster.Type ;
-    const result = A.EnemiesInAttackRange(i, j, world);
+    const result = A.EnemiesInAttackRange({x:i, y : j}, world);
     console.log(result);
     expect(result).toEqual([{ x: 0, y: 0 }, { x: 1, y: 1 }, { x: 2, y: 2 }]);
   });
@@ -328,86 +276,90 @@ describe('TowerAttacks', () => {
 
 //testing for function display 
 
-// describe('display', () => {
-//   let mockWorld = W.CreateWorld(2, 2);
-//     mockWorld = W.initializeWorld(mockWorld);
-//     beforeEach(() => {
-//     mockWorld = {
-//       Width: 2,
-//       Height: 2,
-//       Score: 0,
-//       Matrix: [
-//         [
-//           {
-//             Pos: { x: 0, y: 0 },
-//             AnActor: T.ActorsTypeList.SimpleMonster ,
-//           },
-//           {Pos: { x: 0, y: 1 },
-//             AnActor: T.ActorsTypeList.SimpleTower ,
-//           },
-//         ],
-//         [
-//           {Pos: { x: 1, y: 0 },
-//             AnActor: T.ActorsTypeList.Road ,
-//           },
-//           {Pos  : { x: 1, y: 1 },
-//             AnActor: T.ActorsTypeList.Tree ,
-//           },
-//         ],
-//       ],
-//       Actors: [],
-//       Towers: [],
-//     };
-//     });
+describe('display', () => {
+  let mockWorld = W.CreateWorld(2, 2);
+    mockWorld = W.initializeWorld(mockWorld);
+    beforeEach(() => {
+    mockWorld = {
+      Width: 2,
+      Height: 2,
+      Score: 0,
+      Matrix: [
+        [
+          {
+            Pos: { x: 0, y: 0 },
+            AnActor: T.ActorsTypeList.SimpleMonster ,
+          },
+          {Pos: { x: 0, y: 1 },
+            AnActor: T.ActorsTypeList.SimpleTower ,
+          },
+        ],
+        [
+          {Pos: { x: 1, y: 0 },
+            AnActor: T.ActorsTypeList.Road ,
+          },
+          {Pos  : { x: 1, y: 1 },
+            AnActor: T.ActorsTypeList.Tree ,
+          },
+        ],
+      ],
+      Actors: [],
+      Towers: [],
+    };
+    });
         
-//   it('should display the world with correct colors', () => {
-//     const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
-//     const start : number = Math.floor(mockWorld.Height/2)*mockWorld.Width;
-//     const end : number = start-1;
-//     W.display(mockWorld, end);
-//     expect(mockConsoleLog).toHaveBeenCalledWith(
-//       expect.stringContaining(T.ActorsTypeList.SimpleMonster.Color)
-//     );
-//     expect(mockConsoleLog).toHaveBeenCalledWith(
-//       expect.stringContaining(T.ActorsTypeList.SimpleTower.Color)
-//     );
-//     expect(mockConsoleLog).toHaveBeenCalledWith(
-//       expect.stringContaining(T.ActorsTypeList.Road.Color)
-//     );
-//     expect(mockConsoleLog).toHaveBeenCalledWith(
-//       expect.stringContaining(T.ActorsTypeList.Tree.Color)
-//     );
-//     mockConsoleLog.mockRestore();
-//   });
+  it('should display the world with correct colors', () => {
+    const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
+    const start : number = Math.floor(mockWorld.Height/2)*mockWorld.Width;
+    const end : number = start-1;
+    W.display(mockWorld, end);
+    expect(mockConsoleLog).toHaveBeenCalledWith(
+      expect.stringContaining(T.ActorsTypeList.SimpleMonster.Color)
+    );
+    expect(mockConsoleLog).toHaveBeenCalledWith(
+      expect.stringContaining(T.ActorsTypeList.SimpleTower.Color)
+    );
+    expect(mockConsoleLog).toHaveBeenCalledWith(
+      expect.stringContaining(T.ActorsTypeList.Road.Color)
+    );
+    expect(mockConsoleLog).toHaveBeenCalledWith(
+      expect.stringContaining(T.ActorsTypeList.Tree.Color)
+    );
+    mockConsoleLog.mockRestore();
+  });
 
-//   it('should display the score', () => {
-//     const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
-//     const start : number = Math.floor(mockWorld.Height/2)*mockWorld.Width;
-//     const end : number = start-1;
-//     W.display(mockWorld, end);
-//     expect(mockConsoleLog).toHaveBeenCalledWith(
-//       expect.stringContaining(`Score : ${mockWorld.Score}`)
-//     );
-//     mockConsoleLog.mockRestore();
-//   });
-// });
+  it('should display the score', () => {
+    const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
+    const start : number = Math.floor(mockWorld.Height/2)*mockWorld.Width;
+    const end : number = start-1;
+    W.display(mockWorld, end);
+    expect(mockConsoleLog).toHaveBeenCalledWith(
+      expect.stringContaining(`Score : ${mockWorld.Score}`)
+    );
+    mockConsoleLog.mockRestore();
+  });
+});
 
 
-describe('display function', () => {
-  test('should print the world with the correct colors and score', () => {
-    const world = W.CreateWorld(5, 5);
-    world.Matrix[2][2].AnActor = T.ActorsTypeList.SimpleTower;
-    world.Matrix[3][3].AnActor = T.ActorsTypeList.MagicTower;
-    world.Matrix[1][1].AnActor = T.ActorsTypeList.SimpleMonster;
-    world.Matrix[4][4].AnActor = T.ActorsTypeList.BigMonster;
-    world.Score = 10;
-    const expectedOutput = "🕸️ 🕸️ 🕸️ 🕸️ 🕸️ 🕸️ 🕸️ 🕸️  Score : 10 💀 🕸️ 🕸️ 🕸️ 🕸️ 🕸️ 🕸️ 🕸️ 🕸️ 🕸️ 🕸️ 🕸️ 🕸️ 🕸️ 🕸️ 🕸️ "
-    // " ▒ ▒ ▒ ▒ ▒"
-    // " ▒   ▒ ▒ ▒"
-;
-    const spy = jest.spyOn(console, 'log').mockImplementation();
-    W.display(world, 4);
-    expect(spy).toHaveBeenCalledWith(expectedOutput);
-    spy.mockRestore();
+
+describe('TestFilterActions', () =>  {
+  let actions : T.action[] = [];
+  actions.push({AnActorInfos : {Pos: {x : 0, y :5}, AnActor :T.ActorsTypeList.BigMonster}, aMove : {ExPos : {x : 0, y : 5}, NewPos : {x : 0, y : 6}}});
+  actions.push({AnActorInfos : {Pos: {x : 1, y :5}, AnActor :T.ActorsTypeList.SimpleMonster}, aMove : {ExPos : {x : 1, y : 5}, NewPos : {x : 0, y : 6}}});
+  actions.push({AnActorInfos : {Pos: {x : 10, y :2}, AnActor :T.ActorsTypeList.SimpleMonster}, aMove : {ExPos : {x : 10, y :2 }, NewPos : {x : 10, y : 6}}});
+  actions.push({AnActorInfos : {Pos: {x : 10, y :5}, AnActor :T.ActorsTypeList.SimpleMonster}, aMove : {ExPos : {x : 10, y : 5}, NewPos : {x : 10, y : 8}}});
+  actions.push({AnActorInfos : {Pos: {x : 10, y :5}, AnActor :T.ActorsTypeList.BigMonster}, aMove : {ExPos : {x : 10, y : 5}, NewPos : {x : 0, y : 6}}});
+  actions = A.FilterActions(actions);
+  console.log(actions.map(e=>e.aMove));
+
+  test('Filtering a game phase from conflicting moves', () => {
+    expect((actions[0].AnActorInfos.AnActor)).toEqual(T.ActorsTypeList.BigMonster);
+    expect((actions[0].aMove.NewPos)).toEqual({x :0 , y: 6});
+  
+    expect((actions[1].AnActorInfos.AnActor)).toEqual(T.ActorsTypeList.SimpleMonster);
+    expect((actions[1].aMove.NewPos)).toEqual({x :10 , y: 6});
+  
+    expect((actions[2].AnActorInfos.AnActor)).toEqual(T.ActorsTypeList.SimpleMonster);
+    expect((actions[2].aMove.NewPos)).toEqual({x :10 , y: 8});
   });
 });

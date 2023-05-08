@@ -1,41 +1,54 @@
-import {display, initializeWorld, CreateWorld, gameover, gamePhase, gameMotor} from "./world.js";
+import {display, initializeWorld, CreateWorld} from "./world.js";
 import { Road } from "./rand_road.js";
-import { CreateSimpleTower, TowersPlacement, TowersAttacks, addActorsToWorld } from "./actors.js"; 
-import {ActorsTypeList, world} from "./defineType.js";
+import {  gameover, gamePhase, gameMotor, TowersPlacement, TowersAttacks, addActorsToWorld , TreesPlacement} from "./actors.js"; 
+import {ActorsTypeList, world, point} from "./defineType.js";
+import {OptimalRoad, GetActorType} from "./optimal_road.js";
 
-
-
-function loop() : void {
-    let world : world = CreateWorld(15,13);
-    const start : number = Math.floor(world.Height/2)*world.Width;
+//The main loop of the game 
+function loop() : number {
+    let w : world = CreateWorld(20,15);
+    const start : number = Math.floor(w.Height/2)*w.Width;
     const end : number = start-1;
-    world = Road(initializeWorld(world),start,end);
-    display(world,end);
-    world = CreateSimpleTower(Math.floor(world.Height/2)+2,11,world);
-    world=TowersPlacement(world);
-    display(world,end);
-    for(let i : number = 0 ; i < 10 ; i++ ){
-        //to add bigMonstres in the begining of Road
-        if(i%6===0){   
-            world.Actors=addActorsToWorld(world,ActorsTypeList.BigMonster, Math.floor(world.Height/2));
+
+    w = Road(initializeWorld(w),start,end);
+    display(w,end);
+    w=TowersPlacement(w);
+    w =TreesPlacement(w);
+    const startPoint : point = {x : Math.floor(start/w.Width), y : start%w.Width};
+    const endPoint : point = {x : Math.floor(end/w.Width) , y:  end%w.Width};
+    const AstarRoad : point[] = OptimalRoad(startPoint, w, endPoint);
+    // console.log(AstarRoad);
+    const MaxTurns : number = 100;
+    display(w,end);
+    for(let i : number = 0 ; i < MaxTurns ; i++ ){
+       
+        //to add bigMonstres in the begining of Road, in the second part of the game 
+        if(i%6===0 ){    //
+            w = addActorsToWorld(w,ActorsTypeList.BigMonster, Math.floor(w.Height/2));
+
         }
         //to add simpleMonstres in the begining of Road
-        if(i%6===3){
-            world.Actors=addActorsToWorld(world,ActorsTypeList.SimpleMonster, Math.floor(world.Height/2));
+        else if(i%6===3){
+            w = addActorsToWorld(w,ActorsTypeList.SimpleMonster, Math.floor(w.Height/2));
         }
-        world=TowersAttacks(world);
-        display(world,end);
+       w=TowersAttacks(w);
         //to check if any monster reach end position
-        if(gameover(world,end)===1){
+        w=gameMotor(gamePhase(w, AstarRoad),w);
+       
+        if(gameover(w,end) === 1){
+            display(w,end);
             console.log("####### GAME OVER MONSTERS WIN ########");
-            break;
+            i=MaxTurns+3;
+           
+            return 0;
         }
-        console.log();
-        world=gameMotor(gamePhase(world),world);
+        display(w,end);
     }
-    console.log(world.Actors.length);
+    console.log("####### GAME OVER : CONGRATULATIONS YOU WON ########");
+    return 1;
 }
 
-//loop();
+loop();
 
+// loop();
 /////////////////////////////////////           END           /////////////////////////////////////////////////////
