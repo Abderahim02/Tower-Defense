@@ -6,7 +6,38 @@ import {ConstructNeighbors, GetActorType, NextOptimalMove} from "./optimal_road.
 
 
 //this function puts an actor  in the position {i,j} 
+export const CreateActor=(p: point, act : actor ,w:world):world=>{
+    if(!AvailablePosition(p, w)){
+        w.Matrix[p.x][p.y]={
+            Pos:   p,
+            AnActor:act
+        };
+        return w;
+    }
+    return w;
+};
 
+function IsGoodTreePlacement(p: point, w: world): boolean {
+    const IsRoad: (p: point) => boolean = (p: point) => {
+        return GetActorType(w, p) === "Road";
+    };
+    const t: point[] = ConstructNeighbors(w, p).filter(IsRoad);
+    return t.length > 3;
+  }
+
+export const TreesPlacement = (w: world): world=> {
+    const IsFloor: (p: point) => boolean = (p: point) => {
+        return GetActorType(w, p) === "Floor";
+      };
+    const treePositions: point[] = w.Matrix.flatMap((row, y) =>
+      row.map((_, x) => ({ x, y })).filter((p) => IsGoodTreePlacement(p, w))
+    ).filter(IsFloor);
+    //on ajoute la moitié 
+    for(let i : number = 0 ; i<treePositions.length; i+=2 ){
+        CreateActor(treePositions[i], ActorsTypeList.Tree, w);
+    }
+    return w;
+  };
 
 //this function creates a magic tower in the position {i,j} 
 export const CreateMagicTower=(i:number, j:number, w:world):world=>{
