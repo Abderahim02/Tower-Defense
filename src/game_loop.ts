@@ -1,6 +1,6 @@
 import {display, initializeWorld, CreateWorld} from "./world.js";
 import { Road } from "./rand_road.js";
-import {  MagicPortal, gameover, gamePhase, gameMotor, TowersPlacement, TowersAttacks, addActorsToWorld , TreesPlacement} from "./actors.js"; 
+import { flux, MagicPortal, gameover, gamePhase, gameMotor, TowersPlacement, TowersAttacks, addActorsToWorld , TreesPlacement} from "./actors.js"; 
 import {ActorsTypeList, world, point} from "./defineType.js";
 import {OptimalRoad, GetActorType} from "./optimal_road.js";
 
@@ -20,18 +20,18 @@ function loop() : number {
     const endPoint : point = {x : Math.floor(end/w.Width) , y:  end%w.Width};
     const AstarRoad : point[] = OptimalRoad(startPoint, w, endPoint);
     // console.log(AstarRoad);
-    const MaxTurns : number = 5;
+    const MaxTurns : number = 50;//flux(w, AstarRoad);
     display(w,end);
     //w=MagicPortal(w);
     for(let i : number = 0 ; i < MaxTurns ; i++ ){
        
         //to add bigMonstres in the begining of Road, in the second part of the game 
-        if(i%6===0 ){    //
+        if(i%4===0 ){    //
             w = addActorsToWorld(w,ActorsTypeList.BigMonster, Math.floor(w.Height/2));
 
         }
         //to add simpleMonstres in the begining of Road
-        else if(i%6===3){
+        else if(i%4===2){
             w = addActorsToWorld(w,ActorsTypeList.SimpleMonster, Math.floor(w.Height/2));
         }
         w=TowersAttacks(w);

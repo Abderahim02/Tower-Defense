@@ -302,6 +302,32 @@ export function addActorsToWorld(w : world, actr : actor, xPosition: number):wor
    return w;
 }
 
+export function in_astar(x: point, y: point): number{
+    if(x.x===y.x && x.y==y.y){
+        return 1;
+    }
+    return 0;
+}
+
+export function flux(w: world, astar: point[]): number{
+    let cases=0;
+    for(let i=0; i<w.Towers.length; i++){
+        let x=w.Towers[i].Pos.x;
+        let y=w.Towers[i].Pos.y;
+        for(let j=x-w.Towers[i].AnActor.AttackRange; j<x+w.Towers[i].AnActor.AttackRange; j++){
+            for(let k=y-w.Towers[i].AnActor.AttackRange; k<y+w.Towers[i].AnActor.AttackRange; k++){
+                if(w.Matrix[j][k].AnActor.Type!==undefined){
+                    if(w.Matrix[j][k].AnActor.Type===ActorsTypeList.Floor.Type){
+                        cases++;
+                    }
+                }
+            }
+        }
+    }
+    cases=cases*6;
+    return cases;
+}
+
 
 
 /*this function create a phase of the game, we see all possible moves for all actors
