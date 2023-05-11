@@ -6,7 +6,7 @@ import {ConstructNeighbors, GetActorType, NextOptimalMove} from "./optimal_road.
 
 
 //this function puts an actor  in the position {i,j} 
-export const CreateActor=(p: point, act : actor ,w:world):world=>{
+export const CreateActor = (p: point, act : actor ,w:world):world=>{
     if(!AvailablePosition(p, w)){
         w.Matrix[p.x][p.y]={
             Pos:   p,
@@ -64,6 +64,19 @@ export const CreateSimpleTower=(i:number, j:number, w:world) : world => {
     return w;
 };
 
+//this function creates a flame tower in the position {i,j} 
+export const CreateFlameTower=(i:number, j:number, w:world) : world => {
+    const move : point = {x : i, y : j};
+    if(!AvailablePosition(move, w)){
+        w.Matrix[i][j]={
+            Pos:     { x: i, y: j },
+            AnActor:ActorsTypeList.FlameTower
+        };
+        return w;
+    }
+    return w;
+};
+
 //this function test if the position p belongs to the grid
 function isValidPosition(w : world, p : point){
     return  p!== undefined && p.x < w.Height && p.y < w.Width && p.x >= 0 && p.y >= 0; //
@@ -73,7 +86,6 @@ export const EnemiesInAttackRange=(p: point ,w: world) : point[]=>{
     const range: number = w.Matrix[p.x][p.y].AnActor.AttackRange;
     for(let k: number =p.x-range; k<p.x+range; k++){
         for(let l:number =p.y-range; l<p.y+range; l++){
-//            if( isValidPosition(w, {x : k, y :l }) && w.Matrix[k][l].AnActor.Type === ActorsTypeList.BigMonster.Type ){
               if( isValidPosition(w, {x : k, y :l }) && (GetActorType(w,{x : k, y : l}) === "BigMonster" || GetActorType(w,{x : k, y : l}) === "SimpleMonster" ) ){
                 enemies.push({x:w.Matrix[k][l].Pos.x, y:w.Matrix[k][l].Pos.y});
             }
@@ -94,6 +106,64 @@ export const TowersAttackRange=(p: point ,w: world) : point[]=>{
     }
     return enemies;
 };
+function putFlames(w: world, pe: point): world{
+
+    return w;
+}
+
+function FlameTowerAttack(p : point, w: world): world {
+    const enemies: point[] = EnemiesInAttackRange(p, w);
+    if (enemies.length !== 0) {
+       for(let j : number = 0; j<enemies.length; ++j){
+        w.Matrix[enemies[j].x][enemies[j].y].AnActor.HitPoints -=
+        w.Matrix[p.x][p.y].AnActor.Damage;
+        if (w.Matrix[enemies[j].x][enemies[j].y].AnActor.HitPoints <= 0) {
+            w=killActor(w, enemies[j]);
+            w.Score+=2;
+        }
+       }
+    }
+    return w;
+}
+
+export function MagicPortal(w: world): world{
+    let i: number =0;
+    let j: number =0;
+    const pos1: point={x:0, y:0};
+    while(i<w.Height){
+        const rand=1;
+        while(j<w.Width/3){
+            if(rand===1 && w.Matrix[i][j].AnActor.Type!==undefined && w.Matrix[i][j].AnActor.Type===ActorsTypeList.Floor.Type){
+                pos1.x=i;
+                pos1.y=j;
+                j=w.Width/3;
+                i=w.Height;
+            }
+            j++;
+        }
+        i++;
+    }
+    i=0;
+    j=(2*w.Width)/3;
+    const pos2: point={x:0, y:0};
+    while(i<w.Height){
+        const rand2=1;
+        while(j<w.Width){
+            if(rand2===1 && w.Matrix[i][j].AnActor.Type!==undefined && w.Matrix[i][j].AnActor.Type===ActorsTypeList.Floor.Type){
+                pos2.x=i;
+                pos2.y=j;
+                j=w.Width;
+                i=w.Height;
+            }
+            j++;
+        }
+        i++;
+    }
+    w.Matrix[pos1.x][pos1.y].AnActor=ActorsTypeList.Portal;
+    w.Matrix[pos2.x][pos2.y].AnActor=ActorsTypeList.Portal;
+    return w;
+}
+
 
 export const TowersAttacks = (w: world): world => {
     function TowerAttack(p : point, w: world): world {
@@ -167,44 +237,39 @@ export function killActor(w: world, p:point): world{
 //     return w;
 // };
 
-export const TowersPlacement=(w:world):world=>{
+export const TowersPlacement=(w:world, numberoftowers: number):world=>{
     const IsFloor: (p: point) => boolean = (p: point) => {
         return GetActorType(w, p) === "Floor";
       };
     const TowersPositions: point[] = w.Matrix.flatMap((row, y) =>
       row.map((_, x) => ({ x, y })).filter((p) => IsGoodTreePlacement(p, w))
     ).filter(IsFloor);
-    const rand1 = Math.floor(Math.random()*TowersPositions.length);
-    const rand2 = Math.floor(Math.random()*TowersPositions.length);
-    const rand3 = Math.floor(Math.random()*TowersPositions.length);
-    const rand4 = Math.floor(Math.random()*TowersPositions.length);
-    if(rand1 !== undefined){
-        CreateActor(TowersPositions[rand1], ActorsTypeList.SimpleTower, w);
-        w.Towers.push({
-            Pos : TowersPositions[rand1] ,
-            AnActor : ActorsTypeList.SimpleTower
-        });
-    }    if(rand2 !== undefined){
-        CreateActor(TowersPositions[rand2], ActorsTypeList.SimpleTower, w);
-        w.Towers.push({
-            Pos : TowersPositions[rand2] ,
-            AnActor : ActorsTypeList.SimpleTower
-        });
-    }    if(rand3 !== undefined){
-        CreateActor(TowersPositions[rand3], ActorsTypeList.MagicTower, w);
-        w.Towers.push({
-            Pos : TowersPositions[rand3] ,
-            AnActor : ActorsTypeList.MagicTower
-        });
-    }    if(rand4 !== undefined){
-        CreateActor(TowersPositions[rand4], ActorsTypeList.MagicTower, w);
-        w.Towers.push({
-            Pos : TowersPositions[rand4] ,
-            AnActor : ActorsTypeList.MagicTower
-        });
+    
+    for(let i:number =0; i<numberoftowers; i++){
+        const rand_f: number = Math.floor(Math.random()*TowersPositions.length);
+        const rand = Math.floor(Math.random()*2);
+        if(rand===0){
+            if(rand_f!== undefined){
+                CreateActor(TowersPositions[rand_f], ActorsTypeList.MagicTower, w);
+                w.Towers.push({
+                    Pos : TowersPositions[rand_f] ,
+                    AnActor : ActorsTypeList.MagicTower
+                });
+            }
+        }
+        else{
+            if(rand_f!== undefined){
+                CreateActor(TowersPositions[rand_f], ActorsTypeList.SimpleTower, w);
+                w.Towers.push({
+                    Pos : TowersPositions[rand_f] ,
+                    AnActor : ActorsTypeList.SimpleTower
+                });
+            }
+        }
     }
     return w;
 };
+
 export const updatetower=(w: world, i: number, j: number): world=>{
     const rand: number = Math.floor(Math.random()*2);
     if(rand===1){
@@ -248,6 +313,32 @@ export function addActorsToWorld(w : world, actr : actor, xPosition: number):wor
    return w;
 }
 
+export function in_astar(x: point, y: point): number{
+    if(x.x===y.x && x.y===y.y){
+        return 1;
+    }
+    return 0;
+}
+
+export function flux(w: world, astar: point[]): number{
+    let cases=0;
+    for(let i=0; i<w.Towers.length; i++){
+        const x=w.Towers[i].Pos.x;
+        const y=w.Towers[i].Pos.y;
+        for(let j=x-w.Towers[i].AnActor.AttackRange; j<x+w.Towers[i].AnActor.AttackRange; j++){
+            for(let k=y-w.Towers[i].AnActor.AttackRange; k<y+w.Towers[i].AnActor.AttackRange; k++){
+                if(w.Matrix[j][k].AnActor.Type!==undefined){
+                    if(w.Matrix[j][k].AnActor.Type===ActorsTypeList.Floor.Type){
+                        cases++;
+                    }
+                }
+            }
+        }
+    }
+    cases=cases*6;
+    return cases;
+}
+
 
 
 /*this function create a phase of the game, we see all possible moves for all actors
@@ -272,30 +363,21 @@ export function gamePhase(aWorld : world, OptimalRoad : point[]) : action[] {
     return Phase;
 }
 
-// export function gameMotor(aPhase : action[] , aWorld : world) : world {
-//     const predicate = (value : action) => value.AnActorInfos.AnActor.Type === "BigMonster";
-//     /*we filter the moves of the phase, if there will be a conflict between two actors going to
-//     same new position*/
-//     aPhase  = aPhase.filter((value, index, arr) => {
-//       return arr.indexOf(value) === index && (index === arr.lastIndexOf(value) || predicate(value));
-//     });
-//     for(let i : number =0; i < aPhase.length; ++i){
-//         const act : action = aPhase[i];
-//         aWorld.Matrix[act.aMove.ExPos.x][act.aMove.ExPos.y].AnActor = ActorsTypeList.Road;
-//         aWorld.Matrix[act.aMove.NewPos.x][act.aMove.NewPos.y].AnActor = act.AnActorInfos.AnActor;
-//         aWorld.Actors[i].Pos.x = act.aMove.NewPos.x ;
-//         aWorld.Actors[i].Pos.y = act.aMove.NewPos.y ;
-//     }
-//     return aWorld;
-// }
-//NE PAS SUPPRIMER 
-
+/**
+ * 
+ * @param action1 an action 
+ * @param action2 an action
+ * @returns if both actions have the same directions
+ */
 function compareActions(action1: action, action2: action): boolean {
     const t : boolean = 
     action1.aMove.NewPos.x === action2.aMove.NewPos.x &&
     action1.aMove.NewPos.y === action2.aMove.NewPos.y ;
     return t;
   }
+
+/*we filter the moves of the phase, if there will be a conflict between two actors going to
+    same new position*/
 export function FilterActions(aPhase : action[]) : action[]{
     const filteredActions: action[] = [];
     for (const action of aPhase) {
@@ -313,7 +395,13 @@ export function FilterActions(aPhase : action[]) : action[]{
       }
     return filteredActions;
   }
-  
+
+/**
+ * 
+ * @param aPhase a phase in the game
+ * @param aWorld the world
+ * @returns execute all modifications needed by the pahe in the world
+ */
 export function gameMotor(aPhase: action[], aWorld: world): world {
     const filteredActions: action[] = FilterActions(aPhase);
     for(let i : number =0; i < filteredActions.length; ++i){
@@ -326,7 +414,7 @@ export function gameMotor(aPhase: action[], aWorld: world): world {
     return aWorld;
   } 
 
-// recursive terminal gameover
+//recursive terminal gameover
 export function gameover(world: world,end:number): number{
     function rec(ac:position[]):number{
         if(ac.length===0) return 0;
