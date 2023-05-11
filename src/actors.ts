@@ -248,7 +248,7 @@ export const TowersPlacement=(w:world, numberoftowers: number):world=>{
       row.map((_, x) => ({ x, y })).filter((p) => IsGoodTreePlacement(p, w))
     ).filter(IsFloor);
     let i:number =0;
-    let count : number =0
+    let count : number =0;
     while( i<numberoftowers && count < 4 ){
         const rand_f: number = Math.floor(Math.random()*TowersPositions.length);
         const rand = Math.floor(Math.random()*2);
