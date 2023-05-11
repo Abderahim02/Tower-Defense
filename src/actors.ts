@@ -106,7 +106,7 @@ export const TowersAttackRange=(p: point ,w: world) : point[]=>{
     }
     return enemies;
 };
-function putFlames(w: world, pe: point): world{
+function putFlames(w: world, pe: point): world {
 
     return w;
 }
