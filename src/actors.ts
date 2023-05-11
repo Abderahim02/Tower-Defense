@@ -73,7 +73,8 @@ export const EnemiesInAttackRange=(p: point ,w: world) : point[]=>{
     const range: number = w.Matrix[p.x][p.y].AnActor.AttackRange;
     for(let k: number =p.x-range; k<p.x+range; k++){
         for(let l:number =p.y-range; l<p.y+range; l++){
-            if( isValidPosition(w, {x : k, y :l }) && w.Matrix[k][l].AnActor.Type === ActorsTypeList.BigMonster.Type){
+//            if( isValidPosition(w, {x : k, y :l }) && w.Matrix[k][l].AnActor.Type === ActorsTypeList.BigMonster.Type ){
+              if( isValidPosition(w, {x : k, y :l }) && (GetActorType(w,{x : k, y : l}) === "BigMonster" || GetActorType(w,{x : k, y : l}) === "SimpleMonster" ) ){
                 enemies.push({x:w.Matrix[k][l].Pos.x, y:w.Matrix[k][l].Pos.y});
             }
         }
@@ -81,7 +82,18 @@ export const EnemiesInAttackRange=(p: point ,w: world) : point[]=>{
     return enemies;
 };
 
-
+export const TowersAttackRange=(p: point ,w: world) : point[]=>{
+    const enemies: point[] =[];
+    const range: number = w.Matrix[p.x][p.y].AnActor.AttackRange;
+    for(let k: number =p.x-range; k<= p.x+range; k++){
+        for(let l:number =p.y-range; l<= p.y+range; l++){
+            if( isValidPosition(w, {x : k, y :l }) ){
+                enemies.push({x:w.Matrix[k][l].Pos.x, y:w.Matrix[k][l].Pos.y});
+            }
+        }
+    }
+    return enemies;
+};
 
 export const TowersAttacks = (w: world): world => {
     function TowerAttack(p : point, w: world): world {
@@ -221,7 +233,6 @@ export const updatetower=(w: world, i: number, j: number): world=>{
             };
         }
     }
-
     return w;
 };
 

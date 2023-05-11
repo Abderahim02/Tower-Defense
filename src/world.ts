@@ -44,6 +44,10 @@ export const display=(world : world,end: number): void=> {
         }
     }
     console.log(s2);
+    // console.log("\n");
+
+    // const size : number = Math.floor(world.Height/8);
+    // let r : number =0;
     for(let i: number =0; i<world.Height ;i++){
         let s: string ="";
         for(let j : number =0;j<world.Width;j++){
@@ -84,6 +88,9 @@ export const display=(world : world,end: number): void=> {
                 case 'Fire':
                     s+=ActorsTypeList.Fire.Color;
                     break;
+                case 'Optimal':
+                    s+=ActorsTypeList.Optimal.Color;
+                    break;
                 case 'Road':
                     if(Math.floor(end/world.Width)===i && end%world.Width===j)
                      s+="\x1b[48;2;76;70;50m💀\x1b[0m";
@@ -91,12 +98,27 @@ export const display=(world : world,end: number): void=> {
                     else{
                      s+=ActorsTypeList.Road.Color;
                     }
+                    // s+=`\x1b[48;2;76;70;50m${r}\x1b[0m`;
+                    // r++;
                     break;
             }
         }
         console.log(`${s}`+`${i}`);
+        // if( i <= Math.floor(end/world.Width) + size && i >= Math.floor(end/world.Width) - size  ){
+        //     let m = Math.abs(6-i)  ; // Set the desired number of times to display the "*"
+        //     let output = ""; // Initialize an empty string to store the output
+        //     for (let i = 0; i < m; i++) {
+        //         output += "*"; // Append a "*" to the output string for each iteration of the loop
+        //     }        
+        //     console.log(`${s}`+`${output}`);
+        // }
+        // else{
+        //             console.log(`${s}`+`${i}`);
+        // }
     }
+    console.log("\n");
 };
+
 
 // //this function returns the type of the actor in position p in the grid
 // export function GetActorType(w: world, p:point) : string{

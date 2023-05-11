@@ -121,16 +121,7 @@ export type Vertex = {
   //the heuristic function
   function Heuristic(v: Vertex, G: Graph): number {
     // implementation of the Heuristic function goes here
-    // switch (v.s){
-    //   case 0:
-    //     return 2;
-    //   case 1:
-    //     return 2;
-    //   case 2:
-    //     return 1;
-    //   case 3:
-    //     return 0;
-    // }
+    if(v.s < Math.floor(Math.sqrt(G.size)/2)) return 2;
     return 1;
   }
   
