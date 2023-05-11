@@ -50,13 +50,27 @@ export const noMove=(pos: position, aWorld: world, type: string) : any =>{
      }
      return {x : anActor.Pos.x,y : anActor.Pos.y};
  }; */
- function getRandomInt(max : number) {
-    return Math.floor(Math.random() * max);
+// initialize a seed value
+let seed = new Date().getTime();
+
+// define a random number generator function
+function myRandom() {
+  // use the seed value to generate a new seed
+  seed = (seed * 9301 + 49297) % 233280;
+  // return a random number between 0 and 1
+  return seed / 233280;
+}
+//  function getRandomInt(max : number) {
+//     return Math.floor(Math.random() * max);
+//   }
+function getRandomInt(max : number) {
+    return Math.floor(myRandom() * max);
   }
   
  export const SimpleMove=(anActor:position, aWorld:world, type:string) : point=>{
     const dx: number=1;
     const dy: number=1;
+
      let move : point =  {x : anActor.Pos.x,y : anActor.Pos.y+dy};
      if(AvailablePosition(move, aWorld)){
          return move;

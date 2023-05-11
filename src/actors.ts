@@ -237,6 +237,9 @@ export function killActor(w: world, p:point): world{
 //     return w;
 // };
 
+function IsGoodTowerPlacement(p: point, w : world){
+    return p.y > Math.floor(w.Width/4) ;
+}
 export const TowersPlacement=(w:world, numberoftowers: number):world=>{
     const IsFloor: (p: point) => boolean = (p: point) => {
         return GetActorType(w, p) === "Floor";
@@ -244,28 +247,32 @@ export const TowersPlacement=(w:world, numberoftowers: number):world=>{
     const TowersPositions: point[] = w.Matrix.flatMap((row, y) =>
       row.map((_, x) => ({ x, y })).filter((p) => IsGoodTreePlacement(p, w))
     ).filter(IsFloor);
-    
-    for(let i:number =0; i<numberoftowers; i++){
+    let i:number =0;
+    let count : number =0
+    while( i<numberoftowers && count < 4 ){
         const rand_f: number = Math.floor(Math.random()*TowersPositions.length);
         const rand = Math.floor(Math.random()*2);
         if(rand===0){
-            if(rand_f!== undefined){
+            if(rand_f!== undefined && IsGoodTowerPlacement(TowersPositions[rand_f], w)){
                 CreateActor(TowersPositions[rand_f], ActorsTypeList.MagicTower, w);
                 w.Towers.push({
                     Pos : TowersPositions[rand_f] ,
                     AnActor : ActorsTypeList.MagicTower
                 });
+                count++;
             }
         }
         else{
-            if(rand_f!== undefined){
+            if(rand_f!== undefined && IsGoodTowerPlacement(TowersPositions[rand_f], w) ){
                 CreateActor(TowersPositions[rand_f], ActorsTypeList.SimpleTower, w);
                 w.Towers.push({
                     Pos : TowersPositions[rand_f] ,
                     AnActor : ActorsTypeList.SimpleTower
                 });
+                count++;
             }
         }
+        ++i;
     }
     return w;
 };
