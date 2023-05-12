@@ -7,7 +7,7 @@ import {ConstructNeighbors, GetActorType, NextOptimalMove} from "./optimal_road.
 
 //this function puts an actor  in the position {i,j} 
 export const CreateActor = (p: point, act : actor ,w:world):world=>{
-    if(AvailablePosition(p, w)){
+    if( !AvailablePosition(p, w)){
         w.Matrix[p.x][p.y]={
             Pos:   p,
             AnActor:act
@@ -83,20 +83,20 @@ export const TowersAttackRange=(p: point ,w: world) : point[]=>{
     return enemies;
 };
 
-function FlameTowerAttack(p : point, w: world): world {
-    const enemies: point[] = EnemiesInAttackRange(p, w);
-    if (enemies.length !== 0) {
-       for(let j : number = 0; j<enemies.length; ++j){
-        w.Matrix[enemies[j].x][enemies[j].y].AnActor.HitPoints -=
-        w.Matrix[p.x][p.y].AnActor.Damage;
-        if (w.Matrix[enemies[j].x][enemies[j].y].AnActor.HitPoints <= 0) {
-            w=killActor(w, enemies[j]);
-            w.Score+=2;
-        }
-       }
-    }
-    return w;
-}
+// function FlameTowerAttack(p : point, w: world): world {
+//     const enemies: point[] = EnemiesInAttackRange(p, w);
+//     if (enemies.length !== 0) {
+//        for(let j : number = 0; j<enemies.length; ++j){
+//         w.Matrix[enemies[j].x][enemies[j].y].AnActor.HitPoints -=
+//         w.Matrix[p.x][p.y].AnActor.Damage;
+//         if (w.Matrix[enemies[j].x][enemies[j].y].AnActor.HitPoints <= 0) {
+//             w=killActor(w, enemies[j]);
+//             w.Score+=2;
+//         }
+//        }
+//     }
+//     return w;
+// }
 
 
 export const TowersAttacks = (w: world): world => {
