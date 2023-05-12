@@ -333,7 +333,7 @@ describe('display', () => {
 
 
 
-/* describe('TestFilterActions', () =>  {
+describe('TestFilterActions', () =>  {
   let actions : T.action[] = [];
   actions.push({AnActorInfos : {Pos: {x : 0, y :5}, AnActor :T.ActorsTypeList.BigMonster}, aMove : {ExPos : {x : 0, y : 5}, NewPos : {x : 0, y : 6}}});
   actions.push({AnActorInfos : {Pos: {x : 1, y :5}, AnActor :T.ActorsTypeList.SimpleMonster}, aMove : {ExPos : {x : 1, y : 5}, NewPos : {x : 0, y : 6}}});
@@ -354,4 +354,3 @@ describe('display', () => {
     expect((actions[2].aMove.NewPos)).toEqual({x :10 , y: 8});
   });
 });
- */
