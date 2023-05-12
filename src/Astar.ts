@@ -114,10 +114,6 @@ export type Vertex = {
     return arcs;
   }
   
-  function GetWeight(e: Arc, G: Graph): number {
-    return G.mat[e.from.s][e.to.s];
-  }
-  
   //the heuristic function
   function Heuristic(v: Vertex, G: Graph): number {
     // implementation of the Heuristic function goes here
