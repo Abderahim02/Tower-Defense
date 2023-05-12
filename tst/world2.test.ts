@@ -3,7 +3,8 @@ import * as A from '../src/actors.js';
 import * as M from '../src/movements.js';
 import * as R from '../src/rand_road.js';
 import * as T from '../src/defineType.js';
-// import * as O from '../src/optimal_road.js';
+import * as O from '../src/optimal_road.js';
+import * as Astar from '../src/Astar.js';
 import { exitCode } from 'process';
 
 //all world creatiion functions are to be modified after ts transformation 
@@ -297,3 +298,88 @@ describe('TestFilterActions', () =>  {
     expect((actions[2].aMove.NewPos)).toEqual({x :10 , y: 8});
   });
 });
+
+
+
+
+describe('TestAstar', () =>  {
+  
+  test('testing the distances and parents 1 ', () => {
+    const G0: Astar.Graph = {
+      mat: [
+        [0, 2, 0, 0, 5],
+        [2, 0, 1, 0, 0],
+        [0, 1, 0, 4, 0],
+        [0, 0, 4, 0, 3],
+        [5, 0, 0, 3, 0],
+      ],
+      size: 5,
+    };
+    
+    const s0: Astar.Vertex = { s: 0 };
+    const t0: Astar.Vertex = { s: 4 };
+    
+    const [distances0, parents0] = Astar.Astar(s0, t0, G0);
+    
+    
+        // console.log(distances0); // output: [0, 2, 3, 7, 5]
+        // console.log(parents0); // output: [-1, 0, 1, 2, 0]
+    expect(distances0[0]).toEqual(0);
+    expect(distances0[1]).toEqual(2);
+    expect(distances0[2]).toEqual(3);
+    expect(distances0[3]).toEqual(7);
+    expect(distances0[4]).toEqual(5);
+    expect(parents0[0]).toEqual(-1);
+    expect(parents0[1]).toEqual(0);
+    expect(parents0[2]).toEqual(1);
+    expect(parents0[3]).toEqual(2);
+    expect(parents0[4]).toEqual(0);
+  });
+  test('testing the distances and parents 2 ', () => {
+    const G2: Astar.Graph = {
+      mat: [
+        [0, 1, 1, 0, 0],
+        [1, 0, 1, 1, 1],
+        [1, 1, 0, 2, 2],
+        [0, 1, 2, 0, 1],
+        [0, 1, 2, 1, 0],
+      ],
+      size: 5,
+    };
+    
+    const s2: Astar.Vertex = { s: 0 };
+    const t2: Astar.Vertex = { s: 4 };
+    
+    const [distances2, parents2] = Astar.Astar(s2, t2, G2);
+    
+    // console.log(distances2); 
+    // console.log(parents2); 
+    expect(distances2[0]).toEqual(0);
+    expect(distances2[1]).toEqual(1);
+    expect(distances2[2]).toEqual(1);
+    expect(distances2[3]).toEqual(2);
+    expect(distances2[4]).toEqual(2);
+    expect(parents2[0]).toEqual(-1);
+    expect(parents2[1]).toEqual(0);
+    expect(parents2[2]).toEqual(0);
+    expect(parents2[3]).toEqual(1);
+    expect(parents2[4]).toEqual(1);
+  });
+});
+
+
+describe('Test addActorsToWorld', () =>  {
+  let w  = W.CreateWorld(4, 4);
+  w = W.initializeWorld(w);
+  const start : number = Math.floor(w.Height/2)*w.Width;
+  const end : number = start-1;
+  w.Matrix[1][0].AnActor = T.ActorsTypeList.Road;
+  w = A.addActorsToWorld(w, T.ActorsTypeList.SimpleMonster, 1);
+  test('Test addActorsToWorld ', () => {
+    console.log(w.Actors);
+    expect((w.Actors.length)).toEqual(1);
+    // expect(1).toEqual(1);
+  });
+});
+
+

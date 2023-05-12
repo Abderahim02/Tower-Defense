@@ -125,65 +125,6 @@ export type Vertex = {
     return 1;
   }
   
-  //a test function
-  function TestAstar(){
-    const G0: Graph = {
-        mat: [
-          [0, 2, 0, 0, 5],
-          [2, 0, 1, 0, 0],
-          [0, 1, 0, 4, 0],
-          [0, 0, 4, 0, 3],
-          [5, 0, 0, 3, 0],
-        ],
-        size: 5,
-      };
-      
-      const s0: Vertex = { s: 0 };
-      const t0: Vertex = { s: 4 };
-      
-      const [distances0, parents0] = Astar(s0, t0, G0);
-      
-      console.log(distances0); // output: [0, 2, 3, 7, 5]
-      console.log(parents0); // output: [-1, 0, 1, 2, 0]
-    const G1: Graph = {
-      mat: [
-        [0, 1, 1, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 1],
-        [0, 0, 0, 0],
-      ],
-      size: 4,
-    };
-    
-    const s1: Vertex = { s: 0 };
-    const t1: Vertex = { s: 3 };
-    
-    const [distances1, parents1] = Astar(s1, t1, G1);
-    
-    console.log(distances1); 
-    console.log(parents1);
-    
-    const G2: Graph = {
-      mat: [
-        [0, 1, 1, 0, 0],
-        [1, 0, 1, 1, 1],
-        [1, 1, 0, 2, 2],
-        [0, 1, 2, 0, 1],
-        [0, 1, 2, 1, 0],
-      ],
-      size: 5,
-    };
-    
-    const s2: Vertex = { s: 0 };
-    const t2: Vertex = { s: 4 };
-    
-    const [distances2, parents2] = Astar(s2, t2, G2);
-    
-    console.log(distances2); 
-    console.log(parents2); 
-  }
-  //TestAstar();
-  
   export {
     Astar
   };

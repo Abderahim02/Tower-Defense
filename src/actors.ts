@@ -239,9 +239,11 @@ export const updatetower=(w: world, i: number, j: number): world=>{
 export function addActorsToWorld(w : world, actr : actor, xPosition: number):world{
     if(AvailablePosition({ x: xPosition, y: 0 } , w)){
         w.Matrix[xPosition][0].AnActor = actr;
-        w.Actors = w.Actors.concat({Pos:  { x: xPosition, y: 0 },
-                                 AnActor : actr}
-                                 );
+        // w.Actors = w.Actors.concat({Pos:  { x: xPosition, y: 0 },
+        //                          AnActor : actr}
+        //                          );
+        w.Actors.push({Pos:  { x: xPosition, y: 0 },
+                                 AnActor : actr});
     }
    return w;
 }
