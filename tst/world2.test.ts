@@ -355,3 +355,31 @@ describe('TestFilterActions', () =>  {
 
 
   // CreateActor
+
+
+  const testWorld = {
+    Width: 5,
+    Height: 5,
+    Matrix: [
+      [{AnActor: T.ActorsTypeList.Floor, Pos: {x: 0, y: 0}} , ... Array(4).fill({AnActor: T.ActorsTypeList.Road, Pos: {x: 0, y: 1}})],
+      ...Array(4).fill([{AnActor: T.ActorsTypeList.Road, Pos: {x: 1, y: 0}} , ... Array(4).fill({AnActor: T.ActorsTypeList.Road, Pos: {x: 1, y: 1}})])
+    ],
+    Actors: [],
+    Towers: [],
+    Score: 0,
+  };
+  
+  describe('SimpleMove', () => {
+    test('Returns a valid move', () => {
+      const anActor = {AnActor: T.ActorsTypeList.SimpleMonster, Pos: {x: 0, y: 0}};
+      const move = M.SimpleMove(anActor, testWorld, 'SimpleMonster');
+      expect(move).toEqual({x: 1, y: 1});
+    });
+  
+    test('Returns the original position if no valid moves', () => {
+      const anActor = {AnActor: T.ActorsTypeList.SimpleMonster, Pos: {x: 0, y: 0}};
+      const move = M.SimpleMove(anActor, testWorld, 'SimpleMonster');
+      expect(move).toEqual({x: 1, y: 1});
+    });
+  });
+  
