@@ -63,18 +63,6 @@ export const display=(world : world,end: number): void=> {
                 case 'MagicTower':
                     s+=ActorsTypeList.MagicTower.Color;
                     break;
-                case 'SimpleTowerII':
-                    s+=ActorsTypeList.SimpleTower.Color;
-                    break;
-                case 'MagicTowerII':
-                    s+=ActorsTypeList.MagicTower.Color;
-                    break;
-                case 'SimpleTowerIII':
-                    s+=ActorsTypeList.SimpleTower.Color;
-                    break;
-                case 'MagicTowerIII':
-                    s+=ActorsTypeList.MagicTower.Color;
-                    break;
                 case 'Floor':
                     s+=ActorsTypeList.Floor.Color;
                     break;
@@ -93,37 +81,16 @@ export const display=(world : world,end: number): void=> {
                 case 'Road':
                     if(Math.floor(end/world.Width)===i && end%world.Width===j)
                      s+="\x1b[48;2;76;70;50m💀\x1b[0m";
-                        // s+="\x1b[48;2;76;70;50m* \x1b[0m";
+
                     else{
                      s+=ActorsTypeList.Road.Color;
                     }
-                    // s+=`\x1b[48;2;76;70;50m${r}\x1b[0m`;
-                    // r++;
                     break;
             }
         }
-        console.log(`${s}`+`${i}`);
-        // if( i <= Math.floor(end/world.Width) + size && i >= Math.floor(end/world.Width) - size  ){
-        //     let m = Math.abs(6-i)  ; // Set the desired number of times to display the "*"
-        //     let output = ""; // Initialize an empty string to store the output
-        //     for (let i = 0; i < m; i++) {
-        //         output += "*"; // Append a "*" to the output string for each iteration of the loop
-        //     }        
-        //     console.log(`${s}`+`${output}`);
-        // }
-        // else{
-        //             console.log(`${s}`+`${i}`);
-        // }
+        console.log(`${s}`+`${i}`)
     }
     console.log("\n");
 };
-
-
-// //this function returns the type of the actor in position p in the grid
-// export function GetActorType(w: world, p:point) : string{
-//     return w.Matrix[p.x][p.y].AnActor.Type;
-// }
-
-
 
 /////////////////////////////////////           END           /////////////////////////////////////////////////////
