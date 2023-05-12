@@ -39,7 +39,7 @@ export function ConstructNeighbors(w: world, p : point) : point[]{
 }
 
 //this function look for the position p in the list of positions R
-function SearchForVertex(R : point[], p : point) : number{
+export function SearchForVertex(R : point[], p : point) : number{
     const index = R.findIndex(vertex => vertex.x === p.x && vertex.y === p.y);
     return index !== -1 ? index : -1;
   }

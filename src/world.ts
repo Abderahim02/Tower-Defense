@@ -88,7 +88,7 @@ export const display=(world : world,end: number): void=> {
                     break;
             }
         }
-        console.log(`${s}`+`${i}`)
+        console.log(`${s}`+`${i}`);
     }
     console.log("\n");
 };

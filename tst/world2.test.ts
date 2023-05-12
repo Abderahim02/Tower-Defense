@@ -363,13 +363,27 @@ describe('TestFilterActions', () =>  {
   
 
 
-  describe('Test   isValidPosition ', () =>  {
+  describe('Test CreateActor  ', () =>  {
     let w  = W.CreateWorld(4, 4);
     w = W.initializeWorld(w);
-    
-    test('Test addActorsToWorld ', () => {
-      expect((  O.isValidPosition(w, {x : 0, y : 0}))).toBe(true);
-      // expect(1).toEqual(1);
+    w.Matrix[1][0].AnActor = T.ActorsTypeList.Floor;
+    w = A.CreateActor({x : 1, y : 0}, T.ActorsTypeList.SimpleMonster, w);
+    test('Test CreateACtor ', () => {
+      expect( w.Matrix[1][0].AnActor ).toEqual(T.ActorsTypeList.SimpleMonster);
+    });
+  });
+
+  describe('Test IsGoodTreePlacement  ', () =>  {
+    let w  = W.CreateWorld(8, 8);
+    w = W.initializeWorld(w);
+    w.Matrix[1][0].AnActor = T.ActorsTypeList.Road;
+    for(let i = 2; i < 6; ++i){
+      for(let j = 2; j < 6; ++j){
+        w.Matrix[i][j].AnActor = T.ActorsTypeList.Road;
+      }
+    }
+    test('Test IsgoodTreePlacement ', () => {
+      expect( A.IsGoodTreePlacement({x : 1, y : 2},w) ).toBe(false);
     });
   });
 
@@ -403,3 +417,62 @@ describe('TestFilterActions', () =>  {
     });
   });
   
+  describe('Test Construct neighbors  ', () =>  {
+    let w  = W.CreateWorld(8, 8);
+    test('Test IsgoodTreePlacement ', () => {
+      expect( O.SearchForVertex(O.ConstructNeighbors(w, {x:0, y: 5}),  {x:0, y : 6} ) !== -1 ).toBe(true);
+      expect( O.SearchForVertex(O.ConstructNeighbors(w, {x:0, y: 5}),  {x:5, y : 6} ) !== -1 ).toBe(false);
+      expect( O.SearchForVertex(O.ConstructNeighbors(w, {x:0, y: 5}),  {x:1, y : 6} ) !== -1 ).toBe(true);
+
+    });
+  });
+
+  describe('Test NextOptimalMove  ', () =>  {
+    let w  = W.CreateWorld(8, 8);
+    const start : number = Math.floor(w.Height/2)*w.Width;
+    const end : number = start-1;
+    w = R.Road(w, start, end);
+    const startPoint : T.point = {x : Math.floor(start/w.Width), y : start%w.Width};
+    const endPoint : T.point = {x : Math.floor(end/w.Width) , y:  end%w.Width};
+    const AstarRoad : T.point[] = O.OptimalRoad(startPoint, w, endPoint);
+    test('Test NextOptimalMove ', () => {
+      expect( O.SearchForVertex( AstarRoad, AstarRoad[0] ) !== -1 ).toBe(true);
+
+    });
+  });
+
+
+  describe('Test gameMotor  ', () =>  {
+    let w  = W.CreateWorld(8, 8);
+    const start : number = Math.floor(w.Height/2)*w.Width;
+    const end : number = start-1;
+    w = R.Road(w, start, end);
+    const startPoint : T.point = {x : Math.floor(start/w.Width), y : start%w.Width};
+    const endPoint : T.point = {x : Math.floor(end/w.Width) , y:  end%w.Width};
+    const AstarRoad : T.point[] = O.OptimalRoad(startPoint, w, endPoint);
+    w.Actors.push({AnActor : T.ActorsTypeList.BigMonster, Pos : startPoint});
+    w.Matrix[startPoint.x][startPoint.y].AnActor =  T.ActorsTypeList.BigMonster;
+    test('Test gameMotor ', () => {
+      w= A.gameMotor(A.gamePhase(w, AstarRoad), w);
+      expect( O.SearchForVertex( AstarRoad, AstarRoad[0] ) !== -1 ).toBe(true);
+
+    });
+  });
+
+  describe('Test gameOver  ', () =>  {
+    let w  = W.CreateWorld(8, 8);
+    const start : number = Math.floor(w.Height/2)*w.Width;
+    const end : number = start-1;
+    w = R.Road(w, start, end);
+    test('Test gameMotor ', () => {
+      expect( A.gameover(w, end) ).toBe(0);
+
+    });
+    const startPoint : T.point = {x : Math.floor(start/w.Width), y : start%w.Width};
+
+    w.Actors.push({AnActor : T.ActorsTypeList.BigMonster, Pos :  startPoint});
+    w.Matrix[startPoint.x][startPoint.y].AnActor =  T.ActorsTypeList.BigMonster;
+    test('Test gameMotor ', () => {
+      expect( A.gameover(w, end) ).toBe(0);
+    });
+  });
