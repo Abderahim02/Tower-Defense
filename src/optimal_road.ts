@@ -78,42 +78,4 @@ function ConvertRoadsToGraph( Roads : point[], w : world): Graph{
     p : the begining position (=== the source) 
     end : is the ending point of the road (the position where we want to go)
 */
-export function OptimalRoad( p : point , w : world, end : point ) : point[]{
-    const Roads: point[] = GetRoadInWorld(w);
-    Roads.push(p); // we add the starting position to consiedr it as road
-    const G : Graph = ConvertRoadsToGraph( Roads, w); // we construct the graph
-    //the starting / ending vertexes of the road
-    const EndVertex : Vertex = {s : SearchForVertex(Roads, end) } ;
-    const StartVertex : Vertex = {s : Roads.length - 1 };
-    const tab : [number[], number[]] = Astar(StartVertex, EndVertex , G);
-    const Chemin : point [] = [];
-    //This function constructs the path based on the hierarchy (parents) returned by Astar.
-    function ConstructRoad(t : number[], curseur : number) : point[]{
-        if (curseur === t.length - 1 || curseur < 0 ) {
-            return Chemin;
-        } else {
-            Chemin.push(Roads[curseur]);
-            curseur = t[curseur];
-            return ConstructRoad(t, curseur);
-        }
-    }
-    return ConstructRoad(tab[1], EndVertex.s).concat(p);
-}
-
-
-/*  this function returns the next move for an actor using Astar road,
-    if the position is not empty(!== road) the actor stays in his place with no move.
-    p: is the actual position of the actor
-    OptimalRoad : is an array of points of the Astar road
-*/
-export function NextOptimalMove(p: point, w : world, OptimalRoad : point[] ) : point {
-    const ActorIndex : number = SearchForVertex(OptimalRoad, p );
-    if (ActorIndex === 0) return OptimalRoad[0];
-    const m : point = OptimalRoad[ActorIndex - 1];
-    if ( isValidPosition(w, m) && GetActorType(w, m) === "Road" ) {
-        return m;
-    }
-    return p;
-}
-
 /////////////////////////////////////           END           /////////////////////////////////////////////////////
