@@ -106,10 +106,6 @@ export const TowersAttackRange=(p: point ,w: world) : point[]=>{
     }
     return enemies;
 };
-function putFlames(w: world, pe: point): world {
-
-    return w;
-}
 
 function FlameTowerAttack(p : point, w: world): world {
     const enemies: point[] = EnemiesInAttackRange(p, w);
@@ -123,44 +119,6 @@ function FlameTowerAttack(p : point, w: world): world {
         }
        }
     }
-    return w;
-}
-
-export function MagicPortal(w: world): world{
-    let i: number =0;
-    let j: number =0;
-    const pos1: point={x:0, y:0};
-    while(i<w.Height){
-        const rand=1;
-        while(j<w.Width/3){
-            if(rand===1 && w.Matrix[i][j].AnActor.Type!==undefined && w.Matrix[i][j].AnActor.Type===ActorsTypeList.Floor.Type){
-                pos1.x=i;
-                pos1.y=j;
-                j=w.Width/3;
-                i=w.Height;
-            }
-            j++;
-        }
-        i++;
-    }
-    i=0;
-    j=(2*w.Width)/3;
-    const pos2: point={x:0, y:0};
-    while(i<w.Height){
-        const rand2=1;
-        while(j<w.Width){
-            if(rand2===1 && w.Matrix[i][j].AnActor.Type!==undefined && w.Matrix[i][j].AnActor.Type===ActorsTypeList.Floor.Type){
-                pos2.x=i;
-                pos2.y=j;
-                j=w.Width;
-                i=w.Height;
-            }
-            j++;
-        }
-        i++;
-    }
-    w.Matrix[pos1.x][pos1.y].AnActor=ActorsTypeList.Portal;
-    w.Matrix[pos2.x][pos2.y].AnActor=ActorsTypeList.Portal;
     return w;
 }
 
@@ -204,38 +162,6 @@ export function killActor(w: world, p:point): world{
     }
     return w;
 }
-
-// export const TowersPlacement=(w:world):world=>{
-//     const max = 10;
-//     let count=0;
-//     const floor = ActorsTypeList.Floor.Type;
-//     const road = ActorsTypeList.Road.Type;
-//     for(let i=5; i<w.Height-5; i++){
-//         for(let j=5; j<w.Width-5; j++){
-//             if((w.Matrix[i][j].AnActor.Type===floor && w.Matrix[i][j+1].AnActor.Type===road && w.Matrix[i+1][j+1].AnActor.Type===road && w.Matrix[i-1][j+1].AnActor.Type===road )){
-//                 if(Math.floor(Math.random()*2)===0){
-//                     w=CreateMagicTower(i,j,w);
-//                     w.Towers.push({
-//                         Pos : {x : i, y: j},
-//                         AnActor : ActorsTypeList.MagicTower
-//                     }); 
-//                 }
-//                 else{
-//                     w=CreateSimpleTower(i,j,w);
-//                     w.Towers.push({
-//                         Pos : {x : i, y: j},
-//                         AnActor : ActorsTypeList.SimpleTower
-//                     });
-//                 }
-//                 count++;
-//             }
-//             if(max===count){
-//                 return w;
-//             }
-//         }
-//     }
-//     return w;
-// };
 
 function IsGoodTowerPlacement(p: point, w : world){
     return p.y > Math.floor(w.Width/4) ;

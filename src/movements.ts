@@ -15,7 +15,7 @@ export const noMove=(pos: position, aWorld: world, type: string) : any =>{
 /*  this function returns a possible simple move for an actor, we take also the type of the actor,
     because the function doesn t give good outputs with the type of actor that is available in the 
     type position, we favorise the moves in the direction of the end position */
-/* export const SimpleMove=(anActor:position, aWorld:world, type:string) : point=>{
+export const SimpleMove=(anActor:position, aWorld:world, type:string) : point=>{
     let dx: number=1;
     let dy: number=1;
      if(type==="BigMonster"){
@@ -49,7 +49,7 @@ export const noMove=(pos: position, aWorld: world, type: string) : any =>{
          return move;
      }
      return {x : anActor.Pos.x,y : anActor.Pos.y};
- }; */
+ };
 // initialize a seed value
 let seed = new Date().getTime();
 
@@ -67,37 +67,37 @@ function getRandomInt(max : number) {
     return Math.floor(myRandom() * max);
   }
   
- export const SimpleMove=(anActor:position, aWorld:world, type:string) : point=>{
-    const dx: number=1;
-    const dy: number=1;
+//  export const SimpleMove=(anActor:position, aWorld:world, type:string) : point=>{
+//     const dx: number=1;
+//     const dy: number=1;
 
-     let move : point =  {x : anActor.Pos.x,y : anActor.Pos.y+dy};
-     if(AvailablePosition(move, aWorld)){
-         return move;
-     }
-     const dirs : point[] = [];
-     move = {x : anActor.Pos.x+dx,y : anActor.Pos.y+dy};
-     if(AvailablePosition(move, aWorld)){
-         dirs.push(move);
-     }
-     move = {x : anActor.Pos.x+dx, y :anActor.Pos.y};
-     if(AvailablePosition(move, aWorld)){
-        dirs.push(move);
-     }
-     move = {x : anActor.Pos.x-dx, y :anActor.Pos.y};
-     if(AvailablePosition(move, aWorld)){
-        dirs.push(move);
-     }
-     move = {x : anActor.Pos.x,y : anActor.Pos.y-dy};
-     if(AvailablePosition(move, aWorld)){
-        dirs.push(move);
-     }
-     move = {x : anActor.Pos.x,y : anActor.Pos.y};
-     if(AvailablePosition(move, aWorld)){
-        dirs.push(move);
-     }
-     const rand = getRandomInt(dirs.length);
-     if(dirs[rand] !== undefined) return dirs[rand];
-     return anActor.Pos;
- };
+//      let move : point =  {x : anActor.Pos.x,y : anActor.Pos.y+dy};
+//      if(AvailablePosition(move, aWorld)){
+//          return move;
+//      }
+//      const dirs : point[] = [];
+//      move = {x : anActor.Pos.x+dx,y : anActor.Pos.y+dy};
+//      if(AvailablePosition(move, aWorld)){
+//          dirs.push(move);
+//      }
+//      move = {x : anActor.Pos.x+dx, y :anActor.Pos.y};
+//      if(AvailablePosition(move, aWorld)){
+//         dirs.push(move);
+//      }
+//      move = {x : anActor.Pos.x-dx, y :anActor.Pos.y};
+//      if(AvailablePosition(move, aWorld)){
+//         dirs.push(move);
+//      }
+//      move = {x : anActor.Pos.x,y : anActor.Pos.y-dy};
+//      if(AvailablePosition(move, aWorld)){
+//         dirs.push(move);
+//      }
+//      move = {x : anActor.Pos.x,y : anActor.Pos.y};
+//      if(AvailablePosition(move, aWorld)){
+//         dirs.push(move);
+//      }
+//      const rand = getRandomInt(dirs.length);
+//      if(dirs[rand] !== undefined) return dirs[rand];
+//      return anActor.Pos;
+//  };
  /////////////////////////////////////           END           /////////////////////////////////////////////////////

@@ -3,7 +3,7 @@ import * as A from '../src/actors.js';
 import * as M from '../src/movements.js';
 import * as R from '../src/rand_road.js';
 import * as T from '../src/defineType.js';
-import * as O from '../src/optimal_road.js';
+// import * as O from '../src/optimal_road.js';
 import { exitCode } from 'process';
 
 //all world creatiion functions are to be modified after ts transformation 
