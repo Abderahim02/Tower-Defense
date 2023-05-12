@@ -349,7 +349,7 @@ describe('TestFilterActions', () =>  {
     expect((actions[2].AnActorInfos.AnActor)).toEqual(T.ActorsTypeList.SimpleMonster);
     expect((actions[2].aMove.NewPos)).toEqual({x :10 , y: 8});
   
-  })});
+  });});
 
   describe('Test   isValidPosition ', () =>  {
     let w  = W.CreateWorld(4, 4);
@@ -418,7 +418,7 @@ describe('TestFilterActions', () =>  {
   });
   
   describe('Test Construct neighbors  ', () =>  {
-    let w  = W.CreateWorld(8, 8);
+    const  w  = W.CreateWorld(8, 8);
     test('Test IsgoodTreePlacement ', () => {
       expect( O.SearchForVertex(O.ConstructNeighbors(w, {x:0, y: 5}),  {x:0, y : 6} ) !== -1 ).toBe(true);
       expect( O.SearchForVertex(O.ConstructNeighbors(w, {x:0, y: 5}),  {x:5, y : 6} ) !== -1 ).toBe(false);
