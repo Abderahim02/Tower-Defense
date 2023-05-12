@@ -239,9 +239,6 @@ export const updatetower=(w: world, i: number, j: number): world=>{
 export function addActorsToWorld(w : world, actr : actor, xPosition: number):world{
     if(AvailablePosition({ x: xPosition, y: 0 } , w)){
         w.Matrix[xPosition][0].AnActor = actr;
-        // w.Actors = w.Actors.concat({Pos:  { x: xPosition, y: 0 },
-        //                          AnActor : actr}
-        //                          );
         w.Actors.push({Pos:  { x: xPosition, y: 0 },
                                  AnActor : actr});
     }
@@ -255,24 +252,6 @@ export function in_astar(x: point, y: point): number{
     return 0;
 }
 
-export function flux(w: world, astar: point[]): number{
-    let cases=0;
-    for(let i=0; i<w.Towers.length; i++){
-        const x=w.Towers[i].Pos.x;
-        const y=w.Towers[i].Pos.y;
-        for(let j=x-w.Towers[i].AnActor.AttackRange; j<x+w.Towers[i].AnActor.AttackRange; j++){
-            for(let k=y-w.Towers[i].AnActor.AttackRange; k<y+w.Towers[i].AnActor.AttackRange; k++){
-                if(w.Matrix[j][k].AnActor.Type!==undefined){
-                    if(w.Matrix[j][k].AnActor.Type===ActorsTypeList.Floor.Type){
-                        cases++;
-                    }
-                }
-            }
-        }
-    }
-    cases=cases*6;
-    return cases;
-}
 
 
 

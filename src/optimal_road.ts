@@ -9,14 +9,14 @@ export function GetActorType(w: world, p:point) : string{
 
 
 //this function returns a list of positions in the grid that are with type road
-function GetRoadInWorld(w : world): point[] {
+export function GetRoadInWorld(w : world): point[] {
     return w.Matrix.flatMap(row =>
       row.filter(cell => GetActorType(w, cell.Pos) === "Road").map(cell => cell.Pos)
     );
   }
 
 //this function test if the position p belongs to the grid
-function isValidPosition(w : world, p : point){
+export function isValidPosition(w : world, p : point){
     return  p!== undefined && p.x < w.Height && p.y < w.Width && p.x >= 0 && p.y >= 0; //
 }
 
@@ -72,12 +72,6 @@ function ConvertRoadsToGraph( Roads : point[], w : world): Graph{
         }
     }
     return G;
-}
-
-/*this function diplays the graph G as a 2D matrix, its useful for debbuging*/
-function displayGraph (G : Graph) {
-    const grid = G.mat.map(row => `[${row.join(", ")}]\n`).join("");
-    return grid;
 }
 
 /*  this function returns the best road for a monster to exit the map and win
