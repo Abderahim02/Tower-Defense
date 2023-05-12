@@ -166,8 +166,8 @@ describe('display', () => {
     mockWorld = W.initializeWorld(mockWorld);
     beforeEach(() => {
     mockWorld = {
-      Width: 2,
-      Height: 2,
+      Width: 3,
+      Height: 3,
       Score: 0,
       Matrix: [
         [
@@ -178,6 +178,10 @@ describe('display', () => {
           {Pos: { x: 0, y: 1 },
             AnActor: T.ActorsTypeList.SimpleTower ,
           },
+          {Pos: { x: 0, y: 2 },
+          AnActor: T.ActorsTypeList.Tree ,
+        },
+
         ],
         [
           {Pos: { x: 1, y: 0 },
@@ -186,12 +190,28 @@ describe('display', () => {
           {Pos  : { x: 1, y: 1 },
             AnActor: T.ActorsTypeList.Tree ,
           },
+          {Pos: { x: 1, y: 2 },
+          AnActor: T.ActorsTypeList.Fire ,
+        }
+        ],
+        [
+          {Pos: { x: 2, y: 0 },
+            AnActor: T.ActorsTypeList.Floor,
+          },
+          {Pos  : { x: 2, y: 1 },
+            AnActor: T.ActorsTypeList.Optimal ,
+          },
+          {Pos: { x: 2, y: 2 },
+          AnActor: T.ActorsTypeList.Road ,
+        }
         ],
       ],
       Actors: [],
       Towers: [],
     };
     });
+
+  
         
   it('should display the world with correct colors', () => {
     const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();

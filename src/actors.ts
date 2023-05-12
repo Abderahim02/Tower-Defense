@@ -41,40 +41,16 @@ export const TreesPlacement = (w: world): world=> {
 
 //this function creates a magic tower in the position {i,j} 
 export const CreateMagicTower=(i:number, j:number, w:world):world=>{
-    const m : point = {x : i, y : j};
-    if(!AvailablePosition(m, w)){
-        w.Matrix[i][j]={
-            Pos:     { x: i,y: j },
-            AnActor:ActorsTypeList.MagicTower
-        };
-        return w;
-    }
-    return w;
+    return CreateActor({x:i, y:j}, ActorsTypeList.MagicTower, w);
 };
 //this function creates a simple tower in the position {i,j} 
 export const CreateSimpleTower=(i:number, j:number, w:world) : world => {
-    const move : point = {x : i, y : j};
-    if(!AvailablePosition(move, w)){
-        w.Matrix[i][j]={
-            Pos:     { x: i, y: j },
-            AnActor:ActorsTypeList.SimpleTower
-        };
-        return w;
-    }
-    return w;
+    return CreateActor({x:i, y:j}, ActorsTypeList.SimpleTower, w);
 };
 
 //this function creates a flame tower in the position {i,j} 
 export const CreateFlameTower=(i:number, j:number, w:world) : world => {
-    const move : point = {x : i, y : j};
-    if(!AvailablePosition(move, w)){
-        w.Matrix[i][j]={
-            Pos:     { x: i, y: j },
-            AnActor:ActorsTypeList.FlameTower
-        };
-        return w;
-    }
-    return w;
+    return CreateActor({x:i, y:j}, ActorsTypeList.FlameTower, w);
 };
 
 //this function test if the position p belongs to the grid
